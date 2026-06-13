@@ -221,6 +221,10 @@ async function saveItemMetadataInternal(
   }
 
   const supabase = await createClient();
+
+  const priceValue = data.price ? Number(data.price) : null;
+  const currencyCode = data.price ? data.currency_code.toUpperCase() : null;
+
   const payload = {
     user_id: userResult,
     name: data.name,
@@ -230,6 +234,8 @@ async function saveItemMetadataInternal(
     brand_id: brandResult,
     occasion_tags: parseOccasionTags(data.occasion_tags),
     notes: data.notes || null,
+    price: priceValue,
+    currency_code: currencyCode,
   };
 
   let savedItemId = itemId;

@@ -29,6 +29,8 @@ export type Item = {
   image_processing_attempts: number;
   image_processing_updated_at: string | null;
   notes: string | null;
+  price: number | null;
+  currency_code: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -102,6 +104,8 @@ export type ItemFormInput = {
   season_ids: string[];
   occasion_tags: string;
   notes: string;
+  price: string;
+  currency_code: string;
 };
 
 export type ItemFormErrors = Partial<Record<keyof ItemFormInput | "_form", string>>;

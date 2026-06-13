@@ -7,13 +7,16 @@ type WardrobeFiltersProps = {
 };
 
 const selectClassName =
-  "mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500";
+  "mt-1 block w-full rounded-sm border border-[var(--border-subtle)] bg-[var(--surface)] px-2 py-2 text-sm text-[var(--foreground)] focus:border-[var(--foreground)] focus:outline-none focus:ring-1 focus:ring-[var(--foreground)]";
 
 export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
   return (
-    <form method="get" className="grid gap-4 rounded-lg border border-stone-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-4">
+    <form
+      method="get"
+      className="divider-hairline grid gap-4 pb-6 sm:grid-cols-2 lg:grid-cols-4"
+    >
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-stone-700">
+        <label htmlFor="category" className="label-caps">
           Category
         </label>
         <select
@@ -32,7 +35,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
       </div>
 
       <div>
-        <label htmlFor="color" className="block text-sm font-medium text-stone-700">
+        <label htmlFor="color" className="label-caps">
           Color
         </label>
         <select
@@ -51,7 +54,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
       </div>
 
       <div>
-        <label htmlFor="season" className="block text-sm font-medium text-stone-700">
+        <label htmlFor="season" className="label-caps">
           Season
         </label>
         <select
@@ -70,7 +73,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
       </div>
 
       <div>
-        <label htmlFor="brand" className="block text-sm font-medium text-stone-700">
+        <label htmlFor="brand" className="label-caps">
           Brand
         </label>
         <select
@@ -88,14 +91,11 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
         </select>
       </div>
 
-      <div className="flex flex-wrap items-end gap-3 sm:col-span-2 lg:col-span-4">
-        <button
-          type="submit"
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800"
-        >
+      <div className="flex flex-wrap items-end gap-4 sm:col-span-2 lg:col-span-4">
+        <button type="submit" className="btn-primary">
           Apply filters
         </button>
-        <Link href="/wardrobe" className="text-sm text-stone-600 hover:text-stone-900">
+        <Link href="/wardrobe" className="btn-ghost">
           Clear filters
         </Link>
       </div>

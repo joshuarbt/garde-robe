@@ -1,3 +1,5 @@
+"use client";
+
 type CanvasToolbarProps = {
   hasSelection: boolean;
   hasPlacements: boolean;
@@ -6,9 +8,6 @@ type CanvasToolbarProps = {
   onDelete: () => void;
   onExport: () => void;
 };
-
-const buttonClassName =
-  "rounded-md border border-stone-300 bg-white px-3 py-1.5 text-sm text-stone-800 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function CanvasToolbar({
   hasSelection,
@@ -22,7 +21,7 @@ export function CanvasToolbar({
     <div className="flex flex-wrap gap-2">
       <button
         type="button"
-        className={buttonClassName}
+        className="btn-secondary"
         disabled={!hasSelection}
         onClick={onBringForward}
       >
@@ -30,7 +29,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className={buttonClassName}
+        className="btn-secondary"
         disabled={!hasSelection}
         onClick={onSendBackward}
       >
@@ -38,7 +37,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className={buttonClassName}
+        className="btn-secondary"
         disabled={!hasSelection}
         onClick={onDelete}
       >
@@ -46,7 +45,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className={`${buttonClassName} border-stone-900 bg-stone-900 text-white hover:bg-stone-800`}
+        className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
         disabled={!hasPlacements}
         onClick={onExport}
       >

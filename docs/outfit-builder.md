@@ -1,15 +1,16 @@
 # Outfit Builder
 
-Minimal outfit composition MVP using [Konva](https://konvajs.org/) via `react-konva`. See [canvas-tech-decision.md](./canvas-tech-decision.md) for library rationale.
+Outfit composition using [Konva](https://konvajs.org/) via `react-konva`. See [canvas-tech-decision.md](./canvas-tech-decision.md) for library rationale.
 
-**Save/load to Postgres is not implemented yet.** Canvas state lives in React; mapper functions in `src/lib/canvas/placements.ts` are ready for a follow-up milestone.
+Save and load to Postgres is implemented via `src/lib/outfit/` and the `outfits` / `outfit_items` tables.
 
 ## Routes
 
 | Route | Access | Purpose |
 |-------|--------|---------|
-| `/outfits` | Authenticated | Landing page with link to builder |
-| `/outfits/new` | Authenticated | Outfit canvas editor |
+| `/outfits` | Authenticated | List saved outfits; link to builder |
+| `/outfits/new` | Authenticated | New outfit canvas editor |
+| `/outfits/[id]` | Authenticated | Edit a saved outfit |
 
 Unauthenticated users are redirected to `/login` via middleware.
 
@@ -23,7 +24,8 @@ Unauthenticated users are redirected to `/login` via middleware.
 6. **Bring forward** / **Send backward** to adjust layer order
 7. **Delete** removes the selected item from the canvas
 8. **Export PNG** downloads the current composition (selection cleared first)
-9. Click empty canvas area to deselect
+9. Enter a **name** and **Save outfit** to persist; reopen from `/outfits/[id]`
+10. Click empty canvas area to deselect
 
 ## Architecture
 
@@ -52,9 +54,11 @@ flowchart LR
 | [`src/lib/canvas/placements.ts`](../src/lib/canvas/placements.ts) | Default placement, z-index helpers, DB mappers |
 | [`src/lib/canvas/loadImage.ts`](../src/lib/canvas/loadImage.ts) | Load images with `crossOrigin` for export |
 | [`src/lib/canvas/export.ts`](../src/lib/canvas/export.ts) | `stage.toDataURL()` download helper |
-| [`src/lib/types/outfit.ts`](../src/lib/types/outfit.ts) | `CanvasItemPlacement`, `WardrobeCanvasItem` |
+| [`src/lib/outfit/actions.ts`](../src/lib/outfit/actions.ts) | Save, update, delete outfits |
+| [`src/lib/outfit/queries.ts`](../src/lib/outfit/queries.ts) | List and load outfits |
+| [`src/components/canvas/SaveOutfitForm.tsx`](../src/components/canvas/SaveOutfitForm.tsx) | Name input and save button |
 
-## Canvas state ↔ database (future save/load)
+## Canvas state ↔ database
 
 Runtime state uses `CanvasPlacementState`:
 
@@ -73,9 +77,9 @@ Maps to `outfit_items` columns:
 | `rotation` | `rotation` |
 | `zIndex` | `z_index` |
 
-**Save (future):** call `toCanvasItemPlacements(placements)` → upsert via server action.
+**Save:** `saveOutfit` in `src/lib/outfit/actions.ts` calls `toCanvasItemPlacements(placements)` and inserts rows.
 
-**Load (future):** fetch `outfit_items` rows → `fromOutfitItemRows(rows, wardrobeItems)` → hydrate builder state and preload images.
+**Load:** `getOutfitById` → `fromOutfitItemRows(rows, wardrobeItems)` → hydrate builder state and preload images.
 
 ## Dependencies
 
@@ -108,13 +112,14 @@ Canvas components use `dynamic(..., { ssr: false })` because Konva requires the 
 - [ ] Delete removes selected item from canvas
 - [ ] Export PNG downloads file with all visible items
 - [ ] Export PNG does not include transformer handles
+- [ ] Save outfit with name; appears on `/outfits`
+- [ ] Reopen saved outfit at `/outfits/[id]` with correct positions
+- [ ] Delete outfit from list or edit page
 - [ ] Page works at tablet width (~768px)
 - [ ] Empty wardrobe shows helpful message (no photos)
 
 ## Deferred
 
-- Save outfit name and load saved outfits
-- `/outfits/[id]` edit route
 - HTML drag-from-sidebar
 - Undo/redo, layers panel, snap-to-grid
 - Processed (background-removed) images on canvas

@@ -18,6 +18,7 @@ erDiagram
   auth_users ||--o{ categories : owns
   auth_users ||--o{ brands : owns
   auth_users ||--o{ outfits : owns
+  auth_users ||--o{ outfit_calendar_entries : schedules
   categories ||--o{ items : classifies
   colors ||--o{ items : colors
   brands ||--o{ items : brands
@@ -25,6 +26,7 @@ erDiagram
   seasons ||--o{ item_seasons : tagged
   items ||--o{ outfit_items : placed_in
   outfits ||--o{ outfit_items : contains
+  outfits ||--o{ outfit_calendar_entries : scheduled_on
 ```
 
 ## Table List
@@ -40,6 +42,7 @@ erDiagram
 | `item_seasons` | junction | Many-to-many: items ↔ seasons |
 | `outfits` | per user | Saved outfit compositions |
 | `outfit_items` | junction | Items placed on outfit canvas |
+| `outfit_calendar_entries` | per user | One outfit assigned per calendar day |
 
 ## Column Definitions
 
@@ -48,6 +51,7 @@ erDiagram
 | Column | Type | Constraints | Notes |
 |--------|------|-------------|-------|
 | `id` | `uuid` | PK, FK → `auth.users(id)` ON DELETE CASCADE | Same as auth user id |
+| `currency_code` | `char(3)` | NOT NULL, default `'EUR'` | Profile default for formatting wardrobe value |
 | `created_at` | `timestamptz` | NOT NULL, default `now()` | |
 | `updated_at` | `timestamptz` | NOT NULL, default `now()` | |
 
@@ -109,6 +113,8 @@ erDiagram
 | `image_processing_attempts` | `smallint` | NOT NULL, default `0` | Retry counter |
 | `image_processing_updated_at` | `timestamptz` | | Last status change |
 | `notes` | `text` | | Optional free text |
+| `price` | `numeric(10,2)` | NULL, CHECK (`price >= 0`) | Optional purchase price |
+| `currency_code` | `char(3)` | NULL | ISO 4217 code; defaults from profile on save |
 | `created_at` | `timestamptz` | NOT NULL, default `now()` | |
 | `updated_at` | `timestamptz` | NOT NULL, default `now()` | |
 
@@ -126,6 +132,8 @@ erDiagram
 | `id` | `uuid` | PK, default `gen_random_uuid()` | |
 | `user_id` | `uuid` | NOT NULL, FK → `auth.users(id)` ON DELETE CASCADE | |
 | `name` | `text` | NOT NULL | |
+| `notes` | `text` | NULL | Optional outfit description |
+| `cover_image_url` | `text` | NULL | Optional thumbnail URL or storage path |
 | `created_at` | `timestamptz` | NOT NULL, default `now()` | |
 | `updated_at` | `timestamptz` | NOT NULL, default `now()` | |
 
@@ -145,12 +153,29 @@ Maps to `CanvasItemPlacement` in [`src/lib/types/outfit.ts`](../src/lib/types/ou
 | `z_index` | `integer` | NOT NULL, default `0` | Layer order |
 | | | UNIQUE (`outfit_id`, `item_id`) | One placement per item per outfit |
 
+### `outfit_calendar_entries`
+
+One saved outfit per user per calendar day. See [v2-features.md](./v2-features.md).
+
+| Column | Type | Constraints | Notes |
+|--------|------|-------------|-------|
+| `id` | `uuid` | PK, default `gen_random_uuid()` | |
+| `user_id` | `uuid` | NOT NULL, FK → `auth.users(id)` ON DELETE CASCADE | |
+| `outfit_id` | `uuid` | NOT NULL, FK → `outfits(id)` ON DELETE CASCADE | |
+| `scheduled_date` | `date` | NOT NULL | Local calendar date (YYYY-MM-DD); maps to “date” in product terms |
+| `occasion` | `text` | NULL | e.g. work, wedding |
+| `notes` | `text` | NULL | Day-specific note |
+| `created_at` | `timestamptz` | NOT NULL, default `now()` | |
+| `updated_at` | `timestamptz` | NOT NULL, default `now()` | |
+| | | UNIQUE (`user_id`, `scheduled_date`) | One outfit per day |
+
 ## Relationships
 
 - **User ownership:** `profiles`, `categories`, `brands`, `items`, `outfits` all reference `auth.users(id)`
 - **Item lookups:** `items` optionally references `categories`, `colors`, `brands`
 - **Season tags:** `item_seasons` links `items` to global `seasons`
 - **Outfit canvas:** `outfit_items` links `outfits` to `items` with position metadata
+- **Calendar:** `outfit_calendar_entries` links a user’s saved outfit to a calendar date
 - **Category consistency:** app layer should ensure `items.category_id` belongs to the same user (enforced via RLS on join, not FK)
 
 ## Indexing
@@ -166,6 +191,8 @@ Maps to `CanvasItemPlacement` in [`src/lib/types/outfit.ts`](../src/lib/types/ou
 | `brands_user_id_idx` | `brands` | `user_id` | User brand lists |
 | `outfits_user_id_idx` | `outfits` | `user_id` | User outfit lists |
 | `outfit_items_outfit_id_idx` | `outfit_items` | `outfit_id` | Load canvas items |
+| `outfit_calendar_entries_user_id_idx` | `outfit_calendar_entries` | `user_id` | User calendar |
+| `outfit_calendar_entries_user_id_scheduled_date_idx` | `outfit_calendar_entries` | `user_id`, `scheduled_date` | Month view queries |
 | `item_seasons_season_id_idx` | `item_seasons` | `season_id` | Filter by season |
 
 ## Row Level Security
@@ -178,6 +205,7 @@ RLS is enabled on all app tables. Policies use `auth.uid()` from Supabase Auth.
 | `categories`, `brands`, `items`, `outfits` | User can CRUD rows where `user_id = auth.uid()` |
 | `item_seasons` | Access via item ownership; insert/delete require owning item |
 | `outfit_items` | SELECT/UPDATE/DELETE via outfit ownership; INSERT requires both outfit and item belong to user |
+| `outfit_calendar_entries` | User can CRUD rows where `user_id = auth.uid()`; outfit must belong to user |
 | `colors`, `seasons` | SELECT for authenticated users; no writes (seed-only) |
 
 **Profiles trigger:** new `auth.users` row auto-inserts a `profiles` row.
@@ -207,11 +235,18 @@ Run migrations in order:
 2. `20260313000002_rls_policies.sql`
 3. `20260313000003_storage.sql`
 4. `20260314000004_image_processing.sql`
+5. `20260315000005_v2_schema.sql` — price, profile currency, outfit metadata, calendar table + RLS
+6. `20260315000007_v2_schema_extensions.sql` — optional; only if you applied the former split V2 migrations before consolidation
+
+**Entity naming:** wardrobe items live in `items` (not `clothing_items`). Calendar rows live in `outfit_calendar_entries` (not `calendar_entries`). Row types: [`src/lib/types/database.ts`](../src/lib/types/database.ts).
+
+**If you already applied the old split files** (`20260315000005_item_price.sql`, `20260315000006_outfit_calendar.sql`) in Supabase, skip re-running `005_v2_schema` and apply only `007_v2_schema_extensions.sql` in the SQL Editor.
 
 ## Future Extensions
 
 - `occasions` table + junction if occasion taxonomy outgrows free text
 - `wear_log` for "last worn" tracking
+- Multi-currency conversion for wardrobe value totals
 - `outfit_tags`, sharing flags on `outfits`
 - `item_images` for multiple photos per item
 - Full-text search on `items.name` / `notes`

@@ -4,11 +4,12 @@ import {
   type ItemFormInput,
   type ItemType,
 } from "@/lib/types/item";
+import { isValidCurrencyCode } from "@/lib/currency";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function isUuid(value: string): boolean {
+export function isUuid(value: string): boolean {
   return UUID_REGEX.test(value);
 }
 
@@ -78,6 +79,32 @@ export function validateItemFormInput(
     errors.notes = "Notes must be 500 characters or fewer.";
   }
 
+  const priceRaw = input.price.trim();
+  let parsedPrice: string | null = null;
+  if (priceRaw) {
+    const priceValue = Number(priceRaw);
+    if (Number.isNaN(priceValue) || priceValue < 0) {
+      errors.price = "Enter a valid price (0 or greater).";
+    } else if (!/^\d+(\.\d{1,2})?$/.test(priceRaw)) {
+      errors.price = "Price can have at most 2 decimal places.";
+    } else if (priceValue > 99999999.99) {
+      errors.price = "Price is too large.";
+    } else {
+      parsedPrice = priceRaw;
+    }
+  }
+
+  const currencyCode = input.currency_code.trim().toUpperCase();
+  if (parsedPrice) {
+    if (!currencyCode) {
+      errors.currency_code = "Select a currency when entering a price.";
+    } else if (!isValidCurrencyCode(currencyCode)) {
+      errors.currency_code = "Select a valid currency.";
+    }
+  } else if (currencyCode && !isValidCurrencyCode(currencyCode)) {
+    errors.currency_code = "Select a valid currency.";
+  }
+
   if (Object.keys(errors).length > 0) {
     return { errors };
   }
@@ -90,6 +117,8 @@ export function validateItemFormInput(
       new_brand_name: newBrandName,
       occasion_tags: input.occasion_tags.trim(),
       notes,
+      price: parsedPrice ?? "",
+      currency_code: currencyCode,
     },
     errors: {},
   };
@@ -112,6 +141,8 @@ export function parseItemFormData(formData: FormData): ItemFormInput {
     season_ids: seasonIds,
     occasion_tags: String(formData.get("occasion_tags") ?? ""),
     notes: String(formData.get("notes") ?? ""),
+    price: String(formData.get("price") ?? ""),
+    currency_code: String(formData.get("currency_code") ?? ""),
   };
 }
 

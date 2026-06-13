@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { ItemImage } from "@/components/wardrobe/ItemImage";
+import { formatPrice } from "@/lib/currency";
 import type { ItemWithRelations } from "@/lib/types/item";
 
 type ItemCardProps = {
@@ -7,63 +11,37 @@ type ItemCardProps = {
 };
 
 export function ItemCard({ item }: ItemCardProps) {
-  const seasonNames = item.seasons.map((season) => season.name).join(", ");
+  const reduced = useReducedMotion() ?? false;
 
   return (
-    <article className="overflow-hidden rounded-lg border border-stone-200 bg-white">
-      <ItemImage
-        src={item.image_url}
-        alt={item.name}
-        className="aspect-square w-full"
-      />
-      <div className="space-y-2 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h2 className="font-medium text-stone-900">{item.name}</h2>
-          <span className="shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-xs capitalize text-stone-600">
-            {item.item_type}
-          </span>
+    <motion.article layout className="group">
+      <Link href={`/wardrobe/${item.id}/edit`} className="block">
+        <div className="overflow-hidden bg-[var(--surface-muted)]">
+          <ItemImage
+            src={item.image_url}
+            alt={item.name}
+            className={`aspect-square w-full ${
+              reduced ? "" : "transition-transform duration-300 group-hover:scale-[1.02]"
+            }`}
+          />
         </div>
-        <dl className="space-y-1 text-sm text-stone-600">
+        <div className="mt-4 space-y-1">
           {item.category ? (
-            <div>
-              <dt className="sr-only">Category</dt>
-              <dd>{item.category.name}</dd>
-            </div>
-          ) : null}
-          {item.color ? (
-            <div className="flex items-center gap-2">
-              <dt className="sr-only">Color</dt>
-              <dd className="flex items-center gap-2">
-                {item.color.hex_code ? (
-                  <span
-                    className="inline-block h-3 w-3 rounded-full border border-stone-200"
-                    style={{ backgroundColor: item.color.hex_code }}
-                  />
-                ) : null}
-                {item.color.name}
-              </dd>
-            </div>
-          ) : null}
+            <p className="label-caps">{item.category.name}</p>
+          ) : (
+            <p className="label-caps">{item.item_type}</p>
+          )}
+          <h2 className="font-medium text-[var(--foreground)]">{item.name}</h2>
           {item.brand ? (
-            <div>
-              <dt className="sr-only">Brand</dt>
-              <dd>{item.brand.name}</dd>
-            </div>
+            <p className="text-sm text-[var(--muted)]">{item.brand.name}</p>
           ) : null}
-          {seasonNames ? (
-            <div>
-              <dt className="sr-only">Seasons</dt>
-              <dd>{seasonNames}</dd>
-            </div>
+          {item.price !== null && item.currency_code ? (
+            <p className="text-sm tabular-nums text-stone-500">
+              {formatPrice(item.price, item.currency_code)}
+            </p>
           ) : null}
-        </dl>
-        <Link
-          href={`/wardrobe/${item.id}/edit`}
-          className="inline-block text-sm font-medium text-stone-900 hover:underline"
-        >
-          Edit
-        </Link>
-      </div>
-    </article>
+        </div>
+      </Link>
+    </motion.article>
   );
 }

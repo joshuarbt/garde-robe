@@ -1,4 +1,8 @@
+"use client";
+
 import type { WardrobeCanvasItem } from "@/lib/types/outfit";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 type WardrobeSidebarProps = {
   items: WardrobeCanvasItem[];
@@ -13,17 +17,19 @@ export function WardrobeSidebar({
 }: WardrobeSidebarProps) {
   if (items.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-stone-300 bg-white p-4 text-sm text-stone-600">
-        No wardrobe items with photos yet. Add items in your wardrobe first.
-      </div>
+      <EmptyState
+        message="No wardrobe items with photos yet. Add items in your wardrobe first."
+        actionLabel="Add your first item"
+        actionHref="/wardrobe/new"
+      />
     );
   }
 
   return (
-    <div className="space-y-2">
-      <p className="text-sm font-medium text-stone-700">Wardrobe</p>
-      <p className="text-xs text-stone-500">Click an item to add it to the canvas.</p>
-      <ul className="grid grid-cols-2 gap-2">
+    <div className="space-y-3">
+      <SectionLabel>Wardrobe</SectionLabel>
+      <p className="text-xs text-[var(--muted)]">Click an item to add it to the canvas.</p>
+      <ul className="grid grid-cols-2 gap-3">
         {items.map((item) => {
           const isPlaced = placedItemIds.has(item.id);
 
@@ -33,9 +39,9 @@ export function WardrobeSidebar({
                 type="button"
                 disabled={isPlaced}
                 onClick={() => onAddItem(item)}
-                className="w-full overflow-hidden rounded-md border border-stone-200 bg-white text-left disabled:cursor-not-allowed disabled:opacity-50 hover:border-stone-400 disabled:hover:border-stone-200"
+                className="w-full text-left transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
               >
-                <div className="aspect-square bg-stone-100">
+                <div className="aspect-square overflow-hidden bg-[var(--surface-muted)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.imageUrl}
@@ -43,9 +49,7 @@ export function WardrobeSidebar({
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <span className="block truncate px-2 py-1 text-xs text-stone-700">
-                  {item.name}
-                </span>
+                <span className="label-caps mt-2 block truncate">{item.name}</span>
               </button>
             </li>
           );

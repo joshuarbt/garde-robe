@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ItemForm } from "@/components/wardrobe/ItemForm";
 import { PageShell } from "@/components/layout/PageShell";
-import { getWardrobeLookups } from "@/lib/wardrobe/queries";
+import { getWardrobeLookups, getProfileCurrency } from "@/lib/wardrobe/queries";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function NewWardrobeItemPage() {
@@ -15,7 +15,10 @@ export default async function NewWardrobeItemPage() {
     redirect("/login");
   }
 
-  const lookups = await getWardrobeLookups();
+  const [lookups, defaultCurrency] = await Promise.all([
+    getWardrobeLookups(),
+    getProfileCurrency(),
+  ]);
 
   return (
     <PageShell
@@ -27,7 +30,12 @@ export default async function NewWardrobeItemPage() {
           Back to wardrobe
         </Link>
       </div>
-      <ItemForm lookups={lookups} userId={user.id} submitLabel="Create item" />
+      <ItemForm
+        lookups={lookups}
+        userId={user.id}
+        defaultCurrency={defaultCurrency}
+        submitLabel="Create item"
+      />
     </PageShell>
   );
 }

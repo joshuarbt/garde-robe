@@ -20,3 +20,24 @@ export type Outfit = {
   name: string;
   items: CanvasItemPlacement[];
 };
+
+export type OutfitSummary = {
+  id: string;
+  name: string;
+  notes?: string | null;
+  coverImageUrl?: string | null;
+  previewImageUrl?: string | null;
+  itemCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OutfitWithPlacements = {
+  id: string;
+  name: string;
+  notes?: string | null;
+  coverImageUrl?: string | null;
+  placements: CanvasItemPlacement[];
+  createdAt: string;
+  updatedAt: string;
+};

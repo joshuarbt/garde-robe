@@ -4,7 +4,7 @@ import { DeleteItemButton } from "@/components/wardrobe/DeleteItemButton";
 import { ItemForm } from "@/components/wardrobe/ItemForm";
 import { ItemImage } from "@/components/wardrobe/ItemImage";
 import { PageShell } from "@/components/layout/PageShell";
-import { getItemById, getWardrobeLookups } from "@/lib/wardrobe/queries";
+import { getItemById, getWardrobeLookups, getProfileCurrency } from "@/lib/wardrobe/queries";
 import { createClient } from "@/lib/supabase/server";
 
 type EditWardrobeItemPageProps = {
@@ -24,9 +24,10 @@ export default async function EditWardrobeItemPage({
   }
 
   const { id } = await params;
-  const [lookups, item] = await Promise.all([
+  const [lookups, item, defaultCurrency] = await Promise.all([
     getWardrobeLookups(),
     getItemById(id),
+    getProfileCurrency(),
   ]);
 
   if (!item) {
@@ -56,6 +57,7 @@ export default async function EditWardrobeItemPage({
         userId={user.id}
         itemId={item.id}
         currentImageUrl={item.image_url}
+        defaultCurrency={defaultCurrency}
         submitLabel="Save changes"
         initialValues={{
           name: item.name,
@@ -68,6 +70,8 @@ export default async function EditWardrobeItemPage({
           season_ids: item.seasons.map((season) => season.id),
           occasion_tags: item.occasion_tags.join(", "),
           notes: item.notes ?? "",
+          price: item.price !== null ? String(item.price) : "",
+          currency_code: item.currency_code ?? defaultCurrency,
         }}
       />
 

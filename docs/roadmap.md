@@ -95,7 +95,7 @@ See [storage.md](./storage.md).
 
 ## Milestone 5: Outfit Canvas
 
-**Status:** In progress (builder MVP — no save/load yet)
+**Status:** Complete
 
 **Goal:** Visual outfit builder with persistence.
 
@@ -105,15 +105,38 @@ See [storage.md](./storage.md).
 - [x] Wardrobe sidebar — click items onto the canvas
 - [x] Resize, rotate, and reposition items on the canvas
 - [x] Export composition as PNG
-- [ ] Save outfit with a name; load and reopen saved outfits
-- [ ] Persist item positions and scales in `outfit_items`
+- [x] Save outfit with a name; load and reopen saved outfits
+- [x] Persist item positions and scales in `outfit_items`
 
 **Exit criteria:**
 
-- [ ] User can compose an outfit, save it, and reopen it with items in the same positions
+- [x] User can compose an outfit, save it, and reopen it with items in the same positions
 - [x] Canvas is usable on tablet/desktop; acceptable fallback on mobile
 
 See [outfit-builder.md](./outfit-builder.md) and [canvas-tech-decision.md](./canvas-tech-decision.md).
+
+---
+
+## V2: Pricing, Calendar, Stats, and UI Polish
+
+**Status:** Complete
+
+**Goal:** Extend the production app with V2 features documented in [v2-features.md](./v2-features.md).
+
+**Deliverables:**
+
+- [x] Item price and currency on create/edit forms
+- [x] Save, list, edit, and delete outfits
+- [x] Dashboard stats: item count, outfit count, wardrobe value
+- [x] Calendar view with one outfit per day
+- [x] Premium UI: design tokens, Framer Motion animations, refined nav
+
+**Exit criteria:**
+
+- [x] All V2 smoke tests in [v2-features.md](./v2-features.md) pass after migrations applied
+- [x] `npm run lint` and `npm run build` succeed
+
+**Migrations:** `20260315000005_v2_schema.sql` (and `20260315000007_v2_schema_extensions.sql` if upgrading from the former split files)
 
 ---
 

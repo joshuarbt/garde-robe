@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type Konva from "konva";
 import { downloadStagePng } from "@/lib/canvas/export";
 import { loadCanvasImage } from "@/lib/canvas/loadImage";
@@ -11,11 +11,16 @@ import {
 } from "@/lib/canvas/placements";
 import { CanvasToolbar } from "@/components/canvas/CanvasToolbar";
 import { OutfitCanvas } from "@/components/canvas/OutfitCanvas";
+import { SaveOutfitForm } from "@/components/canvas/SaveOutfitForm";
 import { WardrobeSidebar } from "@/components/canvas/WardrobeSidebar";
 import type { CanvasPlacementState, WardrobeCanvasItem } from "@/lib/types/outfit";
 
 type OutfitBuilderProps = {
   wardrobeItems: WardrobeCanvasItem[];
+  initialPlacements?: CanvasPlacementState[];
+  outfitId?: string;
+  initialName?: string;
+  initialNotes?: string;
 };
 
 function swapZIndex(
@@ -51,9 +56,15 @@ function swapZIndex(
   });
 }
 
-export function OutfitBuilder({ wardrobeItems }: OutfitBuilderProps) {
+export function OutfitBuilder({
+  wardrobeItems,
+  initialPlacements = [],
+  outfitId,
+  initialName,
+  initialNotes,
+}: OutfitBuilderProps) {
   const stageRef = useRef<Konva.Stage | null>(null);
-  const [placements, setPlacements] = useState<CanvasPlacementState[]>([]);
+  const [placements, setPlacements] = useState<CanvasPlacementState[]>(initialPlacements);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Record<string, HTMLImageElement>>(
     {},
@@ -63,6 +74,36 @@ export function OutfitBuilder({ wardrobeItems }: OutfitBuilderProps) {
     () => new Set(placements.map((placement) => placement.itemId)),
     [placements],
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function preloadInitialImages() {
+      for (const placement of initialPlacements) {
+        const item = wardrobeItems.find((entry) => entry.id === placement.itemId);
+        if (!item) {
+          continue;
+        }
+
+        try {
+          const image = await loadCanvasImage(item.imageUrl);
+          if (!cancelled) {
+            setLoadedImages((current) => ({ ...current, [item.id]: image }));
+          }
+        } catch {
+          // Skip items that fail to load
+        }
+      }
+    }
+
+    if (initialPlacements.length > 0) {
+      void preloadInitialImages();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialPlacements, wardrobeItems]);
 
   const ensureImageLoaded = useCallback(async (item: WardrobeCanvasItem) => {
     if (loadedImages[item.id]) {
@@ -155,6 +196,13 @@ export function OutfitBuilder({ wardrobeItems }: OutfitBuilderProps) {
       </aside>
 
       <div className="space-y-4">
+        <SaveOutfitForm
+          placements={placements}
+          outfitId={outfitId}
+          initialName={initialName}
+          initialNotes={initialNotes}
+        />
+
         <CanvasToolbar
           hasSelection={selectedItemId !== null}
           hasPlacements={placements.length > 0}

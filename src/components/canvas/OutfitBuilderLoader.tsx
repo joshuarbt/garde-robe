@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { WardrobeCanvasItem } from "@/lib/types/outfit";
+import type { CanvasPlacementState, WardrobeCanvasItem } from "@/lib/types/outfit";
 
 const OutfitBuilder = dynamic(
   () =>
@@ -14,8 +14,26 @@ const OutfitBuilder = dynamic(
 
 type OutfitBuilderLoaderProps = {
   wardrobeItems: WardrobeCanvasItem[];
+  initialPlacements?: CanvasPlacementState[];
+  outfitId?: string;
+  initialName?: string;
+  initialNotes?: string;
 };
 
-export function OutfitBuilderLoader({ wardrobeItems }: OutfitBuilderLoaderProps) {
-  return <OutfitBuilder wardrobeItems={wardrobeItems} />;
+export function OutfitBuilderLoader({
+  wardrobeItems,
+  initialPlacements,
+  outfitId,
+  initialName,
+  initialNotes,
+}: OutfitBuilderLoaderProps) {
+  return (
+    <OutfitBuilder
+      wardrobeItems={wardrobeItems}
+      initialPlacements={initialPlacements}
+      outfitId={outfitId}
+      initialName={initialName}
+      initialNotes={initialNotes}
+    />
+  );
 }

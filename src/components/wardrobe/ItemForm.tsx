@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ImageUploadField } from "@/components/wardrobe/ImageUploadField";
 import type { ItemFormErrors, ItemFormInput, ItemType, WardrobeLookups } from "@/lib/types/item";
 import { ITEM_TYPES } from "@/lib/types/item";
+import { DEFAULT_CURRENCY, SUPPORTED_CURRENCIES } from "@/lib/currency";
 import { uploadItemImage } from "@/lib/storage/upload";
 import {
   saveItemMetadata,
@@ -17,6 +18,7 @@ type ItemFormProps = {
   itemId?: string;
   currentImageUrl?: string | null;
   initialValues?: Partial<ItemFormInput>;
+  defaultCurrency?: string;
   submitLabel: string;
 };
 
@@ -34,6 +36,8 @@ const defaultValues: ItemFormInput = {
   season_ids: [],
   occasion_tags: "",
   notes: "",
+  price: "",
+  currency_code: DEFAULT_CURRENCY,
 };
 
 type SubmitPhase = "idle" | "saving" | "uploading" | "finishing";
@@ -65,11 +69,13 @@ export function ItemForm({
   itemId,
   currentImageUrl,
   initialValues,
+  defaultCurrency = DEFAULT_CURRENCY,
   submitLabel,
 }: ItemFormProps) {
   const router = useRouter();
   const [values, setValues] = useState<ItemFormInput>({
     ...defaultValues,
+    currency_code: defaultCurrency,
     ...initialValues,
   });
   const [fieldErrors, setFieldErrors] = useState<ItemFormErrors>({});
@@ -284,6 +290,51 @@ export function ItemForm({
           placeholder="Optional"
         />
         <FieldError message={fieldErrors.new_brand_name} />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="price" className="block text-sm font-medium text-stone-700">
+            Price
+          </label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            min="0"
+            step="0.01"
+            value={values.price}
+            disabled={isPending}
+            onChange={(event) => updateValue("price", event.target.value)}
+            className={inputClassName}
+            placeholder="Optional"
+          />
+          <FieldError message={fieldErrors.price} />
+        </div>
+
+        <div>
+          <label
+            htmlFor="currency_code"
+            className="block text-sm font-medium text-stone-700"
+          >
+            Currency
+          </label>
+          <select
+            id="currency_code"
+            name="currency_code"
+            value={values.currency_code}
+            disabled={isPending}
+            onChange={(event) => updateValue("currency_code", event.target.value)}
+            className={inputClassName}
+          >
+            {SUPPORTED_CURRENCIES.map((code) => (
+              <option key={code} value={code}>
+                {code}
+              </option>
+            ))}
+          </select>
+          <FieldError message={fieldErrors.currency_code} />
+        </div>
       </div>
 
       <fieldset>

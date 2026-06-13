@@ -50,7 +50,8 @@ export function OutfitCanvas({
   }, [selectedItemId, placements, stageRef]);
 
   return (
-    <div className="inline-block rounded-lg border border-stone-200 bg-white shadow-sm">
+    <div className="max-w-full overflow-x-auto">
+      <div className="inline-block border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-3">
       <Stage
         ref={stageRef}
         width={CANVAS_WIDTH}
@@ -103,6 +104,7 @@ export function OutfitCanvas({
           />
         </Layer>
       </Stage>
+      </div>
     </div>
   );
 }

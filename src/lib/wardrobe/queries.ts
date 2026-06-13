@@ -4,6 +4,7 @@ import type {
   WardrobeFilters,
   WardrobeLookups,
 } from "@/lib/types/item";
+import { DEFAULT_CURRENCY } from "@/lib/currency";
 import { resolveDisplayImagePath } from "@/lib/image-processing/resolve";
 import { getItemImageUrl } from "@/lib/storage/images";
 import { createClient } from "@/lib/supabase/server";
@@ -27,6 +28,8 @@ type ItemRowRaw = {
   image_processing_attempts: number;
   image_processing_updated_at: string | null;
   notes: string | null;
+  price: number | null;
+  currency_code: string | null;
   created_at: string;
   updated_at: string;
   categories: Relation<{ id: string; name: string; item_type: string }>;
@@ -65,6 +68,8 @@ function mapItem(row: ItemRowRaw): ItemWithRelations {
     image_processing_attempts: row.image_processing_attempts ?? 0,
     image_processing_updated_at: row.image_processing_updated_at,
     notes: row.notes,
+    price: row.price !== null ? Number(row.price) : null,
+    currency_code: row.currency_code,
     created_at: row.created_at,
     updated_at: row.updated_at,
     category: category
@@ -110,6 +115,8 @@ const itemSelect = `
   image_processing_attempts,
   image_processing_updated_at,
   notes,
+  price,
+  currency_code,
   created_at,
   updated_at,
   categories ( id, name, item_type ),
@@ -237,4 +244,27 @@ export async function getItemById(id: string): Promise<ItemWithRelations | null>
   }
 
   return enrichItem(data as ItemRowRaw);
+}
+
+export async function getProfileCurrency(): Promise<string> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return DEFAULT_CURRENCY;
+  }
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("currency_code")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error || !data?.currency_code) {
+    return DEFAULT_CURRENCY;
+  }
+
+  return data.currency_code;
 }
