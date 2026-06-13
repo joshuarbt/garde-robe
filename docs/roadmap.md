@@ -95,20 +95,25 @@ See [storage.md](./storage.md).
 
 ## Milestone 5: Outfit Canvas
 
+**Status:** In progress (builder MVP — no save/load yet)
+
 **Goal:** Visual outfit builder with persistence.
 
 **Deliverables:**
 
-- Canvas page with blank background
-- Wardrobe sidebar — drag items onto the canvas
-- Resize and reposition items on the canvas
-- Save outfit with a name; load and reopen saved outfits
-- Persist item positions and scales in `outfit_items`
+- [x] Canvas page with blank background — see [outfit-builder.md](./outfit-builder.md)
+- [x] Wardrobe sidebar — click items onto the canvas
+- [x] Resize, rotate, and reposition items on the canvas
+- [x] Export composition as PNG
+- [ ] Save outfit with a name; load and reopen saved outfits
+- [ ] Persist item positions and scales in `outfit_items`
 
 **Exit criteria:**
 
-- User can compose an outfit, save it, and reopen it with items in the same positions
-- Canvas is usable on tablet/desktop; acceptable fallback on mobile
+- [ ] User can compose an outfit, save it, and reopen it with items in the same positions
+- [x] Canvas is usable on tablet/desktop; acceptable fallback on mobile
+
+See [outfit-builder.md](./outfit-builder.md) and [canvas-tech-decision.md](./canvas-tech-decision.md).
 
 ---
 
@@ -118,11 +123,13 @@ See [storage.md](./storage.md).
 
 **Deliverables:**
 
-- Vercel deployment with Supabase env vars configured
-- Smoke test all core flows on desktop and mobile
-- Document known issues and limitations
+- [ ] Vercel deployment with Supabase env vars configured
+- [ ] Smoke test all core flows on desktop and mobile
+- [x] Document deployment and env vars — see [deployment.md](./deployment.md)
 
 **Exit criteria:**
 
-- Live URL accessible
-- Add item, browse wardrobe, build outfit, and auth flows work on phone and desktop
+- [ ] Live URL accessible
+- [ ] Add item, browse wardrobe, build outfit, and auth flows work on phone and desktop
+
+See [deployment.md](./deployment.md) for step-by-step Vercel setup.

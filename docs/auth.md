@@ -34,7 +34,7 @@ Copy [`.env.example`](../.env.example) to `.env.local` and fill in both values.
 | Site URL | `http://localhost:3000` |
 | Redirect URLs | `http://localhost:3000/**` |
 
-Add your Vercel production URL when deploying.
+Add your Vercel production URL when deploying. See [deployment.md](./deployment.md) for production Site URL, redirect URLs, and Preview deploy patterns.
 
 ## Auth Flow
 

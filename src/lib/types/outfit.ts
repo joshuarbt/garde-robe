@@ -3,7 +3,16 @@ export type CanvasItemPlacement = {
   x: number;
   y: number;
   scale: number;
-  rotation?: number;
+  rotation: number;
+  zIndex: number;
+};
+
+export type CanvasPlacementState = CanvasItemPlacement;
+
+export type WardrobeCanvasItem = {
+  id: string;
+  name: string;
+  imageUrl: string;
 };
 
 export type Outfit = {

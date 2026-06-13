@@ -12,6 +12,9 @@ Product docs:
 - [docs/wardrobe-feature.md](docs/wardrobe-feature.md) — wardrobe CRUD routes and flows
 - [docs/storage.md](docs/storage.md) — item image upload and Supabase Storage setup
 - [docs/image-processing.md](docs/image-processing.md) — background removal architecture (future)
+- [docs/canvas-tech-decision.md](docs/canvas-tech-decision.md) — outfit canvas library comparison and MVP scope
+- [docs/outfit-builder.md](docs/outfit-builder.md) — outfit builder routes, components, and QA checklist
+- [docs/deployment.md](docs/deployment.md) — Vercel deployment and environment variables
 
 ## Stack
 
