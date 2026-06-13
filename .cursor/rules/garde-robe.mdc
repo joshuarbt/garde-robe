@@ -1,0 +1,96 @@
+---
+description: Garde-robe project conventions and agent workflow
+alwaysApply: true
+---
+
+# Garde-robe
+
+Personal wardrobe manager. Stack: Next.js App Router, Supabase (auth/DB/storage), Vercel, TypeScript.
+
+Product docs:
+- `docs/product.md` — vision and user flows
+- `docs/v1-scope.md` — MVP boundaries
+- `docs/roadmap.md` — milestone order
+
+## Agent Workflow
+
+- Propose a short implementation plan before writing code.
+- Only change files necessary for the requested task.
+- Do not make large refactors unless explicitly requested.
+- Ask for confirmation before introducing a new npm dependency.
+- After implementing, provide a short manual test checklist (see template below).
+
+## Code Quality
+
+- Use TypeScript strictly — avoid `any`; prefer explicit types on public APIs.
+- Keep components small and modular — one responsibility per component.
+- Keep business logic out of UI components — use `lib/`, hooks, or server actions.
+- Prefer simple, maintainable solutions over clever abstractions.
+
+Folder conventions:
+- `app/` — routes, layouts, server components
+- `components/` — presentational and small composed UI
+- `lib/` — Supabase clients, data access, domain logic
+- `hooks/` — reusable client-side logic
+
+## Documentation
+
+- When adding a feature, update relevant files in `docs/`.
+- Document new or changed environment variables in `.env.example` and explain them in the implementation summary.
+
+## Secrets and Environment Variables
+
+Never expose secret keys in client-side code.
+
+| Variable | Where | Notes |
+|----------|-------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Client + server | Public |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Client + server | Public; RLS protects data |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server only | Never in client bundles; future use |
+
+- Frontend uses `NEXT_PUBLIC_*` env vars only for Supabase.
+- Server-only operations (admin, bypass RLS) belong in server components, route handlers, or server actions — never in `"use client"` files.
+
+## Next.js App Router
+
+- Use `app/` directory; server components by default.
+- Client components only when needed (interactivity, hooks, browser APIs).
+- Colocate route-specific code under `app/`.
+
+## Supabase
+
+- Use `@supabase/ssr` for cookie-based auth in Next.js.
+- Enable RLS on all user tables; never rely on client-side filtering for security.
+- Storage buckets use user-scoped paths (e.g. `{userId}/{itemId}`).
+
+## Vercel
+
+- Configure env vars in the Vercel dashboard; mirror them in `.env.example`.
+- Avoid Vercel-specific hacks that break local development.
+
+## UI
+
+- Mobile-first responsive design (Tailwind: base → `sm` → `md` → `lg`).
+- Clean, minimal, fashion-oriented interface — generous whitespace, neutral palette, photography-forward item cards.
+- Prioritize visual browsing over dense tables or cluttered dashboards.
+
+## Future Outfit Canvas
+
+Prepare structure without building canvas before milestone 5:
+- `components/canvas/` — canvas UI (stub until M5)
+- `lib/types/outfit.ts` — shared types for item position and scale
+- Reusable item components for list and canvas sidebar (e.g. `ItemThumbnail`)
+- Avoid list-only layouts that block drag-and-drop reuse
+
+## Manual Test Checklist Template
+
+End every feature implementation with:
+
+```
+## Manual test checklist
+- [ ] Sign in / sign out (if auth touched)
+- [ ] Core happy path for the feature
+- [ ] Mobile viewport (375px)
+- [ ] Desktop viewport
+- [ ] Error/empty states
+```
