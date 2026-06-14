@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthRoute) {
     const dashboardUrl = request.nextUrl.clone();
-    dashboardUrl.pathname = "/dashboard";
+    dashboardUrl.pathname = "/wardrobe";
     return NextResponse.redirect(dashboardUrl);
   }
 

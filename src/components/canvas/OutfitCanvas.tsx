@@ -15,6 +15,7 @@ type OutfitCanvasProps = {
   onSelect: (itemId: string | null) => void;
   onPlacementChange: (itemId: string, patch: Partial<CanvasPlacementState>) => void;
   stageRef: React.RefObject<Konva.Stage | null>;
+  mobileScale?: boolean;
 };
 
 export function OutfitCanvas({
@@ -24,6 +25,7 @@ export function OutfitCanvas({
   onSelect,
   onPlacementChange,
   stageRef,
+  mobileScale = false,
 }: OutfitCanvasProps) {
   const transformerRef = useRef<Konva.Transformer>(null);
   const sortedPlacements = sortByZIndex(placements);
@@ -49,9 +51,8 @@ export function OutfitCanvas({
     }
   }, [selectedItemId, placements, stageRef]);
 
-  return (
-    <div className="max-w-full overflow-x-auto">
-      <div className="inline-block border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-3">
+  const stageContent = (
+    <div className="inline-block border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-3">
       <Stage
         ref={stageRef}
         width={CANVAS_WIDTH}
@@ -104,7 +105,16 @@ export function OutfitCanvas({
           />
         </Layer>
       </Stage>
-      </div>
     </div>
   );
+
+  if (mobileScale) {
+    return (
+      <div className="outfit-canvas-mobile-scale">
+        <div className="outfit-canvas-mobile-scale-inner">{stageContent}</div>
+      </div>
+    );
+  }
+
+  return <div className="max-w-full overflow-x-auto">{stageContent}</div>;
 }

@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { AssignOutfitModal } from "@/components/calendar/AssignOutfitModal";
 import { CalendarDayCell } from "@/components/calendar/CalendarDayCell";
-import { revealProps } from "@/lib/motion";
 import type { CalendarEntry } from "@/lib/types/calendar";
 import type { OutfitSummary } from "@/lib/types/outfit";
 
@@ -18,7 +16,7 @@ type CalendarGridProps = {
   preselectedOutfitName?: string;
 };
 
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
 function padDatePart(value: number): string {
   return String(value).padStart(2, "0");
@@ -59,7 +57,6 @@ export function CalendarGrid({
   preselectedOutfitName,
 }: CalendarGridProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const reduced = useReducedMotion() ?? false;
 
   const entryByDate = useMemo(() => {
     const map = new Map<string, CalendarEntry>();
@@ -104,58 +101,60 @@ export function CalendarGrid({
   return (
     <>
       {preselectedOutfitId && preselectedOutfitName ? (
-        <p className="mb-6 border border-[var(--border-subtle)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
-          Select a day to schedule{" "}
-          <span className="font-medium text-[var(--foreground)]">
-            {preselectedOutfitName}
-          </span>
-          .
+        <p className="text-meta mb-6">
+          Tap a day to schedule{" "}
+          <span className="text-[var(--foreground)]">{preselectedOutfitName}</span>
         </p>
       ) : null}
 
       <div className="flex items-center justify-between gap-4">
         <Link
           href={buildCalendarHref(prevYear, prevMonth, preselectedOutfitId)}
-          className="btn-secondary"
+          className="btn-ghost min-h-[var(--touch-min)] text-sm"
         >
           Previous
         </Link>
-        <motion.h2
-          key={`${year}-${month}`}
-          className="font-display text-2xl font-normal text-[var(--foreground)]"
-          {...revealProps(reduced)}
-        >
-          {monthLabel}
-        </motion.h2>
+        <h2 className="text-title">{monthLabel}</h2>
         <Link
           href={buildCalendarHref(nextYear, nextMonth, preselectedOutfitId)}
-          className="btn-secondary"
+          className="btn-ghost min-h-[var(--touch-min)] text-sm"
         >
           Next
         </Link>
       </div>
 
-      <div className="mt-8 grid grid-cols-7 gap-px bg-[var(--border-subtle)]">
-        {WEEKDAY_LABELS.map((label) => (
-          <div
-            key={label}
-            className="label-caps bg-[var(--background)] py-2 text-center"
-          >
-            {label}
-          </div>
-        ))}
+      <div className="mt-8">
+        <div className="grid grid-cols-7">
+          {WEEKDAY_LABELS.map((label, index) => (
+            <div
+              key={`${label}-${index}`}
+              className="text-overline py-2 text-center"
+            >
+              {label}
+            </div>
+          ))}
+        </div>
 
-        {cells.map((cell, index) => (
-          <div key={cell.scheduledDate ?? `empty-${index}`} className="bg-[var(--background)]">
-            <CalendarDayCell
-              day={cell.day}
-              scheduledDate={cell.scheduledDate}
-              entry={cell.scheduledDate ? entryByDate.get(cell.scheduledDate) ?? null : null}
-              isToday={cell.scheduledDate === today}
-              onSelectDate={setSelectedDate}
-            />
-          </div>
-        ))}
+        <div className="grid grid-cols-7 border-t border-[var(--border-subtle)]">
+          {cells.map((cell, index) => (
+            <div
+              key={cell.scheduledDate ?? `empty-${index}`}
+              className={`border-b border-[var(--border-subtle)] ${
+                (index + 1) % 7 !== 0 ? "border-r" : ""
+              } border-[var(--border-subtle)]`}
+            >
+              <CalendarDayCell
+                day={cell.day}
+                scheduledDate={cell.scheduledDate}
+                entry={
+                  cell.scheduledDate ? entryByDate.get(cell.scheduledDate) ?? null : null
+                }
+                isToday={cell.scheduledDate === today}
+                onSelectDate={setSelectedDate}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {selectedDate ? (

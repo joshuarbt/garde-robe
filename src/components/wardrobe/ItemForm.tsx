@@ -3,6 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ImageUploadField } from "@/components/wardrobe/ImageUploadField";
+import { MobileActionBar } from "@/components/ui/MobileActionBar";
+import { Icon } from "@/components/ui/Icon";
+import { actionIcons } from "@/lib/icons";
 import type { ItemFormErrors, ItemFormInput, ItemType, WardrobeLookups } from "@/lib/types/item";
 import { ITEM_TYPES } from "@/lib/types/item";
 import { DEFAULT_CURRENCY, SUPPORTED_CURRENCIES } from "@/lib/currency";
@@ -22,8 +25,8 @@ type ItemFormProps = {
   submitLabel: string;
 };
 
-const inputClassName =
-  "mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500 disabled:opacity-60";
+const FORM_ID = "item-form";
+const inputClassName = "input-field mt-1.5";
 
 const defaultValues: ItemFormInput = {
   name: "",
@@ -47,7 +50,7 @@ function FieldError({ message }: { message?: string }) {
     return null;
   }
 
-  return <p className="mt-1 text-sm text-red-700">{message}</p>;
+  return <p className="text-status-error mt-1 text-sm">{message}</p>;
 }
 
 function getSubmitLabel(phase: SubmitPhase, submitLabel: string): string {
@@ -61,6 +64,31 @@ function getSubmitLabel(phase: SubmitPhase, submitLabel: string): string {
     default:
       return submitLabel;
   }
+}
+
+type FormSectionProps = {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+};
+
+function FormSection({ title, defaultOpen = true, children }: FormSectionProps) {
+  return (
+    <>
+      <details open={defaultOpen} className="group space-y-4 md:hidden">
+        <summary className="flex min-h-[var(--touch-min)] cursor-pointer list-none items-center justify-between border-b border-[var(--border-subtle)] pb-3 font-medium text-[var(--foreground)] [&::-webkit-details-marker]:hidden">
+          {title}
+          <Icon
+            icon={actionIcons.expand}
+            size="sm"
+            className="text-[var(--muted)] transition-transform group-open:rotate-180"
+          />
+        </summary>
+        <div className="space-y-4 pb-4 pt-2">{children}</div>
+      </details>
+      <div className="hidden space-y-4 md:block">{children}</div>
+    </>
+  );
 }
 
 export function ItemForm({
@@ -85,6 +113,7 @@ export function ItemForm({
   const [phase, setPhase] = useState<SubmitPhase>("idle");
 
   const isPending = phase !== "idle";
+  const buttonLabel = getSubmitLabel(phase, submitLabel);
 
   const filteredCategories = lookups.categories.filter(
     (category) => category.item_type === values.item_type,
@@ -143,284 +172,301 @@ export function ItemForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <ImageUploadField
-        currentImageUrl={currentImageUrl}
-        disabled={isPending}
-        onFileChange={setSelectedFile}
-        error={imageError}
-      />
-
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-stone-700">
-          Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          required
-          value={values.name}
-          disabled={isPending}
-          onChange={(event) => updateValue("name", event.target.value)}
-          className={inputClassName}
-        />
-        <FieldError message={fieldErrors.name} />
-      </div>
-
-      <div>
-        <label htmlFor="item_type" className="block text-sm font-medium text-stone-700">
-          Type
-        </label>
-        <select
-          id="item_type"
-          name="item_type"
-          value={values.item_type}
-          disabled={isPending}
-          onChange={(event) => {
-            updateValue("item_type", event.target.value as ItemType);
-            updateValue("category_id", "");
-          }}
-          className={inputClassName}
-        >
-          {ITEM_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-        <FieldError message={fieldErrors.item_type} />
-      </div>
-
-      <div>
-        <label htmlFor="category_id" className="block text-sm font-medium text-stone-700">
-          Category
-        </label>
-        <select
-          id="category_id"
-          name="category_id"
-          value={values.category_id}
-          disabled={isPending}
-          onChange={(event) => updateValue("category_id", event.target.value)}
-          className={inputClassName}
-        >
-          <option value="">Select existing category</option>
-          {filteredCategories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        <FieldError message={fieldErrors.category_id} />
-      </div>
-
-      <div>
-        <label
-          htmlFor="new_category_name"
-          className="block text-sm font-medium text-stone-700"
-        >
-          Or new category
-        </label>
-        <input
-          id="new_category_name"
-          name="new_category_name"
-          value={values.new_category_name}
-          disabled={isPending || Boolean(values.category_id)}
-          onChange={(event) => updateValue("new_category_name", event.target.value)}
-          className={inputClassName}
-          placeholder="e.g. tops, necklace"
-        />
-        <FieldError message={fieldErrors.new_category_name} />
-      </div>
-
-      <div>
-        <label htmlFor="color_id" className="block text-sm font-medium text-stone-700">
-          Color
-        </label>
-        <select
-          id="color_id"
-          name="color_id"
-          value={values.color_id}
-          disabled={isPending}
-          onChange={(event) => updateValue("color_id", event.target.value)}
-          className={inputClassName}
-        >
-          <option value="">No color</option>
-          {lookups.colors.map((color) => (
-            <option key={color.id} value={color.id}>
-              {color.name}
-            </option>
-          ))}
-        </select>
-        <FieldError message={fieldErrors.color_id} />
-      </div>
-
-      <div>
-        <label htmlFor="brand_id" className="block text-sm font-medium text-stone-700">
-          Brand
-        </label>
-        <select
-          id="brand_id"
-          name="brand_id"
-          value={values.brand_id}
-          disabled={isPending}
-          onChange={(event) => updateValue("brand_id", event.target.value)}
-          className={inputClassName}
-        >
-          <option value="">No brand</option>
-          {lookups.brands.map((brand) => (
-            <option key={brand.id} value={brand.id}>
-              {brand.name}
-            </option>
-          ))}
-        </select>
-        <FieldError message={fieldErrors.brand_id} />
-      </div>
-
-      <div>
-        <label htmlFor="new_brand_name" className="block text-sm font-medium text-stone-700">
-          Or new brand
-        </label>
-        <input
-          id="new_brand_name"
-          name="new_brand_name"
-          value={values.new_brand_name}
-          disabled={isPending || Boolean(values.brand_id)}
-          onChange={(event) => updateValue("new_brand_name", event.target.value)}
-          className={inputClassName}
-          placeholder="Optional"
-        />
-        <FieldError message={fieldErrors.new_brand_name} />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-stone-700">
-            Price
-          </label>
-          <input
-            id="price"
-            name="price"
-            type="number"
-            min="0"
-            step="0.01"
-            value={values.price}
-            disabled={isPending}
-            onChange={(event) => updateValue("price", event.target.value)}
-            className={inputClassName}
-            placeholder="Optional"
-          />
-          <FieldError message={fieldErrors.price} />
-        </div>
-
-        <div>
-          <label
-            htmlFor="currency_code"
-            className="block text-sm font-medium text-stone-700"
-          >
-            Currency
-          </label>
-          <select
-            id="currency_code"
-            name="currency_code"
-            value={values.currency_code}
-            disabled={isPending}
-            onChange={(event) => updateValue("currency_code", event.target.value)}
-            className={inputClassName}
-          >
-            {SUPPORTED_CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {code}
-              </option>
-            ))}
-          </select>
-          <FieldError message={fieldErrors.currency_code} />
-        </div>
-      </div>
-
-      <fieldset>
-        <legend className="block text-sm font-medium text-stone-700">Seasons</legend>
-        <div className="mt-2 grid gap-2 sm:grid-cols-2">
-          {lookups.seasons.map((season) => {
-            const checked = values.season_ids.includes(season.id);
-
-            return (
-              <label key={season.id} className="flex items-center gap-2 text-sm text-stone-700">
-                <input
-                  type="checkbox"
-                  name="season_ids"
-                  value={season.id}
-                  checked={checked}
-                  disabled={isPending}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      updateValue("season_ids", [...values.season_ids, season.id]);
-                    } else {
-                      updateValue(
-                        "season_ids",
-                        values.season_ids.filter((id) => id !== season.id),
-                      );
-                    }
-                  }}
-                />
-                {season.name}
-              </label>
-            );
-          })}
-        </div>
-        <FieldError message={fieldErrors.season_ids} />
-      </fieldset>
-
-      <div>
-        <label
-          htmlFor="occasion_tags"
-          className="block text-sm font-medium text-stone-700"
-        >
-          Occasion tags
-        </label>
-        <input
-          id="occasion_tags"
-          name="occasion_tags"
-          value={values.occasion_tags}
-          disabled={isPending}
-          onChange={(event) => updateValue("occasion_tags", event.target.value)}
-          className={inputClassName}
-          placeholder="work, casual, formal"
-        />
-        <FieldError message={fieldErrors.occasion_tags} />
-      </div>
-
-      <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-stone-700">
-          Notes
-        </label>
-        <textarea
-          id="notes"
-          name="notes"
-          rows={4}
-          value={values.notes}
-          disabled={isPending}
-          onChange={(event) => updateValue("notes", event.target.value)}
-          className={inputClassName}
-        />
-        <FieldError message={fieldErrors.notes} />
-      </div>
-
-      {formError ? (
-        <p
-          role="alert"
-          className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
-        >
-          {formError}
-        </p>
-      ) : null}
-
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 disabled:opacity-60"
+    <>
+      <form
+        id={FORM_ID}
+        onSubmit={handleSubmit}
+        className="space-y-4 pb-mobile-action-focus md:pb-0"
       >
-        {getSubmitLabel(phase, submitLabel)}
-      </button>
-    </form>
+        <FormSection title="Essentials" defaultOpen>
+          <ImageUploadField
+            currentImageUrl={currentImageUrl}
+            disabled={isPending}
+            onFileChange={setSelectedFile}
+            error={imageError}
+          />
+
+          <div>
+            <label htmlFor="name" className="input-label">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              required
+              value={values.name}
+              disabled={isPending}
+              onChange={(event) => updateValue("name", event.target.value)}
+              className={inputClassName}
+            />
+            <FieldError message={fieldErrors.name} />
+          </div>
+
+          <div>
+            <label htmlFor="item_type" className="input-label">
+              Type
+            </label>
+            <select
+              id="item_type"
+              name="item_type"
+              value={values.item_type}
+              disabled={isPending}
+              onChange={(event) => {
+                updateValue("item_type", event.target.value as ItemType);
+                updateValue("category_id", "");
+              }}
+              className={inputClassName}
+            >
+              {ITEM_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+            <FieldError message={fieldErrors.item_type} />
+          </div>
+        </FormSection>
+
+        <FormSection title="Details">
+          <div>
+            <label htmlFor="category_id" className="input-label">
+              Category
+            </label>
+            <select
+              id="category_id"
+              name="category_id"
+              value={values.category_id}
+              disabled={isPending}
+              onChange={(event) => updateValue("category_id", event.target.value)}
+              className={inputClassName}
+            >
+              <option value="">Select existing category</option>
+              {filteredCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <FieldError message={fieldErrors.category_id} />
+          </div>
+
+          <div>
+            <label htmlFor="new_category_name" className="input-label">
+              Or new category
+            </label>
+            <input
+              id="new_category_name"
+              name="new_category_name"
+              value={values.new_category_name}
+              disabled={isPending || Boolean(values.category_id)}
+              onChange={(event) => updateValue("new_category_name", event.target.value)}
+              className={inputClassName}
+              placeholder="e.g. tops, necklace"
+            />
+            <FieldError message={fieldErrors.new_category_name} />
+          </div>
+
+          <div>
+            <label htmlFor="color_id" className="input-label">
+              Color
+            </label>
+            <select
+              id="color_id"
+              name="color_id"
+              value={values.color_id}
+              disabled={isPending}
+              onChange={(event) => updateValue("color_id", event.target.value)}
+              className={inputClassName}
+            >
+              <option value="">No color</option>
+              {lookups.colors.map((color) => (
+                <option key={color.id} value={color.id}>
+                  {color.name}
+                </option>
+              ))}
+            </select>
+            <FieldError message={fieldErrors.color_id} />
+          </div>
+
+          <div>
+            <label htmlFor="brand_id" className="input-label">
+              Brand
+            </label>
+            <select
+              id="brand_id"
+              name="brand_id"
+              value={values.brand_id}
+              disabled={isPending}
+              onChange={(event) => updateValue("brand_id", event.target.value)}
+              className={inputClassName}
+            >
+              <option value="">No brand</option>
+              {lookups.brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+            <FieldError message={fieldErrors.brand_id} />
+          </div>
+
+          <div>
+            <label htmlFor="new_brand_name" className="input-label">
+              Or new brand
+            </label>
+            <input
+              id="new_brand_name"
+              name="new_brand_name"
+              value={values.new_brand_name}
+              disabled={isPending || Boolean(values.brand_id)}
+              onChange={(event) => updateValue("new_brand_name", event.target.value)}
+              className={inputClassName}
+              placeholder="Optional"
+            />
+            <FieldError message={fieldErrors.new_brand_name} />
+          </div>
+        </FormSection>
+
+        <FormSection title="Optional">
+          <fieldset>
+            <legend className="input-label">Seasons</legend>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              {lookups.seasons.map((season) => {
+                const checked = values.season_ids.includes(season.id);
+
+                return (
+                  <label
+                    key={season.id}
+                    className="flex min-h-[var(--touch-min)] items-center gap-2 text-sm text-[var(--foreground)]"
+                  >
+                    <input
+                      type="checkbox"
+                      name="season_ids"
+                      value={season.id}
+                      checked={checked}
+                      disabled={isPending}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          updateValue("season_ids", [...values.season_ids, season.id]);
+                        } else {
+                          updateValue(
+                            "season_ids",
+                            values.season_ids.filter((id) => id !== season.id),
+                          );
+                        }
+                      }}
+                    />
+                    {season.name}
+                  </label>
+                );
+              })}
+            </div>
+            <FieldError message={fieldErrors.season_ids} />
+          </fieldset>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="price" className="input-label">
+                Price
+              </label>
+              <input
+                id="price"
+                name="price"
+                type="number"
+                min="0"
+                step="0.01"
+                value={values.price}
+                disabled={isPending}
+                onChange={(event) => updateValue("price", event.target.value)}
+                className={inputClassName}
+                placeholder="Optional"
+              />
+              <FieldError message={fieldErrors.price} />
+            </div>
+
+            <div>
+              <label htmlFor="currency_code" className="input-label">
+                Currency
+              </label>
+              <select
+                id="currency_code"
+                name="currency_code"
+                value={values.currency_code}
+                disabled={isPending}
+                onChange={(event) => updateValue("currency_code", event.target.value)}
+                className={inputClassName}
+              >
+                {SUPPORTED_CURRENCIES.map((code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ))}
+              </select>
+              <FieldError message={fieldErrors.currency_code} />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="occasion_tags" className="input-label">
+              Occasion tags
+            </label>
+            <input
+              id="occasion_tags"
+              name="occasion_tags"
+              value={values.occasion_tags}
+              disabled={isPending}
+              onChange={(event) => updateValue("occasion_tags", event.target.value)}
+              className={inputClassName}
+              placeholder="work, casual, formal"
+            />
+            <FieldError message={fieldErrors.occasion_tags} />
+          </div>
+
+          <div>
+            <label htmlFor="notes" className="input-label">
+              Notes
+            </label>
+            <textarea
+              id="notes"
+              name="notes"
+              rows={4}
+              value={values.notes}
+              disabled={isPending}
+              onChange={(event) => updateValue("notes", event.target.value)}
+              className={inputClassName}
+            />
+            <FieldError message={fieldErrors.notes} />
+          </div>
+        </FormSection>
+
+        {formError ? (
+          <p
+            role="alert"
+            className="alert-error"
+          >
+            {formError}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={isPending}
+          className="btn-primary hidden w-full disabled:opacity-60 md:block"
+        >
+          {buttonLabel}
+        </button>
+      </form>
+
+      <MobileActionBar withTabBar={false}>
+        <button
+          type="submit"
+          form={FORM_ID}
+          disabled={isPending}
+          className="btn-primary w-full disabled:opacity-60"
+        >
+          {buttonLabel}
+        </button>
+      </MobileActionBar>
+    </>
   );
 }

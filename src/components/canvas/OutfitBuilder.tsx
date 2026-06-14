@@ -9,10 +9,13 @@ import {
   getNextZIndex,
   sortByZIndex,
 } from "@/lib/canvas/placements";
+import { BuilderActionBar } from "@/components/canvas/BuilderActionBar";
 import { CanvasToolbar } from "@/components/canvas/CanvasToolbar";
 import { OutfitCanvas } from "@/components/canvas/OutfitCanvas";
 import { SaveOutfitForm } from "@/components/canvas/SaveOutfitForm";
+import { useSaveOutfitForm } from "@/components/canvas/useSaveOutfitForm";
 import { WardrobeSidebar } from "@/components/canvas/WardrobeSidebar";
+import { WardrobeStrip } from "@/components/canvas/WardrobeStrip";
 import type { CanvasPlacementState, WardrobeCanvasItem } from "@/lib/types/outfit";
 
 type OutfitBuilderProps = {
@@ -69,6 +72,13 @@ export function OutfitBuilder({
   const [loadedImages, setLoadedImages] = useState<Record<string, HTMLImageElement>>(
     {},
   );
+
+  const saveForm = useSaveOutfitForm({
+    placements,
+    outfitId,
+    initialName,
+    initialNotes,
+  });
 
   const placedItemIds = useMemo(
     () => new Set(placements.map((placement) => placement.itemId)),
@@ -185,41 +195,59 @@ export function OutfitBuilder({
     }, 50);
   }
 
+  const canvasProps = {
+    placements,
+    loadedImages,
+    selectedItemId,
+    onSelect: setSelectedItemId,
+    onPlacementChange: handlePlacementChange,
+    stageRef,
+    mobileScale: true,
+  };
+
+  const toolbarProps = {
+    hasSelection: selectedItemId !== null,
+    hasPlacements: placements.length > 0,
+    onBringForward: handleBringForward,
+    onSendBackward: handleSendBackward,
+    onDelete: handleDelete,
+    onExport: handleExport,
+  };
+
+  const wardrobeProps = {
+    items: wardrobeItems,
+    placedItemIds,
+    onAddItem: handleAddItem,
+  };
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-      <aside>
-        <WardrobeSidebar
-          items={wardrobeItems}
-          placedItemIds={placedItemIds}
-          onAddItem={handleAddItem}
-        />
-      </aside>
+    <div className="pb-mobile-action-focus md:pb-0">
+      <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <aside className="hidden lg:block">
+          <WardrobeSidebar {...wardrobeProps} />
+        </aside>
 
-      <div className="space-y-4">
-        <SaveOutfitForm
-          placements={placements}
-          outfitId={outfitId}
-          initialName={initialName}
-          initialNotes={initialNotes}
-        />
+        <div className="flex flex-col gap-4">
+          <div className="order-1 md:order-3">
+            <OutfitCanvas {...canvasProps} />
+          </div>
 
-        <CanvasToolbar
-          hasSelection={selectedItemId !== null}
-          hasPlacements={placements.length > 0}
-          onBringForward={handleBringForward}
-          onSendBackward={handleSendBackward}
-          onDelete={handleDelete}
-          onExport={handleExport}
-        />
+          <div className="order-2 md:hidden">
+            <WardrobeStrip {...wardrobeProps} />
+          </div>
 
-        <OutfitCanvas
-          placements={placements}
-          loadedImages={loadedImages}
-          selectedItemId={selectedItemId}
-          onSelect={setSelectedItemId}
-          onPlacementChange={handlePlacementChange}
-          stageRef={stageRef}
-        />
+          <div className="order-3 md:order-2">
+            <CanvasToolbar {...toolbarProps} />
+          </div>
+
+          <div className="order-4 hidden md:block md:order-1">
+            <SaveOutfitForm {...saveForm} />
+          </div>
+
+          <div className="order-5 md:hidden">
+            <BuilderActionBar {...saveForm} />
+          </div>
+        </div>
       </div>
     </div>
   );

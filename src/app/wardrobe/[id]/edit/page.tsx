@@ -35,47 +35,47 @@ export default async function EditWardrobeItemPage({
   }
 
   return (
-    <PageShell title="Edit item" description="Update this wardrobe item.">
-      <div className="mb-6">
-        <Link href="/wardrobe" className="text-sm text-stone-600 hover:text-stone-900">
-          Back to wardrobe
-        </Link>
-      </div>
+    <PageShell title={item.name}>
+      <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
+        Back
+      </Link>
 
-      <div className="mb-8">
+      <div className="mb-8 max-w-sm">
         <ItemImage
           src={item.image_url}
           alt={item.name}
-          className="aspect-[4/3] w-full max-w-lg rounded-lg border border-stone-200"
+          className="aspect-[3/4] w-full border border-[var(--border-subtle)]"
           sizes="512px"
           priority
         />
       </div>
 
-      <ItemForm
-        lookups={lookups}
-        userId={user.id}
-        itemId={item.id}
-        currentImageUrl={item.image_url}
-        defaultCurrency={defaultCurrency}
-        submitLabel="Save changes"
-        initialValues={{
-          name: item.name,
-          item_type: item.item_type,
-          category_id: item.category_id ?? "",
-          new_category_name: "",
-          color_id: item.color_id ?? "",
-          brand_id: item.brand_id ?? "",
-          new_brand_name: "",
-          season_ids: item.seasons.map((season) => season.id),
-          occasion_tags: item.occasion_tags.join(", "),
-          notes: item.notes ?? "",
-          price: item.price !== null ? String(item.price) : "",
-          currency_code: item.currency_code ?? defaultCurrency,
-        }}
-      />
+      <div className="pb-mobile-action-focus md:pb-0">
+        <ItemForm
+          lookups={lookups}
+          userId={user.id}
+          itemId={item.id}
+          currentImageUrl={item.image_url}
+          defaultCurrency={defaultCurrency}
+          submitLabel="Save changes"
+          initialValues={{
+            name: item.name,
+            item_type: item.item_type,
+            category_id: item.category_id ?? "",
+            new_category_name: "",
+            color_id: item.color_id ?? "",
+            brand_id: item.brand_id ?? "",
+            new_brand_name: "",
+            season_ids: item.seasons.map((season) => season.id),
+            occasion_tags: item.occasion_tags.join(", "),
+            notes: item.notes ?? "",
+            price: item.price !== null ? String(item.price) : "",
+            currency_code: item.currency_code ?? defaultCurrency,
+          }}
+        />
+      </div>
 
-      <div className="mt-8 border-t border-stone-200 pt-6">
+      <div className="divider-hairline mt-10 pb-mobile-action-focus pt-8 md:pb-0">
         <DeleteItemButton itemId={item.id} />
       </div>
     </PageShell>

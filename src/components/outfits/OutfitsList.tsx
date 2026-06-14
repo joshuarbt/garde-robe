@@ -1,6 +1,6 @@
 "use client";
 
-import { OutfitListItem } from "@/components/outfits/OutfitListItem";
+import { OutfitCard } from "@/components/outfits/OutfitCard";
 import { StaggerItem, StaggerList } from "@/components/layout/motion";
 import { formatOutfitDate } from "@/lib/format/date";
 import type { OutfitSummary } from "@/lib/types/outfit";
@@ -11,10 +11,13 @@ type OutfitsListProps = {
 
 export function OutfitsList({ outfits }: OutfitsListProps) {
   return (
-    <StaggerList as="ul" className="divide-y divide-[var(--border-subtle)]">
-      {outfits.map((outfit) => (
-        <StaggerItem key={outfit.id} as="li">
-          <OutfitListItem
+    <StaggerList
+      as="ul"
+      className="grid grid-cols-2 gap-x-4 gap-y-[var(--space-grid-y)] md:grid-cols-3"
+    >
+      {outfits.map((outfit, index) => (
+        <StaggerItem key={outfit.id} as="li" index={index}>
+          <OutfitCard
             outfit={outfit}
             formattedDate={formatOutfitDate(outfit.updatedAt)}
           />

@@ -1,8 +1,5 @@
-"use client";
-
 import type { ItemWithRelations } from "@/lib/types/item";
-import { ItemCard } from "@/components/wardrobe/ItemCard";
-import { StaggerItem, StaggerList } from "@/components/layout/motion";
+import { AnimatedItemGrid } from "@/components/wardrobe/AnimatedItemGrid";
 import { EmptyState } from "@/components/ui/EmptyState";
 
 type ItemListProps = {
@@ -14,13 +11,5 @@ export function ItemList({ items }: ItemListProps) {
     return <EmptyState message="No items match your filters." />;
   }
 
-  return (
-    <StaggerList className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <StaggerItem key={item.id}>
-          <ItemCard item={item} />
-        </StaggerItem>
-      ))}
-    </StaggerList>
-  );
+  return <AnimatedItemGrid items={items} />;
 }

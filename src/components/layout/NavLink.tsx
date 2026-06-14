@@ -15,13 +15,13 @@ export function NavLink({ href, label }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className={`label-caps relative pb-0.5 transition-opacity hover:opacity-70 ${
+      className={`text-caption relative pb-0.5 font-normal transition-opacity hover:opacity-70 ${
         isActive ? "text-[var(--foreground)]" : "text-[var(--muted)]"
       }`}
     >
       {label}
       {isActive ? (
-        <span className="absolute -bottom-1 left-0 h-px w-full bg-[var(--foreground)]" />
+        <span className="absolute -bottom-1 left-0 h-px w-full bg-[var(--accent)]" />
       ) : null}
     </Link>
   );

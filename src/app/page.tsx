@@ -1,52 +1,32 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
-import { StaggerItem, StaggerList } from "@/components/layout/motion";
+import { createClient } from "@/lib/supabase/server";
 
-const sections = [
-  {
-    href: "/wardrobe",
-    title: "Wardrobe",
-    description: "Browse and manage your pieces.",
-  },
-  {
-    href: "/outfits",
-    title: "Outfits",
-    description: "Compose and save looks on a visual canvas.",
-  },
-  {
-    href: "/calendar",
-    title: "Calendar",
-    description: "Plan what to wear, day by day.",
-  },
-  {
-    href: "/dashboard",
-    title: "Dashboard",
-    description: "Your collection at a glance.",
-  },
-] as const;
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export default function Home() {
+  if (user) {
+    redirect("/wardrobe");
+  }
+
   return (
     <PageShell
-      eyebrow="Personal wardrobe"
+      compact={false}
       title="Your personal wardrobe"
       description="Catalog what you own and build outfits visually — clothing, accessories, and jewelry in one place."
     >
-      <StaggerList className="grid gap-6 sm:grid-cols-2">
-        {sections.map(({ href, title, description }) => (
-          <StaggerItem key={href}>
-            <Link
-              href={href}
-              className="interactive-lift surface-editorial block p-6"
-            >
-              <h2 className="font-display text-2xl font-normal text-[var(--foreground)]">
-                {title}
-              </h2>
-              <p className="mt-2 text-sm text-[var(--muted)]">{description}</p>
-            </Link>
-          </StaggerItem>
-        ))}
-      </StaggerList>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Link href="/login" className="btn-primary">
+          Sign in
+        </Link>
+        <Link href="/signup" className="btn-secondary">
+          Create account
+        </Link>
+      </div>
     </PageShell>
   );
 }

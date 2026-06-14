@@ -21,20 +21,15 @@ export default async function NewWardrobeItemPage() {
   ]);
 
   return (
-    <PageShell
-      title="Add item"
-      description="Add a new piece to your wardrobe."
-    >
-      <div className="mb-6">
-        <Link href="/wardrobe" className="text-sm text-stone-600 hover:text-stone-900">
-          Back to wardrobe
-        </Link>
-      </div>
+    <PageShell title="Add piece">
+      <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
+        Back
+      </Link>
       <ItemForm
         lookups={lookups}
         userId={user.id}
         defaultCurrency={defaultCurrency}
-        submitLabel="Create item"
+        submitLabel="Save piece"
       />
     </PageShell>
   );

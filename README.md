@@ -1,12 +1,13 @@
 # Garde-robe
 
-Personal wardrobe manager — catalog clothing, accessories, and jewelry, then compose outfits on a visual canvas.
+Personal wardrobe manager — catalog clothing, accessories, and jewelry with photos and filters, compose outfits on a Konva canvas, save looks, plan wear days on a calendar, and review your collection summary. See [docs/product.md](docs/product.md) for user flows.
 
 Product docs:
 
 - [docs/product.md](docs/product.md) — vision and user flows
 - [docs/v1-scope.md](docs/v1-scope.md) — MVP boundaries
 - [docs/roadmap.md](docs/roadmap.md) — implementation milestones
+- [docs/v2-features.md](docs/v2-features.md) — pricing, calendar, collection, UI notes
 - [docs/auth.md](docs/auth.md) — authentication setup and flow
 - [docs/database-schema.md](docs/database-schema.md) — database schema and migrations
 - [docs/wardrobe-feature.md](docs/wardrobe-feature.md) — wardrobe CRUD routes and flows
@@ -18,10 +19,37 @@ Product docs:
 
 ## Stack
 
-- Next.js App Router (TypeScript)
-- Tailwind CSS
-- Supabase (auth, database, storage)
-- Vercel (deployment — Milestone 6)
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 App Router, TypeScript, Tailwind CSS v4 |
+| Backend | Supabase (auth, Postgres, Storage) |
+| Canvas | Konva + react-konva |
+| Motion | Framer Motion (`src/lib/motion.ts`, reduced-motion safe) |
+| Icons | Lucide via shared `Icon` / `src/lib/icons.ts` |
+| Typography | Geist Sans + Cormorant Garamond (display) |
+| Deploy | Vercel (Milestone 6) |
+
+## Routes
+
+Authenticated app routes:
+
+| Route | Purpose |
+|-------|---------|
+| `/wardrobe` | Photo grid + filters |
+| `/wardrobe/new` | Add item |
+| `/wardrobe/[id]/edit` | Edit item |
+| `/outfits` | Lookbook grid |
+| `/outfits/new` | Outfit builder (focus layout) |
+| `/outfits/[id]` | View/edit saved look |
+| `/calendar` | Month grid; assign one outfit per day |
+| `/dashboard` | "Your collection" prose summary |
+| `/login`, `/signup` | Auth |
+
+Mobile uses a bottom tab bar and sticky header. Builder and edit routes hide the tab bar (focus routes).
+
+## Design system
+
+Tokens and utilities live in [`src/app/globals.css`](src/app/globals.css) (`--space-*`, `.text-display`, `.text-title`, `.btn-*`). The UI is editorial: photo-first grids, prose collection summary, minimal chrome. Motion primitives are in [`src/lib/motion.ts`](src/lib/motion.ts) and [`src/components/layout/motion.tsx`](src/components/layout/motion.tsx).
 
 ## Getting Started
 
@@ -65,13 +93,22 @@ Placeholder pages run without Supabase configured. Auth and middleware require b
 
 ```
 src/
-├── app/              # Routes and layouts
-├── components/       # UI components (layout/, canvas/)
-├── hooks/            # Client-side hooks
+├── app/                    # App Router pages + globals.css (design tokens)
+├── components/
+│   ├── auth/               # Login, signup, sign out
+│   ├── calendar/           # Grid, assign modal
+│   ├── canvas/             # Outfit builder (Konva)
+│   ├── dashboard/          # Collection stats + category prose
+│   ├── layout/             # AppNav, PageShell, MobileTabBar, motion helpers
+│   ├── outfits/            # OutfitCard, OutfitsList
+│   ├── ui/                 # BottomSheet, EmptyState, Icon, IconButton
+│   └── wardrobe/           # ItemCard, filters, AnimatedItemGrid
+├── hooks/                  # e.g. useIsDesktop
 ├── lib/
-│   ├── env/          # Environment variable validation
-│   └── supabase/     # Browser, server, and middleware clients
-└── middleware.ts     # Supabase session refresh (when env is configured)
+│   ├── auth/, calendar/, dashboard/, outfit/, wardrobe/
+│   ├── icons.ts, motion.ts, currency.ts
+│   └── supabase/           # Browser, server, middleware clients
+└── middleware.ts           # Supabase session refresh (when env is configured)
 ```
 
 ## Scripts

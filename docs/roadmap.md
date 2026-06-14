@@ -27,6 +27,8 @@ Implementation milestones for v1. Each milestone builds on the previous one. Sco
 
 ## Milestone 2: Auth and Database
 
+**Status:** Complete
+
 **Goal:** User accounts and a secure data schema.
 
 **Prep (complete):**
@@ -123,20 +125,34 @@ See [outfit-builder.md](./outfit-builder.md) and [canvas-tech-decision.md](./can
 
 **Goal:** Extend the production app with V2 features documented in [v2-features.md](./v2-features.md).
 
-**Deliverables:**
+### V2 features
 
 - [x] Item price and currency on create/edit forms
 - [x] Save, list, edit, and delete outfits
-- [x] Dashboard stats: item count, outfit count, wardrobe value
+- [x] Collection summary at `/dashboard`: item count, outfit count, wardrobe value, category prose
 - [x] Calendar view with one outfit per day
-- [x] Premium UI: design tokens, Framer Motion animations, refined nav
+
+**Migrations:**
+
+- `20260315000005_v2_schema.sql` (fresh install)
+- `20260315000007_v2_schema_extensions.sql` (if upgrading from former split migrations)
+- `20260315000008_default_currency_eur.sql` (profile default currency EUR)
+
+### V2 UX and editorial polish
+
+- [x] **Mobile-first UX** — 44px touch targets, bottom sheets, sticky action bars, focus routes hide tab bar, builder mobile layout
+- [x] **Icon system** — centralized `src/lib/icons.ts`, `Icon` / `IconButton` wrappers
+- [x] **Premium visual system** — warm tokens, Cormorant display type, hairline borders, no shadows
+- [x] **Premium motion polish** — animated sheets, staggered grids, popovers; `prefers-reduced-motion` respected
+- [x] **Editorial UI restraint** — de-dashboard collection page, photo grids for outfits, text-first filters, lighter nav, `.text-title` hierarchy
+
+UI behavior details in [v2-features.md](./v2-features.md) — update that file's **UI polish** section in a follow-up if desired.
 
 **Exit criteria:**
 
 - [x] All V2 smoke tests in [v2-features.md](./v2-features.md) pass after migrations applied
+- [x] Editorial collection page and lookbook grids ship on wardrobe/outfits
 - [x] `npm run lint` and `npm run build` succeed
-
-**Migrations:** `20260315000005_v2_schema.sql` (and `20260315000007_v2_schema_extensions.sql` if upgrading from the former split files)
 
 ---
 
@@ -149,6 +165,16 @@ See [outfit-builder.md](./outfit-builder.md) and [canvas-tech-decision.md](./can
 - [ ] Vercel deployment with Supabase env vars configured
 - [ ] Smoke test all core flows on desktop and mobile
 - [x] Document deployment and env vars — see [deployment.md](./deployment.md)
+
+**Smoke test checklist (mobile 375px + desktop):**
+
+- [ ] Add item, browse wardrobe photo grid, edit and delete item
+- [ ] Filter "Refine" flow (mobile sheet; desktop compact row)
+- [ ] Build outfit, save, reopen from `/outfits/[id]`
+- [ ] Outfits lookbook grid
+- [ ] Collection prose summary at `/dashboard`
+- [ ] Calendar assign, replace, and remove outfit on a day
+- [ ] Auth: sign up, sign in, sign out
 
 **Exit criteria:**
 

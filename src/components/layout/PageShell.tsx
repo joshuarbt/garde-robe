@@ -2,36 +2,51 @@ import { FadeIn } from "@/components/layout/motion";
 
 type PageShellProps = {
   title: string;
-  description: string;
+  subtitle?: string;
+  description?: string;
   eyebrow?: string;
   children?: React.ReactNode;
   wide?: boolean;
+  compact?: boolean;
   actions?: React.ReactNode;
+  actionsAlign?: "start" | "baseline";
 };
 
 export function PageShell({
   title,
+  subtitle,
   description,
   eyebrow,
   children,
   wide = false,
+  compact = true,
   actions,
+  actionsAlign = "start",
 }: PageShellProps) {
   return (
     <FadeIn
-      className={`mx-auto w-full px-4 py-12 sm:px-6 sm:py-14 ${wide ? "max-w-5xl" : "max-w-2xl"}`}
+      className={`mx-auto w-full px-[var(--space-page-x)] py-[var(--space-page-y)] ${
+        wide ? "max-w-5xl" : "max-w-2xl"
+      }`}
     >
-      {eyebrow ? <p className="label-caps mb-3">{eyebrow}</p> : null}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-normal tracking-tight text-[var(--foreground)] sm:text-4xl">
-            {title}
-          </h1>
-          <p className="mt-3 max-w-xl text-[var(--muted)]">{description}</p>
+      {eyebrow ? <p className="text-overline mb-2">{eyebrow}</p> : null}
+      <div
+        className={`flex justify-between gap-4 ${
+          actionsAlign === "baseline" ? "items-baseline" : "items-start"
+        }`}
+      >
+        <div className="min-w-0 flex-1">
+          <h1 className={compact ? "text-display" : "text-display-lg"}>{title}</h1>
+          {subtitle ? <p className="text-caption mt-3">{subtitle}</p> : null}
+          {description && !compact ? (
+            <p className="text-caption mt-4 max-w-xl">{description}</p>
+          ) : null}
         </div>
         {actions ? <div className="shrink-0">{actions}</div> : null}
       </div>
-      {children ? <div className="mt-10">{children}</div> : null}
+      {children ? (
+        <div className="mt-10 md:mt-12">{children}</div>
+      ) : null}
     </FadeIn>
   );
 }

@@ -4,5 +4,7 @@ type SectionLabelProps = {
 };
 
 export function SectionLabel({ children, className = "" }: SectionLabelProps) {
-  return <h2 className={`label-caps ${className}`.trim()}>{children}</h2>;
+  return (
+    <h2 className={`label-caps ${className}`.trim()}>{children}</h2>
+  );
 }

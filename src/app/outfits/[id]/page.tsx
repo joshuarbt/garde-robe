@@ -50,31 +50,28 @@ export default async function EditOutfitPage({
   return (
     <PageShell
       title={outfit.name}
-      description="Edit your saved outfit. Drag, resize, and rotate items on the canvas."
       wide
-      actions={<DeleteOutfitButton outfitId={outfit.id} outfitName={outfit.name} />}
+      actions={
+        <DeleteOutfitButton outfitId={outfit.id} outfitName={outfit.name} />
+      }
     >
       <Link href="/outfits" className="btn-ghost mb-6 inline-block">
-        Back to outfits
+        Back
       </Link>
 
       {saved === "1" ? (
-        <p
-          role="status"
-          className="mb-6 border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800"
-        >
-          Outfit saved successfully.
+        <p role="status" className="alert-success mb-6">
+          Look saved.
         </p>
       ) : null}
 
       {outfit.notes ? (
-        <p className="mb-6 text-sm text-[var(--muted)]">{outfit.notes}</p>
+        <p className="text-meta mb-6">{outfit.notes}</p>
       ) : null}
 
       {missingCount > 0 ? (
-        <p className="mb-6 text-sm text-amber-700">
-          {missingCount} saved item{missingCount === 1 ? " is" : "s are"} no longer in
-          your wardrobe and could not be loaded.
+        <p className="alert-warning mb-6">
+          {missingCount} piece{missingCount === 1 ? "" : "s"} could not be loaded.
         </p>
       ) : null}
 

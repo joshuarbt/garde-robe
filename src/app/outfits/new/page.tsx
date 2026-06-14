@@ -20,15 +20,10 @@ export default async function NewOutfitPage() {
   const wardrobeItems = toWardrobeCanvasItems(items);
 
   return (
-    <PageShell
-      title="Build outfit"
-      description="Click wardrobe items to add them. Drag, resize, and rotate on the canvas."
-      wide
-    >
-      <Link href="/outfits" className="btn-ghost mb-8 inline-block">
-        Back to outfits
+    <PageShell title="Build look" wide>
+      <Link href="/outfits" className="btn-ghost mb-6 inline-block">
+        Back
       </Link>
-
       <OutfitBuilderLoader wardrobeItems={wardrobeItems} />
     </PageShell>
   );

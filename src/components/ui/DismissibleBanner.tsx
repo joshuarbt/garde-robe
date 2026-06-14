@@ -17,13 +17,13 @@ export function DismissibleBanner({ message, className = "" }: DismissibleBanner
   return (
     <div
       role="status"
-      className={`mb-6 flex items-start justify-between gap-4 border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 ${className}`.trim()}
+      className={`alert-warning mb-6 flex items-start justify-between gap-4 ${className}`.trim()}
     >
       <p>{message}</p>
       <button
         type="button"
         onClick={() => setVisible(false)}
-        className="shrink-0 text-amber-800 underline-offset-2 hover:underline"
+        className="btn-ghost shrink-0 text-sm text-[var(--status-warning)]"
         aria-label="Dismiss"
       >
         Dismiss

@@ -21,7 +21,7 @@ export function AuthFormField({
 }: AuthFormFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-stone-700">
+      <label htmlFor={id} className="input-label">
         {label}
       </label>
       <input
@@ -33,7 +33,7 @@ export function AuthFormField({
         value={value}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder:text-stone-400 focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500 disabled:opacity-60"
+        className="input-field mt-1.5"
       />
     </div>
   );

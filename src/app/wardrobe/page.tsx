@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ItemList } from "@/components/wardrobe/ItemList";
+import { FilterSheet } from "@/components/wardrobe/FilterSheet";
+import { WardrobeFilterChips } from "@/components/wardrobe/WardrobeFilterChips";
 import { WardrobeFiltersBar } from "@/components/wardrobe/WardrobeFilters";
 import { PageShell } from "@/components/layout/PageShell";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { IconLink } from "@/components/ui/IconButton";
+import { actionIcons } from "@/lib/icons";
 import type { WardrobeFilters } from "@/lib/types/item";
 import { getItems, getWardrobeLookups } from "@/lib/wardrobe/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -46,36 +50,60 @@ export default async function WardrobePage({ searchParams }: WardrobePageProps) 
     Boolean(params.season) ||
     Boolean(params.brand);
 
+  const pieceLabel = `${items.length} piece${items.length === 1 ? "" : "s"}`;
+
   return (
     <PageShell
       title="Wardrobe"
-      description="Browse and manage your clothing, accessories, and jewelry."
+      subtitle={pieceLabel}
       wide
+      actionsAlign="baseline"
       actions={
-        <Link href="/wardrobe/new" className="btn-primary">
-          Add item
-        </Link>
+        <div className="flex items-center gap-2">
+          {(items.length > 0 || hasActiveFilters) && (
+            <FilterSheet lookups={lookups} filters={filters} />
+          )}
+          <Link
+            href="/wardrobe/new"
+            className="btn-ghost hidden min-h-[var(--touch-min)] sm:inline-flex"
+          >
+            Add
+          </Link>
+          <IconLink
+            href="/wardrobe/new"
+            icon={actionIcons.add}
+            label="Add item"
+            className="sm:hidden"
+          />
+        </div>
       }
     >
-      <p className="label-caps mb-8">
-        {items.length} item{items.length === 1 ? "" : "s"}
-      </p>
+      {hasActiveFilters ? (
+        <WardrobeFilterChips
+          lookups={lookups}
+          filters={filters}
+          className="mb-6 md:hidden"
+        />
+      ) : null}
 
-      <div className="space-y-8">
-        {items.length > 0 || hasActiveFilters ? (
+      {(items.length > 0 || hasActiveFilters) && (
+        <div className="mb-8 hidden md:block">
           <WardrobeFiltersBar lookups={lookups} filters={filters} />
-        ) : null}
+          {hasActiveFilters ? (
+            <WardrobeFilterChips lookups={lookups} filters={filters} className="mt-3" />
+          ) : null}
+        </div>
+      )}
 
-        {items.length === 0 && !hasActiveFilters ? (
-          <EmptyState
-            message="No items yet."
-            actionLabel="Add your first item"
-            actionHref="/wardrobe/new"
-          />
-        ) : (
-          <ItemList items={items} />
-        )}
-      </div>
+      {items.length === 0 && !hasActiveFilters ? (
+        <EmptyState
+          message="Your wardrobe is empty."
+          actionLabel="Add your first piece"
+          actionHref="/wardrobe/new"
+        />
+      ) : (
+        <ItemList items={items} />
+      )}
     </PageShell>
   );
 }

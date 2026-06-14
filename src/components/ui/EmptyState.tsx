@@ -16,15 +16,16 @@ export function EmptyState({
   className = "",
 }: EmptyStateProps) {
   return (
-    <div
-      className={`rounded-sm border border-dashed border-[var(--border-strong)] bg-[var(--surface)] px-8 py-12 text-center ${className}`.trim()}
-    >
-      <p className="text-[var(--muted)]">{message}</p>
-      {description ? (
-        <p className="mt-2 text-sm text-stone-500">{description}</p>
-      ) : null}
+    <div className={`py-16 text-center md:py-20 ${className}`.trim()}>
+      <p className="font-display text-[var(--text-display)] leading-[var(--text-display-leading)] text-[var(--muted)]">
+        {message}
+      </p>
+      {description ? <p className="text-caption mx-auto mt-3 max-w-sm">{description}</p> : null}
       {actionLabel && actionHref ? (
-        <Link href={actionHref} className="btn-ghost mt-5 inline-block">
+        <Link
+          href={actionHref}
+          className="btn-ghost btn-ghost-underline mt-8 inline-flex"
+        >
           {actionLabel}
         </Link>
       ) : null}

@@ -61,14 +61,14 @@ export function ImageUploadField({
 
   return (
     <div>
-      <label htmlFor="item_image" className="block text-sm font-medium text-stone-700">
+      <label htmlFor="item_image" className="input-label">
         Photo
       </label>
       <div className="mt-2 space-y-3">
         <ItemImage
           src={displayUrl}
           alt="Item preview"
-          className="aspect-square w-full max-w-xs rounded-md border border-stone-200"
+          className="aspect-square w-full max-w-xs border border-[var(--border-subtle)]"
           sizes="320px"
         />
         <input
@@ -78,12 +78,12 @@ export function ImageUploadField({
           accept="image/jpeg,image/png,image/webp"
           disabled={disabled}
           onChange={handleFileChange}
-          className="block w-full text-sm text-stone-700 file:mr-3 file:rounded-md file:border-0 file:bg-stone-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-stone-900 hover:file:bg-stone-200 disabled:opacity-60"
+          className="block w-full text-sm text-[var(--foreground)] file:mr-3 file:border-0 file:bg-[var(--surface-muted)] file:px-3 file:py-2 file:text-sm file:font-medium file:text-[var(--foreground)] disabled:opacity-60"
         />
-        <p className="text-xs text-stone-500">JPEG, PNG, or WebP. Max 5 MB.</p>
+        <p className="text-meta">JPEG, PNG, or WebP. Max 5 MB.</p>
       </div>
       {displayError ? (
-        <p className="mt-1 text-sm text-red-700">{displayError}</p>
+        <p className="text-status-error mt-1 text-sm">{displayError}</p>
       ) : null}
     </div>
   );

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { AppNav } from "@/components/layout/AppNav";
+import { MainContent } from "@/components/layout/MainContent";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,7 +38,8 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
         <AppNav />
-        <main className="flex-1">{children}</main>
+        <MainContent>{children}</MainContent>
+        <MobileTabBar />
       </body>
     </html>
   );

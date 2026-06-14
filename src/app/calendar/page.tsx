@@ -85,7 +85,6 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
   return (
     <PageShell
       title="Calendar"
-      description="Plan what to wear. Assign one saved outfit per day."
       wide
     >
       {outfitLinkWarning ? <DismissibleBanner message={outfitLinkWarning} /> : null}

@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { CategoryBreakdown } from "@/components/dashboard/CategoryBreakdown";
-import {
-  DashboardQuickLinks,
-  StatsCards,
-} from "@/components/dashboard/StatsCards";
+import { StatsCards } from "@/components/dashboard/StatsCards";
 import { PageShell } from "@/components/layout/PageShell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getDashboardStats } from "@/lib/dashboard/queries";
@@ -28,37 +25,29 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats();
 
   return (
-    <PageShell
-      title="Dashboard"
-      description="Your wardrobe at a glance."
-      wide
-    >
+    <PageShell title="Your collection">
       {stats.itemCount === 0 ? (
         <EmptyState
-          className="mb-8"
-          message="Add clothing to your wardrobe to see stats here."
-          actionLabel="Add your first item"
+          message="Add pieces to your wardrobe to see your collection summary."
+          actionLabel="Add your first piece"
           actionHref="/wardrobe/new"
         />
       ) : (
-        <StatsCards stats={stats} />
+        <>
+          <StatsCards stats={stats} />
+          <CategoryBreakdown
+            breakdown={stats.categoryBreakdown}
+            className="mt-[var(--space-section)]"
+          />
+          <div className="mt-[var(--space-section)] flex flex-wrap items-baseline gap-x-4 gap-y-2">
+            <p className="text-meta">
+              Signed in as{" "}
+              <span className="text-[var(--foreground)]">{user.email}</span>
+            </p>
+            <SignOutButton />
+          </div>
+        </>
       )}
-
-      {stats.itemCount > 0 ? (
-        <CategoryBreakdown breakdown={stats.categoryBreakdown} className="mt-10" />
-      ) : null}
-
-      <DashboardQuickLinks className="mt-10 divider-hairline pt-10" />
-
-      <div className="mt-10 divider-hairline pt-8">
-        <p className="text-xs text-[var(--muted)]">
-          Signed in as{" "}
-          <span className="text-[var(--foreground)]">{user.email}</span>
-        </p>
-        <div className="mt-3">
-          <SignOutButton />
-        </div>
-      </div>
     </PageShell>
   );
 }

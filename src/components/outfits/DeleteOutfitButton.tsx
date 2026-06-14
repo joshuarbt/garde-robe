@@ -1,14 +1,23 @@
 "use client";
 
 import { useTransition } from "react";
+import { Icon } from "@/components/ui/Icon";
+import { actionIcons } from "@/lib/icons";
 import { deleteOutfit } from "@/lib/outfit/actions";
 
 type DeleteOutfitButtonProps = {
   outfitId: string;
   outfitName: string;
+  variant?: "text" | "icon" | "menu";
+  onComplete?: () => void;
 };
 
-export function DeleteOutfitButton({ outfitId, outfitName }: DeleteOutfitButtonProps) {
+export function DeleteOutfitButton({
+  outfitId,
+  outfitName,
+  variant = "text",
+  onComplete,
+}: DeleteOutfitButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   function handleDelete() {
@@ -19,7 +28,35 @@ export function DeleteOutfitButton({ outfitId, outfitName }: DeleteOutfitButtonP
 
     startTransition(async () => {
       await deleteOutfit(outfitId);
+      onComplete?.();
     });
+  }
+
+  if (variant === "menu") {
+    return (
+      <button
+        type="button"
+        disabled={isPending}
+        onClick={handleDelete}
+        className="btn-destructive flex min-h-[var(--touch-min)] w-full items-center text-sm active:bg-[var(--surface-muted)] disabled:opacity-60"
+      >
+        {isPending ? "Deleting…" : "Delete"}
+      </button>
+    );
+  }
+
+  if (variant === "icon") {
+    return (
+      <button
+        type="button"
+        disabled={isPending}
+        onClick={handleDelete}
+        className="btn-icon text-[var(--status-error)] disabled:opacity-60"
+        aria-label={`Delete ${outfitName}`}
+      >
+        <Icon icon={actionIcons.delete} size="sm" />
+      </button>
+    );
   }
 
   return (
@@ -27,7 +64,7 @@ export function DeleteOutfitButton({ outfitId, outfitName }: DeleteOutfitButtonP
       type="button"
       disabled={isPending}
       onClick={handleDelete}
-      className="text-sm text-red-700 hover:text-red-800 disabled:opacity-60"
+      className="btn-destructive text-sm disabled:opacity-60"
     >
       {isPending ? "Deleting…" : "Delete"}
     </button>

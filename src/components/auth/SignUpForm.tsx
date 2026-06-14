@@ -30,13 +30,13 @@ export function SignUpForm() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push("/wardrobe");
     router.refresh();
   }
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="mx-auto max-w-sm space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <AuthFormField
           id="signup-email"
           label="Email"
@@ -59,26 +59,19 @@ export function SignUpForm() {
         />
 
         {error ? (
-          <p
-            role="alert"
-            className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
-          >
+          <p role="alert" className="alert-error">
             {error}
           </p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-stone-800 disabled:opacity-60"
-        >
+        <button type="submit" disabled={isLoading} className="btn-primary w-full">
           {isLoading ? "Creating account…" : "Create account"}
         </button>
       </form>
 
-      <p className="text-sm text-stone-600">
+      <p className="text-meta text-center">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-stone-900 hover:underline">
+        <Link href="/login" className="text-[var(--foreground)] underline-offset-2 hover:underline">
           Sign in
         </Link>
       </p>

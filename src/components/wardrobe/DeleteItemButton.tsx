@@ -29,7 +29,7 @@ export function DeleteItemButton({ itemId }: DeleteItemButtonProps) {
       type="button"
       onClick={handleDelete}
       disabled={isPending}
-      className="rounded-md border border-red-200 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60"
+      className="btn-destructive disabled:opacity-60"
     >
       {isPending ? "Deleting…" : "Delete item"}
     </button>

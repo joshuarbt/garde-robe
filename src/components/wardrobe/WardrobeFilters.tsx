@@ -6,24 +6,21 @@ type WardrobeFiltersProps = {
   filters: WardrobeFilters;
 };
 
-const selectClassName =
-  "mt-1 block w-full rounded-sm border border-[var(--border-subtle)] bg-[var(--surface)] px-2 py-2 text-sm text-[var(--foreground)] focus:border-[var(--foreground)] focus:outline-none focus:ring-1 focus:ring-[var(--foreground)]";
-
 export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
   return (
     <form
       method="get"
-      className="divider-hairline grid gap-4 pb-6 sm:grid-cols-2 lg:grid-cols-4"
+      className="flex flex-wrap items-end gap-x-4 gap-y-3 pb-4"
     >
-      <div>
-        <label htmlFor="category" className="label-caps">
+      <div className="min-w-[8rem] flex-1">
+        <label htmlFor="category" className="input-label">
           Category
         </label>
         <select
           id="category"
           name="category"
           defaultValue={filters.category ?? ""}
-          className={selectClassName}
+          className="input-field mt-1"
         >
           <option value="">All categories</option>
           {lookups.categories.map((category) => (
@@ -34,15 +31,15 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
         </select>
       </div>
 
-      <div>
-        <label htmlFor="color" className="label-caps">
+      <div className="min-w-[8rem] flex-1">
+        <label htmlFor="color" className="input-label">
           Color
         </label>
         <select
           id="color"
           name="color"
           defaultValue={filters.color ?? ""}
-          className={selectClassName}
+          className="input-field mt-1"
         >
           <option value="">All colors</option>
           {lookups.colors.map((color) => (
@@ -53,15 +50,15 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
         </select>
       </div>
 
-      <div>
-        <label htmlFor="season" className="label-caps">
+      <div className="min-w-[8rem] flex-1">
+        <label htmlFor="season" className="input-label">
           Season
         </label>
         <select
           id="season"
           name="season"
           defaultValue={filters.season ?? ""}
-          className={selectClassName}
+          className="input-field mt-1"
         >
           <option value="">All seasons</option>
           {lookups.seasons.map((season) => (
@@ -72,15 +69,15 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
         </select>
       </div>
 
-      <div>
-        <label htmlFor="brand" className="label-caps">
+      <div className="min-w-[8rem] flex-1">
+        <label htmlFor="brand" className="input-label">
           Brand
         </label>
         <select
           id="brand"
           name="brand"
           defaultValue={filters.brand ?? ""}
-          className={selectClassName}
+          className="input-field mt-1"
         >
           <option value="">All brands</option>
           {lookups.brands.map((brand) => (
@@ -91,12 +88,12 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
         </select>
       </div>
 
-      <div className="flex flex-wrap items-end gap-4 sm:col-span-2 lg:col-span-4">
-        <button type="submit" className="btn-primary">
-          Apply filters
+      <div className="flex items-center gap-4 pb-1">
+        <button type="submit" className="btn-ghost text-sm">
+          Apply
         </button>
-        <Link href="/wardrobe" className="btn-ghost">
-          Clear filters
+        <Link href="/wardrobe" className="btn-ghost text-sm">
+          Clear
         </Link>
       </div>
     </form>

@@ -18,7 +18,7 @@ export function ItemImage({
   if (!src) {
     return (
       <div
-        className={`flex items-center justify-center bg-stone-100 text-sm text-stone-400 ${className}`}
+        className={`flex items-center justify-center bg-[var(--surface-muted)] text-sm text-[var(--muted)] ${className}`}
       >
         No photo
       </div>
@@ -26,7 +26,7 @@ export function ItemImage({
   }
 
   return (
-    <div className={`relative overflow-hidden bg-stone-100 ${className}`}>
+    <div className={`relative overflow-hidden bg-[var(--surface-muted)] ${className}`}>
       <Image
         src={src}
         alt={alt}
