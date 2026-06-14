@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
+import { OutfitPreview } from "@/components/outfits/OutfitPreview";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Crossfade } from "@/components/layout/motion";
@@ -42,6 +43,17 @@ export function AssignOutfitModal({
 
   const title = currentEntry && !isChanging ? "Planned outfit" : "Assign outfit";
   const contentKey = currentEntry && !isChanging ? "view" : "assign";
+
+  const outfitsById = useMemo(() => {
+    const map = new Map<string, OutfitSummary>();
+    for (const outfit of outfits) {
+      map.set(outfit.id, outfit);
+    }
+    return map;
+  }, [outfits]);
+
+  const assignedOutfit = currentEntry ? outfitsById.get(currentEntry.outfitId) ?? null : null;
+  const selectedOutfit = selectedOutfitId ? outfitsById.get(selectedOutfitId) ?? null : null;
 
   function handleAssign() {
     if (!selectedOutfitId) {
@@ -167,17 +179,27 @@ export function AssignOutfitModal({
 
       <Crossfade contentKey={contentKey}>
         {currentEntry && !isChanging ? (
-          <div className="divider-hairline mt-6 space-y-3 pt-6">
-            <p className="label-caps">Outfit for this day</p>
-            <Link
-              href={`/outfits/${currentEntry.outfitId}`}
-              className="block font-display text-xl text-[var(--foreground)] transition-opacity hover:opacity-70"
-            >
-              {currentEntry.outfitName}
-            </Link>
-            {currentEntry.notes ? (
-              <p className="text-sm text-[var(--muted)]">{currentEntry.notes}</p>
+          <div className="mt-6 space-y-4">
+            {assignedOutfit ? (
+              <OutfitPreview
+                items={assignedOutfit.previewItems}
+                alt={currentEntry.outfitName}
+                variant="card"
+                className="w-full"
+              />
             ) : null}
+            <div className="space-y-2">
+              <p className="text-overline">Outfit for this day</p>
+              <Link
+                href={`/outfits/${currentEntry.outfitId}`}
+                className="block text-title text-[var(--foreground)] transition-opacity hover:opacity-70"
+              >
+                {currentEntry.outfitName}
+              </Link>
+              {currentEntry.notes ? (
+                <p className="text-sm text-[var(--muted)]">{currentEntry.notes}</p>
+              ) : null}
+            </div>
           </div>
         ) : (
           <>
@@ -196,23 +218,42 @@ export function AssignOutfitModal({
                 />
               </div>
             ) : (
-              <ul className="mt-6 max-h-60 space-y-2 overflow-y-auto">
-                {outfits.map((outfit) => (
-                  <li key={outfit.id}>
-                    <label className="flex min-h-[var(--touch-min)] cursor-pointer items-center gap-3 border border-[var(--border-subtle)] px-3 py-3 transition-colors hover:bg-[var(--surface-muted)]">
-                      <input
-                        type="radio"
-                        name="outfit"
-                        value={outfit.id}
-                        checked={selectedOutfitId === outfit.id}
-                        disabled={isPending}
-                        onChange={() => setSelectedOutfitId(outfit.id)}
-                      />
-                      <span className="text-sm text-[var(--foreground)]">{outfit.name}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-6 space-y-4">
+                {selectedOutfit ? (
+                  <OutfitPreview
+                    items={selectedOutfit.previewItems}
+                    alt={selectedOutfit.name}
+                    variant="card"
+                    className="w-full"
+                  />
+                ) : null}
+
+                <ul className="max-h-60 divide-y divide-[var(--border-hairline)] overflow-y-auto">
+                  {outfits.map((outfit) => (
+                    <li key={outfit.id}>
+                      <label className="flex min-h-[var(--touch-min)] cursor-pointer items-center gap-3 py-3 transition-opacity active:opacity-70">
+                        <input
+                          type="radio"
+                          name="outfit"
+                          value={outfit.id}
+                          checked={selectedOutfitId === outfit.id}
+                          disabled={isPending}
+                          onChange={() => setSelectedOutfitId(outfit.id)}
+                          className="shrink-0"
+                        />
+                        <OutfitPreview
+                          items={outfit.previewItems}
+                          alt={outfit.name}
+                          variant="row"
+                        />
+                        <span className="min-w-0 flex-1 text-sm text-[var(--foreground)]">
+                          {outfit.name}
+                        </span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </>
         )}

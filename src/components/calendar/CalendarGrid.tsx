@@ -98,6 +98,14 @@ export function CalendarGrid({
 
   const selectedEntry = selectedDate ? entryByDate.get(selectedDate) ?? null : null;
 
+  const outfitsById = useMemo(() => {
+    const map = new Map<string, OutfitSummary>();
+    for (const outfit of outfits) {
+      map.set(outfit.id, outfit);
+    }
+    return map;
+  }, [outfits]);
+
   return (
     <>
       {preselectedOutfitId && preselectedOutfitName ? (
@@ -136,7 +144,11 @@ export function CalendarGrid({
         </div>
 
         <div className="grid grid-cols-7 border-t border-[var(--border-subtle)]">
-          {cells.map((cell, index) => (
+          {cells.map((cell, index) => {
+            const entry =
+              cell.scheduledDate ? entryByDate.get(cell.scheduledDate) ?? null : null;
+
+            return (
             <div
               key={cell.scheduledDate ?? `empty-${index}`}
               className={`border-b border-[var(--border-subtle)] ${
@@ -146,14 +158,14 @@ export function CalendarGrid({
               <CalendarDayCell
                 day={cell.day}
                 scheduledDate={cell.scheduledDate}
-                entry={
-                  cell.scheduledDate ? entryByDate.get(cell.scheduledDate) ?? null : null
-                }
+                entry={entry}
+                outfit={entry ? outfitsById.get(entry.outfitId) ?? null : null}
                 isToday={cell.scheduledDate === today}
                 onSelectDate={setSelectedDate}
               />
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

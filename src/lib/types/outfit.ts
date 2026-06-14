@@ -21,12 +21,22 @@ export type Outfit = {
   items: CanvasItemPlacement[];
 };
 
+export type OutfitPreviewItem = {
+  itemId: string;
+  imageUrl: string;
+  x: number;
+  y: number;
+  scale: number;
+  rotation: number;
+  zIndex: number;
+};
+
 export type OutfitSummary = {
   id: string;
   name: string;
   notes?: string | null;
   coverImageUrl?: string | null;
-  previewImageUrl?: string | null;
+  previewItems: OutfitPreviewItem[];
   itemCount: number;
   createdAt: string;
   updatedAt: string;
