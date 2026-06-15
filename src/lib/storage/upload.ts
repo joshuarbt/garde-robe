@@ -1,8 +1,10 @@
 "use client";
 
+import { PROCESSED_IMAGE_CONTENT_TYPE } from "@/lib/image-processing/constants";
 import { resizeImageFile } from "@/lib/images/client";
 import {
   buildItemOriginalPath,
+  buildItemProcessedPath,
   getExtensionForMimeType,
   ITEM_IMAGES_BUCKET,
 } from "@/lib/storage/paths";
@@ -37,6 +39,26 @@ export async function uploadItemImage(
       upsert: true,
       contentType: processedFile.type,
     });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { path };
+}
+
+export async function uploadProcessedItemImage(
+  pngBlob: Blob,
+  userId: string,
+  itemId: string,
+): Promise<{ path: string } | { error: string }> {
+  const path = buildItemProcessedPath(userId, itemId);
+  const supabase = createClient();
+
+  const { error } = await supabase.storage.from(ITEM_IMAGES_BUCKET).upload(path, pngBlob, {
+    upsert: true,
+    contentType: PROCESSED_IMAGE_CONTENT_TYPE,
+  });
 
   if (error) {
     return { error: error.message };

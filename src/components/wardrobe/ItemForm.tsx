@@ -10,11 +10,13 @@ import type { ItemFormErrors, ItemFormInput, ItemType, WardrobeLookups } from "@
 import { ITEM_TYPES } from "@/lib/types/item";
 import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import { DEFAULT_CURRENCY, SUPPORTED_CURRENCIES } from "@/lib/currency";
-import { uploadItemImage } from "@/lib/storage/upload";
+import { uploadItemImage, uploadProcessedItemImage } from "@/lib/storage/upload";
 import {
+  completeBackgroundRemoval,
   saveItemMetadata,
   updateItemImagePath,
 } from "@/lib/wardrobe/actions";
+import type { BackgroundChoice } from "@/components/wardrobe/ImageUploadField";
 
 type ItemFormProps = {
   lookups: WardrobeLookups;
@@ -75,20 +77,20 @@ type FormSectionProps = {
 
 function FormSection({ title, defaultOpen = true, children }: FormSectionProps) {
   return (
-    <>
-      <details open={defaultOpen} className="group space-y-4 md:hidden">
-        <summary className="flex min-h-[var(--touch-min)] cursor-pointer list-none items-center justify-between border-b border-[var(--border-subtle)] pb-3 font-medium text-[var(--foreground)] [&::-webkit-details-marker]:hidden">
-          {title}
-          <Icon
-            icon={actionIcons.expand}
-            size="sm"
-            className="text-[var(--muted)] transition-transform group-open:rotate-180"
-          />
-        </summary>
-        <div className="space-y-4 pb-4 pt-2">{children}</div>
-      </details>
-      <div className="hidden space-y-4 md:block">{children}</div>
-    </>
+    <details open={defaultOpen} className="group space-y-4">
+      <summary className="flex min-h-[var(--touch-min)] cursor-pointer list-none items-center justify-between border-b border-[var(--border-subtle)] pb-3 font-medium text-[var(--foreground)] md:hidden [&::-webkit-details-marker]:hidden">
+        {title}
+        <Icon
+          icon={actionIcons.expand}
+          size="sm"
+          className="text-[var(--muted)] transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="space-y-4 pb-4 pt-2 md:pb-0 md:pt-0">
+        <p className="input-label hidden md:block">{title}</p>
+        {children}
+      </div>
+    </details>
   );
 }
 
@@ -111,6 +113,10 @@ export function ItemForm({
   const [formError, setFormError] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [backgroundChoice, setBackgroundChoice] = useState<BackgroundChoice>({
+    useProcessed: false,
+    processedBlob: null,
+  });
   const [phase, setPhase] = useState<SubmitPhase>("idle");
 
   const isPending = phase !== "idle";
@@ -158,6 +164,27 @@ export function ItemForm({
           setPhase("idle");
           return;
         }
+
+        if (backgroundChoice.useProcessed && backgroundChoice.processedBlob) {
+          const processedUpload = await uploadProcessedItemImage(
+            backgroundChoice.processedBlob,
+            userId,
+            savedItemId,
+          );
+
+          if ("error" in processedUpload) {
+            setImageError(processedUpload.error);
+            setPhase("idle");
+            return;
+          }
+
+          const completionResult = await completeBackgroundRemoval(savedItemId);
+          if (!completionResult.success) {
+            setImageError(completionResult.error);
+            setPhase("idle");
+            return;
+          }
+        }
       }
 
       router.push("/wardrobe");
@@ -184,6 +211,7 @@ export function ItemForm({
             currentImageUrl={currentImageUrl}
             disabled={isPending}
             onFileChange={setSelectedFile}
+            onBackgroundChoiceChange={setBackgroundChoice}
             error={imageError}
           />
 

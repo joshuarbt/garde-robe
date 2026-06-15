@@ -125,10 +125,14 @@ export function validateItemFormInput(
 }
 
 export function parseItemFormData(formData: FormData): ItemFormInput {
-  const seasonIds = formData
-    .getAll("season_ids")
-    .map((value) => String(value))
-    .filter(Boolean);
+  const seasonIds = [
+    ...new Set(
+      formData
+        .getAll("season_ids")
+        .map((value) => String(value))
+        .filter(Boolean),
+    ),
+  ];
 
   return {
     name: String(formData.get("name") ?? ""),

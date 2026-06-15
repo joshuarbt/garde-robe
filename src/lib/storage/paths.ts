@@ -22,7 +22,7 @@ export function buildItemOriginalPath(
 }
 
 export function buildItemProcessedPath(userId: string, itemId: string): string {
-  return `${userId}/${itemId}/processed.webp`;
+  return `${userId}/${itemId}/processed.png`;
 }
 
 export function buildItemFolderPrefix(userId: string, itemId: string): string {

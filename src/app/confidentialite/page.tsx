@@ -179,30 +179,11 @@ export default function ConfidentialitePage() {
         </LegalSection>
 
         <LegalSection title="9. Cookies" id="cookies">
-          <p>Nous utilisons deux types de cookies :</p>
-          <ul className="list-disc space-y-2 pl-5 text-[var(--muted)]">
-            <li>
-              <strong className="text-[var(--foreground)]">Cookies essentiels</strong> — cookies de
-              session Supabase (
-              <code className="text-[var(--foreground)]">sb-*-auth-token</code>) nécessaires à la
-              connexion et au fonctionnement du service. Ils ne requièrent pas votre consentement
-              préalable.
-            </li>
-            <li>
-              <strong className="text-[var(--foreground)]">Cookies non essentiels</strong> — mesure
-              d&apos;audience (statistiques anonymes). Ils ne sont déposés qu&apos;avec votre
-              consentement explicite via le bandeau ou la page «&nbsp;Gérer les cookies&nbsp;».
-              Aucun outil de mesure d&apos;audience n&apos;est actif pour l&apos;instant.
-            </li>
-          </ul>
-          <p className="text-[var(--muted)]">
-            Refuser les cookies non essentiels n&apos;affecte pas votre connexion ni l&apos;utilisation
-            de la garde-robe, des tenues ou du calendrier. Vous pouvez modifier votre choix à tout
-            moment depuis le pied de page ou{" "}
-            <Link href="/compte" className="text-[var(--foreground)] underline-offset-2 hover:underline">
-              Mon compte
-            </Link>
-            .
+          <p>
+            Nous utilisons uniquement des cookies essentiels de session Supabase (
+            <code className="text-[var(--foreground)]">sb-*-auth-token</code>) nécessaires à la
+            connexion et au fonctionnement du service. Aucun cookie de mesure d&apos;audience ou
+            publicitaire n&apos;est déposé.
           </p>
         </LegalSection>
 

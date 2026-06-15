@@ -6,7 +6,7 @@ const protectedRoutes = ["/dashboard", "/wardrobe", "/outfits", "/calendar", "/c
 const authRoutes = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  const supabaseResponse = NextResponse.next({
     request,
   });
 
@@ -18,18 +18,25 @@ export async function updateSession(request: NextRequest) {
       getAll() {
         return request.cookies.getAll();
       },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => {
-          request.cookies.set(name, value);
-        });
-
-        supabaseResponse = NextResponse.next({
-          request,
-        });
+      setAll(cookiesToSet, headers) {
+        let anyChanged = false;
 
         cookiesToSet.forEach(({ name, value, options }) => {
+          const existing = request.cookies.get(name)?.value;
+          if (existing === value) {
+            return;
+          }
+
+          anyChanged = true;
+          request.cookies.set(name, value);
           supabaseResponse.cookies.set(name, value, options);
         });
+
+        if (anyChanged) {
+          Object.entries(headers).forEach(([key, headerValue]) => {
+            supabaseResponse.headers.set(key, headerValue);
+          });
+        }
       },
     },
   });

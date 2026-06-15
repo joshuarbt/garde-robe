@@ -22,7 +22,7 @@ export function isValidCurrencyCode(value: string): value is CurrencyCode {
 }
 
 export function formatPrice(amount: number, currencyCode: string): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: currencyCode,
   }).format(amount);

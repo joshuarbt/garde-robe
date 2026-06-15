@@ -14,7 +14,7 @@ import {
   buildItemProcessedPath,
   ITEM_IMAGES_BUCKET,
 } from "@/lib/storage/paths";
-import { resetImageProcessingState } from "@/lib/image-processing/service";
+import { resetImageProcessingState, markProcessingCompleted } from "@/lib/image-processing/service";
 import { createClient } from "@/lib/supabase/server";
 import {
   parseItemFormData,
@@ -133,6 +133,7 @@ async function resolveBrandId(
 
 async function syncItemSeasons(itemId: string, seasonIds: string[]): Promise<ActionResult> {
   const supabase = await createClient();
+  const uniqueSeasonIds = [...new Set(seasonIds)];
 
   const { error: deleteError } = await supabase
     .from("item_seasons")
@@ -143,12 +144,12 @@ async function syncItemSeasons(itemId: string, seasonIds: string[]): Promise<Act
     return { success: false, error: deleteError.message };
   }
 
-  if (seasonIds.length === 0) {
+  if (uniqueSeasonIds.length === 0) {
     return { success: true };
   }
 
   const { error: insertError } = await supabase.from("item_seasons").insert(
-    seasonIds.map((seasonId) => ({
+    uniqueSeasonIds.map((seasonId) => ({
       item_id: itemId,
       season_id: seasonId,
     })),
@@ -335,6 +336,45 @@ export async function updateItemImagePath(
   }
 
   await deleteProcessedImageFile(item.user_id, itemId);
+
+  revalidatePath("/wardrobe");
+  revalidatePath(`/wardrobe/${itemId}/edit`);
+  return { success: true };
+}
+
+export async function completeBackgroundRemoval(itemId: string): Promise<ActionResult> {
+  const userResult = await requireUserId();
+  if (typeof userResult !== "string") {
+    return userResult;
+  }
+
+  const supabase = await createClient();
+  const { data: item, error: fetchError } = await supabase
+    .from("items")
+    .select("id, user_id, image_path")
+    .eq("id", itemId)
+    .eq("user_id", userResult)
+    .single();
+
+  if (fetchError || !item) {
+    return { success: false, error: fetchError?.message ?? "Vêtement introuvable." };
+  }
+
+  if (!item.image_path) {
+    return { success: false, error: "Aucune image originale à associer." };
+  }
+
+  const { error } = await supabase
+    .from("items")
+    .update({
+      remove_background: true,
+      ...markProcessingCompleted({ user_id: item.user_id, id: item.id }),
+    })
+    .eq("id", itemId);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
 
   revalidatePath("/wardrobe");
   revalidatePath(`/wardrobe/${itemId}/edit`);

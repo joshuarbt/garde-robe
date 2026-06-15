@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CookiePreferencesSection } from "@/components/cookies/CookiePreferencesSection";
 import { DeleteAccountSection } from "@/components/privacy/DeleteAccountSection";
 import { ExportDataSection } from "@/components/privacy/ExportDataSection";
 import { SignOutButton } from "@/components/auth/SignOutButton";
@@ -54,7 +53,6 @@ export default async function ComptePage() {
       </div>
 
       <ExportDataSection />
-      <CookiePreferencesSection />
       <DeleteAccountSection deletionAvailable={deletionAvailable} />
     </PageShell>
   );
