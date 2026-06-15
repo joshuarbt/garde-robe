@@ -118,7 +118,7 @@ export function OutfitPreview({
         className={`flex items-center justify-center bg-[var(--surface-muted)] text-sm text-[var(--muted)] ${variantStyles[variant]} ${className}`.trim()}
         aria-label={alt}
       >
-        {variant === "chip" || variant === "cell" ? null : "No photo"}
+        {variant === "chip" || variant === "cell" ? null : "Pas de photo"}
       </div>
     );
   }

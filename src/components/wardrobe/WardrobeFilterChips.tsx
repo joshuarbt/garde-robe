@@ -21,7 +21,7 @@ function buildActiveFilters(
     const category = lookups.categories.find((entry) => entry.id === filters.category);
     chips.push({
       key: "category",
-      label: category?.name ?? "Category",
+      label: category?.name ?? "Catégorie",
       value: filters.category,
     });
   }
@@ -30,7 +30,7 @@ function buildActiveFilters(
     const color = lookups.colors.find((entry) => entry.id === filters.color);
     chips.push({
       key: "color",
-      label: color?.name ?? "Color",
+      label: color?.name ?? "Couleur",
       value: filters.color,
     });
   }
@@ -39,7 +39,7 @@ function buildActiveFilters(
     const season = lookups.seasons.find((entry) => entry.id === filters.season);
     chips.push({
       key: "season",
-      label: season?.name ?? "Season",
+      label: season?.name ?? "Saison",
       value: filters.season,
     });
   }
@@ -48,7 +48,7 @@ function buildActiveFilters(
     const brand = lookups.brands.find((entry) => entry.id === filters.brand);
     chips.push({
       key: "brand",
-      label: brand?.name ?? "Brand",
+      label: brand?.name ?? "Marque",
       value: filters.brand,
     });
   }
@@ -110,7 +110,7 @@ export function WardrobeFilterChips({
             <Link
               href={buildClearHref(filters, chip.key)}
               className="btn-ghost min-h-[var(--touch-min)] gap-1 text-sm"
-              aria-label={`Remove ${chip.label} filter`}
+              aria-label={`Retirer le filtre ${chip.label}`}
             >
               {chip.label}
               <span aria-hidden className="text-[var(--muted)]">
@@ -121,7 +121,7 @@ export function WardrobeFilterChips({
         ))}
       </AnimatePresence>
       <Link href="/wardrobe" className="btn-ghost min-h-[var(--touch-min)] text-sm text-[var(--muted)]">
-        Clear all
+        Tout effacer
       </Link>
     </div>
   );

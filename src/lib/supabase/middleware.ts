@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getPublicEnv } from "@/lib/env/public";
 
-const protectedRoutes = ["/dashboard", "/wardrobe", "/outfits", "/calendar"];
+const protectedRoutes = ["/dashboard", "/wardrobe", "/outfits", "/calendar", "/compte"];
 const authRoutes = ["/login", "/signup"];
 
 export async function updateSession(request: NextRequest) {

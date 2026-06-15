@@ -16,15 +16,15 @@ export default async function Home() {
   return (
     <PageShell
       compact={false}
-      title="Your personal wardrobe"
-      description="Catalog what you own and build outfits visually — clothing, accessories, and jewelry in one place."
+      title="Votre garde-robe personnelle"
+      description="Cataloguez ce que vous possédez et composez des tenues visuellement — vêtements, accessoires et bijoux au même endroit."
     >
       <div className="flex flex-col gap-3 sm:flex-row">
         <Link href="/login" className="btn-primary">
-          Sign in
+          Se connecter
         </Link>
         <Link href="/signup" className="btn-secondary">
-          Create account
+          Créer un compte
         </Link>
       </div>
     </PageShell>

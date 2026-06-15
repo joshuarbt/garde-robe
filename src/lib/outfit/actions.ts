@@ -15,7 +15,7 @@ async function requireUserId(): Promise<string | { success: false; error: string
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, error: "You must be signed in." };
+    return { success: false, error: "Vous devez être connecté." };
   }
 
   return user.id;
@@ -56,7 +56,7 @@ export async function saveOutfit(input: {
   if (!("data" in validation)) {
     return {
       success: false,
-      error: "Please fix the highlighted fields.",
+      error: "Veuillez corriger les champs indiqués.",
       fieldErrors: validation.errors,
     };
   }
@@ -78,7 +78,7 @@ export async function saveOutfit(input: {
       .maybeSingle();
 
     if (fetchError || !existing) {
-      return { success: false, error: "Outfit not found." };
+      return { success: false, error: "Tenue introuvable." };
     }
 
     const { error: updateError } = await supabase
@@ -97,14 +97,14 @@ export async function saveOutfit(input: {
       .single();
 
     if (insertError || !created) {
-      return { success: false, error: insertError?.message ?? "Could not create outfit." };
+      return { success: false, error: insertError?.message ?? "Impossible de créer la tenue." };
     }
 
     savedOutfitId = created.id;
   }
 
   if (!savedOutfitId) {
-    return { success: false, error: "Could not save outfit." };
+    return { success: false, error: "Impossible d'enregistrer la tenue." };
   }
 
   const { error: deleteError } = await supabase

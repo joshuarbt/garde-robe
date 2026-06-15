@@ -11,15 +11,15 @@ type OutfitsErrorProps = {
 export default function OutfitsError({ error, reset }: OutfitsErrorProps) {
   return (
     <PageShell
-      title="Outfits"
-      description="Compose looks on a blank canvas using items from your wardrobe."
+      title="Tenues"
+      description="Composez des tenues sur un canevas vierge avec les articles de votre garde-robe."
       wide
     >
       <RouteError
-        title="Could not load your outfits"
-        message={error.message || "Something went wrong while loading your saved outfits."}
+        title="Impossible de charger vos tenues"
+        message={error.message || "Une erreur s'est produite lors du chargement de vos tenues enregistrées."}
         backHref="/outfits"
-        backLabel="Back to outfits"
+        backLabel="Retour aux tenues"
         reset={reset}
       />
     </PageShell>

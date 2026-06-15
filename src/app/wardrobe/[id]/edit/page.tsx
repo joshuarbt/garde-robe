@@ -37,7 +37,7 @@ export default async function EditWardrobeItemPage({
   return (
     <PageShell title={item.name}>
       <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
-        Back
+        Retour
       </Link>
 
       <div className="mb-8 max-w-sm">
@@ -57,7 +57,7 @@ export default async function EditWardrobeItemPage({
           itemId={item.id}
           currentImageUrl={item.image_url}
           defaultCurrency={defaultCurrency}
-          submitLabel="Save changes"
+          submitLabel="Enregistrer les modifications"
           initialValues={{
             name: item.name,
             item_type: item.item_type,

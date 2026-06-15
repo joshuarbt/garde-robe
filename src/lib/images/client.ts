@@ -13,7 +13,7 @@ function loadImageFromFile(file: File): Promise<HTMLImageElement> {
 
     image.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error("Could not read image file."));
+      reject(new Error("Impossible de lire le fichier image."));
     };
 
     image.src = url;
@@ -47,7 +47,7 @@ export async function resizeImageFile(file: File): Promise<File> {
 
   const context = canvas.getContext("2d");
   if (!context) {
-    throw new Error("Could not process image.");
+    throw new Error("Impossible de traiter l'image.");
   }
 
   context.drawImage(image, 0, 0, width, height);
@@ -58,7 +58,7 @@ export async function resizeImageFile(file: File): Promise<File> {
     canvas.toBlob(
       (result) => {
         if (!result) {
-          reject(new Error("Could not compress image."));
+          reject(new Error("Impossible de compresser l'image."));
           return;
         }
 

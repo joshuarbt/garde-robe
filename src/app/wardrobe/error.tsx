@@ -11,15 +11,15 @@ type WardrobeErrorProps = {
 export default function WardrobeError({ error, reset }: WardrobeErrorProps) {
   return (
     <PageShell
-      title="Wardrobe"
-      description="Browse and manage your clothing, accessories, and jewelry."
+      title="Garde-robe"
+      description="Parcourez et gérez vos vêtements, accessoires et bijoux."
       wide
     >
       <RouteError
-        title="Could not load your wardrobe"
-        message={error.message || "Something went wrong while loading your wardrobe."}
+        title="Impossible de charger votre garde-robe"
+        message={error.message || "Une erreur s'est produite lors du chargement de votre garde-robe."}
         backHref="/wardrobe"
-        backLabel="Back to wardrobe"
+        backLabel="Retour à la garde-robe"
         reset={reset}
       />
     </PageShell>

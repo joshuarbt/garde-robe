@@ -22,7 +22,7 @@ export default async function OutfitsPage() {
 
   return (
     <PageShell
-      title="Outfits"
+      title="Tenues"
       wide
       actionsAlign="baseline"
       actions={
@@ -31,12 +31,12 @@ export default async function OutfitsPage() {
             href="/outfits/new"
             className="btn-ghost hidden min-h-[var(--touch-min)] sm:inline-flex"
           >
-            New look
+            Nouvelle tenue
           </Link>
           <IconLink
             href="/outfits/new"
             icon={actionIcons.add}
-            label="Build outfit"
+            label="Composer une tenue"
             className="sm:hidden"
           />
         </>
@@ -44,8 +44,8 @@ export default async function OutfitsPage() {
     >
       {outfits.length === 0 ? (
         <EmptyState
-          message="No saved looks yet."
-          description="Compose on the canvas, name it, and save it here."
+          message="Aucune tenue enregistrée."
+          description="Composez sur le canevas, nommez-la et enregistrez-la ici."
         />
       ) : (
         <OutfitsList outfits={outfits} />

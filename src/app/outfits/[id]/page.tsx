@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { formatCount } from "@/lib/i18n/plural";
 import { OutfitBuilderLoader } from "@/components/canvas/OutfitBuilderLoader";
 import { DeleteOutfitButton } from "@/components/outfits/DeleteOutfitButton";
 import { PageShell } from "@/components/layout/PageShell";
@@ -56,12 +57,12 @@ export default async function EditOutfitPage({
       }
     >
       <Link href="/outfits" className="btn-ghost mb-6 inline-block">
-        Back
+        Retour
       </Link>
 
       {saved === "1" ? (
         <p role="status" className="alert-success mb-6">
-          Look saved.
+          Tenue enregistrée.
         </p>
       ) : null}
 
@@ -71,7 +72,7 @@ export default async function EditOutfitPage({
 
       {missingCount > 0 ? (
         <p className="alert-warning mb-6">
-          {missingCount} piece{missingCount === 1 ? "" : "s"} could not be loaded.
+          {formatCount(missingCount, "vêtement n'a pas pu être chargé", "vêtements n'ont pas pu être chargés")}.
         </p>
       ) : null}
 

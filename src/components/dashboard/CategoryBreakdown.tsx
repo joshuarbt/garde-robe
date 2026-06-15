@@ -1,4 +1,5 @@
 import type { CategoryBreakdownEntry } from "@/lib/dashboard/queries";
+import { formatCount } from "@/lib/i18n/plural";
 
 const MAX_INLINE = 6;
 
@@ -23,7 +24,7 @@ export function CategoryBreakdown({ breakdown, className }: CategoryBreakdownPro
     <p className={`text-caption ${className ?? ""}`.trim()}>
       {inlineText}
       {hiddenCount > 0
-        ? `, and ${hiddenCount} more categor${hiddenCount === 1 ? "y" : "ies"}`
+        ? `, et ${formatCount(hiddenCount, "autre catégorie", "autres catégories")}`
         : ""}
     </p>
   );

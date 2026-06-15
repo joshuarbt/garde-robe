@@ -33,7 +33,11 @@ export function useSaveOutfitForm({
   const [fieldErrors, setFieldErrors] = useState<SaveOutfitFieldErrors>({});
   const [isSaving, setIsSaving] = useState(false);
 
-  const saveLabel = isSaving ? "Saving…" : outfitId ? "Save changes" : "Save outfit";
+  const saveLabel = isSaving
+    ? "Enregistrement…"
+    : outfitId
+      ? "Enregistrer les modifications"
+      : "Enregistrer la tenue";
   const canSave = !disabled && !isSaving && placements.length > 0;
 
   async function handleSave() {
@@ -55,7 +59,7 @@ export function useSaveOutfitForm({
       router.push(`/outfits/${result.outfitId}${savedParam}`);
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Une erreur s'est produite. Veuillez réessayer.");
       setIsSaving(false);
     }
   }

@@ -24,7 +24,7 @@ export async function uploadItemImage(
   try {
     processedFile = await resizeImageFile(file);
   } catch {
-    return { error: "Could not process image." };
+    return { error: "Impossible de traiter l'image." };
   }
 
   const extension = getExtensionForMimeType(processedFile.type);

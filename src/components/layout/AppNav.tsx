@@ -4,9 +4,9 @@ import { hasPublicEnv } from "@/lib/env/public";
 import { createClient } from "@/lib/supabase/server";
 
 const desktopNavLinks = [
-  { href: "/wardrobe", label: "Wardrobe" },
-  { href: "/outfits", label: "Outfits" },
-  { href: "/calendar", label: "Calendar" },
+  { href: "/wardrobe", label: "Garde-robe" },
+  { href: "/outfits", label: "Tenues" },
+  { href: "/calendar", label: "Calendrier" },
   { href: "/dashboard", label: "Collection" },
 ] as const;
 
@@ -35,7 +35,7 @@ export async function AppNav() {
         </Link>
 
         {user ? (
-          <nav className="hidden items-center gap-x-6 md:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-x-6 md:flex" aria-label="Navigation principale">
             {desktopNavLinks.map(({ href, label }) => (
               <NavLink key={href} href={href} label={label} />
             ))}
@@ -43,10 +43,10 @@ export async function AppNav() {
         ) : (
           <div className="hidden items-center gap-x-5 md:flex">
             <Link href="/login" className="text-caption transition-opacity hover:opacity-70">
-              Login
+              Se connecter
             </Link>
             <Link href="/signup" className="btn-primary px-4 py-2 text-xs">
-              Sign up
+              Créer un compte
             </Link>
           </div>
         )}

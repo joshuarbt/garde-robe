@@ -21,7 +21,9 @@ export function DeleteOutfitButton({
   const [isPending, startTransition] = useTransition();
 
   function handleDelete() {
-    const confirmed = window.confirm(`Delete "${outfitName}"? This cannot be undone.`);
+    const confirmed = window.confirm(
+      `Supprimer « ${outfitName} » ? Cette action est irréversible.`,
+    );
     if (!confirmed) {
       return;
     }
@@ -40,7 +42,7 @@ export function DeleteOutfitButton({
         onClick={handleDelete}
         className="btn-destructive flex min-h-[var(--touch-min)] w-full items-center text-sm active:bg-[var(--surface-muted)] disabled:opacity-60"
       >
-        {isPending ? "Deleting…" : "Delete"}
+        {isPending ? "Suppression…" : "Supprimer"}
       </button>
     );
   }
@@ -52,7 +54,7 @@ export function DeleteOutfitButton({
         disabled={isPending}
         onClick={handleDelete}
         className="btn-icon text-[var(--status-error)] disabled:opacity-60"
-        aria-label={`Delete ${outfitName}`}
+        aria-label={`Supprimer ${outfitName}`}
       >
         <Icon icon={actionIcons.delete} size="sm" />
       </button>
@@ -66,7 +68,7 @@ export function DeleteOutfitButton({
       onClick={handleDelete}
       className="btn-destructive text-sm disabled:opacity-60"
     >
-      {isPending ? "Deleting…" : "Delete"}
+      {isPending ? "Suppression…" : "Supprimer"}
     </button>
   );
 }

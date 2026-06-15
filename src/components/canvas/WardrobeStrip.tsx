@@ -13,8 +13,8 @@ export function WardrobeStrip({ items, placedItemIds, onAddItem }: WardrobeStrip
   if (items.length === 0) {
     return (
       <EmptyState
-        message="No wardrobe items with photos yet."
-        actionLabel="Add your first item"
+        message="Aucun article avec photo dans la garde-robe."
+        actionLabel="Ajouter votre premier article"
         actionHref="/wardrobe/new"
       />
     );
@@ -22,7 +22,7 @@ export function WardrobeStrip({ items, placedItemIds, onAddItem }: WardrobeStrip
 
   return (
     <div className="space-y-2">
-      <p className="label-caps">Add from wardrobe</p>
+      <p className="label-caps">Ajouter depuis la garde-robe</p>
       <ul className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory">
         {items.map((item) => {
           const isPlaced = placedItemIds.has(item.id);
@@ -34,7 +34,7 @@ export function WardrobeStrip({ items, placedItemIds, onAddItem }: WardrobeStrip
                 disabled={isPlaced}
                 onClick={() => onAddItem(item)}
                 className="w-full text-left transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-                aria-label={`Add ${item.name}`}
+                aria-label={`Ajouter ${item.name}`}
               >
                 <div className="aspect-square overflow-hidden bg-[var(--surface-muted)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

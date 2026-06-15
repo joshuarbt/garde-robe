@@ -10,11 +10,11 @@ export type AllowedImageType = (typeof ALLOWED_IMAGE_TYPES)[number];
 
 export function validateImageFile(file: File): string | null {
   if (!ALLOWED_IMAGE_TYPES.includes(file.type as AllowedImageType)) {
-    return "Image must be JPEG, PNG, or WebP.";
+    return "L'image doit être au format JPEG, PNG ou WebP.";
   }
 
   if (file.size > MAX_IMAGE_FILE_SIZE) {
-    return "Image must be 5 MB or smaller.";
+    return "L'image doit faire 5 Mo ou moins.";
   }
 
   return null;

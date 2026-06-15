@@ -16,7 +16,7 @@ type CalendarGridProps = {
   preselectedOutfitName?: string;
 };
 
-const WEEKDAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
+const WEEKDAY_LABELS = ["D", "L", "M", "M", "J", "V", "S"];
 
 function padDatePart(value: number): string {
   return String(value).padStart(2, "0");
@@ -86,7 +86,7 @@ export function CalendarGrid({
     });
   }
 
-  const monthLabel = new Intl.DateTimeFormat(undefined, {
+  const monthLabel = new Intl.DateTimeFormat("fr-FR", {
     month: "long",
     year: "numeric",
   }).format(new Date(year, month - 1, 1));
@@ -110,7 +110,7 @@ export function CalendarGrid({
     <>
       {preselectedOutfitId && preselectedOutfitName ? (
         <p className="text-meta mb-6">
-          Tap a day to schedule{" "}
+          Touchez un jour pour planifier{" "}
           <span className="text-[var(--foreground)]">{preselectedOutfitName}</span>
         </p>
       ) : null}
@@ -120,14 +120,14 @@ export function CalendarGrid({
           href={buildCalendarHref(prevYear, prevMonth, preselectedOutfitId)}
           className="btn-ghost min-h-[var(--touch-min)] text-sm"
         >
-          Previous
+          Précédent
         </Link>
         <h2 className="text-title">{monthLabel}</h2>
         <Link
           href={buildCalendarHref(nextYear, nextMonth, preselectedOutfitId)}
           className="btn-ghost min-h-[var(--touch-min)] text-sm"
         >
-          Next
+          Suivant
         </Link>
       </div>
 

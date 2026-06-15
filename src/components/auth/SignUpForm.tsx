@@ -4,18 +4,28 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthFormField } from "@/components/auth/AuthFormField";
+import { translateAuthError } from "@/lib/auth/errors";
 import { createClient } from "@/lib/supabase/client";
 
 export function SignUpForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedPolicy, setAcceptedPolicy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+
+    if (!acceptedPolicy) {
+      setError(
+        "Vous devez accepter la politique de confidentialité et les conditions d'utilisation.",
+      );
+      return;
+    }
+
     setIsLoading(true);
 
     const supabase = createClient();
@@ -25,7 +35,7 @@ export function SignUpForm() {
     });
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError(translateAuthError(signUpError.message));
       setIsLoading(false);
       return;
     }
@@ -39,7 +49,7 @@ export function SignUpForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <AuthFormField
           id="signup-email"
-          label="Email"
+          label="E-mail"
           type="email"
           name="email"
           autoComplete="email"
@@ -49,7 +59,7 @@ export function SignUpForm() {
         />
         <AuthFormField
           id="signup-password"
-          label="Password"
+          label="Mot de passe"
           type="password"
           name="password"
           autoComplete="new-password"
@@ -58,6 +68,38 @@ export function SignUpForm() {
           disabled={isLoading}
         />
 
+        <label className="flex cursor-pointer items-start gap-3 text-caption text-[var(--muted)]">
+          <input
+            type="checkbox"
+            checked={acceptedPolicy}
+            onChange={(event) => setAcceptedPolicy(event.target.checked)}
+            disabled={isLoading}
+            className="mt-0.5 shrink-0"
+            required
+          />
+          <span>
+            J&apos;accepte la{" "}
+            <Link
+              href="/confidentialite"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--foreground)] underline-offset-2 hover:underline"
+            >
+              politique de confidentialité
+            </Link>{" "}
+            et les{" "}
+            <Link
+              href="/cgu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--foreground)] underline-offset-2 hover:underline"
+            >
+              conditions d&apos;utilisation
+            </Link>
+            .
+          </span>
+        </label>
+
         {error ? (
           <p role="alert" className="alert-error">
             {error}
@@ -65,14 +107,14 @@ export function SignUpForm() {
         ) : null}
 
         <button type="submit" disabled={isLoading} className="btn-primary w-full">
-          {isLoading ? "Creating account…" : "Create account"}
+          {isLoading ? "Création du compte…" : "Créer un compte"}
         </button>
       </form>
 
       <p className="text-meta text-center">
-        Already have an account?{" "}
+        Vous avez déjà un compte ?{" "}
         <Link href="/login" className="text-[var(--foreground)] underline-offset-2 hover:underline">
-          Sign in
+          Se connecter
         </Link>
       </p>
     </div>

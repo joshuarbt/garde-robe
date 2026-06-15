@@ -24,7 +24,7 @@ export function SaveOutfitForm({
         <div className="min-w-0 space-y-4">
           <div>
             <label htmlFor="outfit-name" className="label-caps">
-              Outfit name
+              Nom de la tenue
             </label>
             <input
               id="outfit-name"
@@ -32,7 +32,7 @@ export function SaveOutfitForm({
               value={name}
               disabled={isSaving}
               onChange={(event) => setName(event.target.value)}
-              placeholder="e.g. Summer casual"
+              placeholder="ex. Tenue décontractée d'été"
               className={inputClassName}
             />
             {fieldErrors.name ? (
@@ -50,7 +50,7 @@ export function SaveOutfitForm({
               value={notes}
               disabled={isSaving}
               onChange={(event) => setNotes(event.target.value)}
-              placeholder="Optional — occasion, weather, etc."
+              placeholder="Facultatif — occasion, météo, etc."
               className={inputClassName}
             />
             {fieldErrors.notes ? (

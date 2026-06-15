@@ -8,7 +8,7 @@ type ItemListProps = {
 
 export function ItemList({ items }: ItemListProps) {
   if (items.length === 0) {
-    return <EmptyState message="No items match your filters." />;
+    return <EmptyState message="Aucun vêtement ne correspond à vos filtres." />;
   }
 
   return <AnimatedItemGrid items={items} />;

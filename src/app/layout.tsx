@@ -1,29 +1,25 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import { CookieConsentBanner } from "@/components/cookies/CookieConsentBanner";
+import { CookieConsentPreferences } from "@/components/cookies/CookieConsentPreferences";
+import { NonEssentialScripts } from "@/components/cookies/NonEssentialScripts";
 import { AppNav } from "@/components/layout/AppNav";
+import { LegalFooter } from "@/components/layout/LegalFooter";
 import { MainContent } from "@/components/layout/MainContent";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
+import { CookieConsentProvider } from "@/lib/cookies/context";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Garde-robe",
-  description: "Personal wardrobe manager",
+  description: "Gestionnaire de garde-robe personnelle",
 };
 
 export default function RootLayout({
@@ -33,13 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased`}
+      lang="fr"
+      className={`${plusJakarta.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
-        <AppNav />
-        <MainContent>{children}</MainContent>
-        <MobileTabBar />
+        <CookieConsentProvider>
+          <AppNav />
+          <MainContent>{children}</MainContent>
+          <LegalFooter />
+          <CookieConsentBanner />
+          <CookieConsentPreferences />
+          <NonEssentialScripts />
+          <MobileTabBar />
+        </CookieConsentProvider>
       </body>
     </html>
   );

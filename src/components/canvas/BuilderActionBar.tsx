@@ -48,7 +48,7 @@ export function BuilderActionBar({
                 value={notes}
                 disabled={isSaving}
                 onChange={(event) => setNotes(event.target.value)}
-                placeholder="Optional — occasion, weather, etc."
+                placeholder="Facultatif — occasion, météo, etc."
                 className="input-field w-full"
               />
               {fieldErrors.notes ? (
@@ -61,14 +61,14 @@ export function BuilderActionBar({
               className="btn-ghost w-full justify-center text-sm"
               onClick={() => setShowNotes(true)}
             >
-              Add note
+              Ajouter une note
             </button>
           )}
 
           <div className="flex gap-3">
             <div className="min-w-0 flex-1">
               <label htmlFor="outfit-name-mobile" className="sr-only">
-                Outfit name
+                Nom de la tenue
               </label>
               <input
                 id="outfit-name-mobile"
@@ -76,7 +76,7 @@ export function BuilderActionBar({
                 value={name}
                 disabled={isSaving}
                 onChange={(event) => setName(event.target.value)}
-                placeholder="Look name"
+                placeholder="Nom de la tenue"
                 className="input-field w-full"
               />
               {fieldErrors.name ? (

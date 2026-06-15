@@ -68,7 +68,7 @@ export function BottomSheet({
           <motion.button
             type="button"
             className="absolute inset-0 bg-[var(--foreground)]/25 backdrop-blur-sm"
-            aria-label="Close"
+            aria-label="Fermer"
             onClick={onClose}
             {...sheetMotion.backdrop}
           />
@@ -90,7 +90,7 @@ export function BottomSheet({
               <h2 id={titleId} className="font-display text-xl text-[var(--foreground)] md:text-2xl">
                 {title}
               </h2>
-              <IconButton icon={actionIcons.close} label="Close" onClick={onClose} />
+              <IconButton icon={actionIcons.close} label="Fermer" onClick={onClose} />
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4">{children}</div>
             {footer ? (

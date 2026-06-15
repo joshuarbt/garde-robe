@@ -34,14 +34,14 @@ export function AssignOutfitModal({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const formattedDate = new Intl.DateTimeFormat(undefined, {
+  const formattedDate = new Intl.DateTimeFormat("fr-FR", {
     weekday: "long",
     month: "long",
     day: "numeric",
     year: "numeric",
   }).format(new Date(`${scheduledDate}T12:00:00`));
 
-  const title = currentEntry && !isChanging ? "Planned outfit" : "Assign outfit";
+  const title = currentEntry && !isChanging ? "Tenue planifiée" : "Assigner une tenue";
   const contentKey = currentEntry && !isChanging ? "view" : "assign";
 
   const outfitsById = useMemo(() => {
@@ -57,7 +57,7 @@ export function AssignOutfitModal({
 
   function handleAssign() {
     if (!selectedOutfitId) {
-      setError("Select an outfit.");
+      setError("Sélectionnez une tenue.");
       return;
     }
 
@@ -100,7 +100,7 @@ export function AssignOutfitModal({
             }}
             className="btn-ghost text-sm disabled:opacity-60"
           >
-            Change outfit
+            Changer de tenue
           </button>
           <button
             type="button"
@@ -108,7 +108,7 @@ export function AssignOutfitModal({
             onClick={handleRemove}
             className="btn-ghost text-sm text-[var(--status-error)] disabled:opacity-60"
           >
-            Remove
+            Supprimer
           </button>
           <button
             type="button"
@@ -116,7 +116,7 @@ export function AssignOutfitModal({
             onClick={onClose}
             className="btn-ghost text-sm disabled:opacity-60"
           >
-            Close
+            Fermer
           </button>
         </div>
       ) : (
@@ -133,7 +133,7 @@ export function AssignOutfitModal({
                 }}
                 className="btn-ghost text-sm disabled:opacity-60"
               >
-                Cancel
+                Annuler
               </button>
             ) : null}
             <button
@@ -142,7 +142,7 @@ export function AssignOutfitModal({
               onClick={onClose}
               className="btn-ghost text-sm disabled:opacity-60 md:hidden"
             >
-              Close
+              Fermer
             </button>
             <button
               type="button"
@@ -150,7 +150,7 @@ export function AssignOutfitModal({
               onClick={onClose}
               className="btn-secondary hidden disabled:opacity-60 md:inline-flex"
             >
-              Close
+              Fermer
             </button>
           </div>
           <button
@@ -159,7 +159,7 @@ export function AssignOutfitModal({
             onClick={handleAssign}
             className="btn-primary w-full disabled:opacity-60 md:w-auto md:self-end"
           >
-            {isPending ? "Saving…" : "Save"}
+            {isPending ? "Enregistrement…" : "Enregistrer"}
           </button>
         </>
       )}
@@ -189,7 +189,7 @@ export function AssignOutfitModal({
               />
             ) : null}
             <div className="space-y-2">
-              <p className="text-overline">Outfit for this day</p>
+              <p className="text-overline">Tenue pour ce jour</p>
               <Link
                 href={`/outfits/${currentEntry.outfitId}`}
                 className="block text-title text-[var(--foreground)] transition-opacity hover:opacity-70"
@@ -205,15 +205,15 @@ export function AssignOutfitModal({
           <>
             {!currentEntry ? (
               <p className="mt-6 text-sm text-[var(--muted)]">
-                No outfit planned for this day.
+                Aucune tenue planifiée pour ce jour.
               </p>
             ) : null}
 
             {outfits.length === 0 ? (
               <div className="mt-6">
                 <EmptyState
-                  message="Save an outfit first before assigning it to the calendar."
-                  actionLabel="Build outfit"
+                  message="Enregistrez d'abord une tenue avant de l'assigner au calendrier."
+                  actionLabel="Composer une tenue"
                   actionHref="/outfits/new"
                 />
               </div>

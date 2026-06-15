@@ -8,7 +8,7 @@ const OutfitBuilder = dynamic(
     import("@/components/canvas/OutfitBuilder").then((module) => module.OutfitBuilder),
   {
     ssr: false,
-    loading: () => <p className="text-meta">Loading outfit builder…</p>,
+    loading: () => <p className="text-meta">Chargement du créateur de tenues…</p>,
   },
 );
 

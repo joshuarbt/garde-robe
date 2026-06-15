@@ -28,18 +28,18 @@ export function validateOutfitInput(
   const name = input.name.trim();
 
   if (!name) {
-    errors.name = "Outfit name is required.";
+    errors.name = "Le nom de la tenue est obligatoire.";
   } else if (name.length > 100) {
-    errors.name = "Name must be 100 characters or fewer.";
+    errors.name = "Le nom doit comporter 100 caractères ou moins.";
   }
 
   if (input.placements.length === 0) {
-    errors.placements = "Add at least one item to the canvas before saving.";
+    errors.placements = "Ajoutez au moins un article au canevas avant d'enregistrer.";
   }
 
   const notes = input.notes.trim();
   if (notes.length > 500) {
-    errors.notes = "Notes must be 500 characters or fewer.";
+    errors.notes = "Les notes doivent comporter 500 caractères ou moins.";
   }
 
   if (Object.keys(errors).length > 0) {

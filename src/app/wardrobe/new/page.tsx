@@ -21,15 +21,15 @@ export default async function NewWardrobeItemPage() {
   ]);
 
   return (
-    <PageShell title="Add piece">
+    <PageShell title="Ajouter une pièce">
       <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
-        Back
+        Retour
       </Link>
       <ItemForm
         lookups={lookups}
         userId={user.id}
         defaultCurrency={defaultCurrency}
-        submitLabel="Save piece"
+        submitLabel="Enregistrer"
       />
     </PageShell>
   );

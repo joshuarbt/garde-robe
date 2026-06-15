@@ -41,11 +41,11 @@ function getOutfitLinkWarning(
   }
 
   if (!preselectedOutfitId) {
-    return "The outfit link is invalid. Choose an outfit from your saved list.";
+    return "Le lien vers la tenue est invalide. Choisissez une tenue dans votre liste enregistrée.";
   }
 
   if (!preselectedOutfitFound) {
-    return "That outfit was not found. It may have been deleted.";
+    return "Cette tenue est introuvable. Elle a peut-être été supprimée.";
   }
 
   return undefined;
@@ -84,7 +84,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
 
   return (
     <PageShell
-      title="Calendar"
+      title="Calendrier"
       wide
     >
       {outfitLinkWarning ? <DismissibleBanner message={outfitLinkWarning} /> : null}
@@ -92,8 +92,8 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
       {outfits.length === 0 ? (
         <EmptyState
           className="mb-8"
-          message="Save an outfit first to use the calendar."
-          actionLabel="Build your first outfit"
+          message="Enregistrez d'abord une tenue pour utiliser le calendrier."
+          actionLabel="Composer votre première tenue"
           actionHref="/outfits/new"
         />
       ) : (

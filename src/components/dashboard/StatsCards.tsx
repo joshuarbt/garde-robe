@@ -2,6 +2,7 @@
 
 import { formatPrice } from "@/lib/currency";
 import type { DashboardStats } from "@/lib/dashboard/queries";
+import { formatCount } from "@/lib/i18n/plural";
 
 type StatsCardsProps = {
   stats: DashboardStats;
@@ -10,19 +11,23 @@ type StatsCardsProps = {
 export function StatsCards({ stats }: StatsCardsProps) {
   const footnotes = [
     stats.itemsWithoutPrice > 0
-      ? `${stats.itemsWithoutPrice} piece${stats.itemsWithoutPrice === 1 ? "" : "s"} without a price`
+      ? formatCount(stats.itemsWithoutPrice, "vêtement sans prix", "vêtements sans prix")
       : null,
     stats.itemsWithOtherCurrency > 0
-      ? `${stats.itemsWithOtherCurrency} piece${stats.itemsWithOtherCurrency === 1 ? "" : "s"} in other currencies excluded`
+      ? formatCount(
+          stats.itemsWithOtherCurrency,
+          "vêtement dans une autre devise exclu",
+          "vêtements dans d'autres devises exclus",
+        )
       : null,
   ].filter(Boolean);
 
   return (
     <div className="space-y-3">
       <p className="font-display text-display text-[var(--foreground)]">
-        {stats.itemCount} piece{stats.itemCount === 1 ? "" : "s"}
+        {formatCount(stats.itemCount, "vêtement", "vêtements")}
         <span className="text-[var(--muted-light)]"> · </span>
-        {stats.outfitCount} look{stats.outfitCount === 1 ? "" : "s"}
+        {formatCount(stats.outfitCount, "tenue", "tenues")}
         <span className="text-[var(--muted-light)]"> · </span>
         {formatPrice(stats.wardrobeValue, stats.profileCurrency)}
       </p>

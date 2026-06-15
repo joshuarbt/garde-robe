@@ -31,52 +31,52 @@ export function validateItemFormInput(
 
   const name = input.name.trim();
   if (!name) {
-    errors.name = "Name is required.";
+    errors.name = "Le nom est obligatoire.";
   } else if (name.length > 100) {
-    errors.name = "Name must be 100 characters or fewer.";
+    errors.name = "Le nom doit comporter 100 caractères ou moins.";
   }
 
   if (!ITEM_TYPES.includes(input.item_type)) {
-    errors.item_type = "Select a valid item type.";
+    errors.item_type = "Sélectionnez un type de vêtement valide.";
   }
 
   const newCategoryName = input.new_category_name.trim();
   if (input.category_id && !isUuid(input.category_id)) {
-    errors.category_id = "Select a valid category.";
+    errors.category_id = "Sélectionnez une catégorie valide.";
   } else if (!input.category_id && !newCategoryName) {
-    errors.category_id = "Select a category or enter a new one.";
+    errors.category_id = "Sélectionnez une catégorie ou saisissez-en une nouvelle.";
   } else if (newCategoryName.length > 50) {
-    errors.new_category_name = "Category name must be 50 characters or fewer.";
+    errors.new_category_name = "Le nom de la catégorie doit comporter 50 caractères ou moins.";
   }
 
   if (input.color_id && !isUuid(input.color_id)) {
-    errors.color_id = "Select a valid color.";
+    errors.color_id = "Sélectionnez une couleur valide.";
   }
 
   const newBrandName = input.new_brand_name.trim();
   if (input.brand_id && !isUuid(input.brand_id)) {
-    errors.brand_id = "Select a valid brand.";
+    errors.brand_id = "Sélectionnez une marque valide.";
   } else if (newBrandName.length > 50) {
-    errors.new_brand_name = "Brand name must be 50 characters or fewer.";
+    errors.new_brand_name = "Le nom de la marque doit comporter 50 caractères ou moins.";
   }
 
   for (const seasonId of input.season_ids) {
     if (!isUuid(seasonId)) {
-      errors.season_ids = "One or more seasons are invalid.";
+      errors.season_ids = "Une ou plusieurs saisons sont invalides.";
       break;
     }
   }
 
   const occasionTags = parseOccasionTags(input.occasion_tags);
   if (occasionTags.length > 10) {
-    errors.occasion_tags = "You can add up to 10 occasion tags.";
+    errors.occasion_tags = "Vous pouvez ajouter jusqu'à 10 occasions.";
   } else if (occasionTags.some((tag) => tag.length > 30)) {
-    errors.occasion_tags = "Each occasion tag must be 30 characters or fewer.";
+    errors.occasion_tags = "Chaque occasion doit comporter 30 caractères ou moins.";
   }
 
   const notes = input.notes.trim();
   if (notes.length > 500) {
-    errors.notes = "Notes must be 500 characters or fewer.";
+    errors.notes = "Les notes doivent comporter 500 caractères ou moins.";
   }
 
   const priceRaw = input.price.trim();
@@ -84,11 +84,11 @@ export function validateItemFormInput(
   if (priceRaw) {
     const priceValue = Number(priceRaw);
     if (Number.isNaN(priceValue) || priceValue < 0) {
-      errors.price = "Enter a valid price (0 or greater).";
+      errors.price = "Saisissez un prix valide (0 ou plus).";
     } else if (!/^\d+(\.\d{1,2})?$/.test(priceRaw)) {
-      errors.price = "Price can have at most 2 decimal places.";
+      errors.price = "Le prix peut avoir au maximum 2 décimales.";
     } else if (priceValue > 99999999.99) {
-      errors.price = "Price is too large.";
+      errors.price = "Le prix est trop élevé.";
     } else {
       parsedPrice = priceRaw;
     }
@@ -97,12 +97,12 @@ export function validateItemFormInput(
   const currencyCode = input.currency_code.trim().toUpperCase();
   if (parsedPrice) {
     if (!currencyCode) {
-      errors.currency_code = "Select a currency when entering a price.";
+      errors.currency_code = "Sélectionnez une devise lorsque vous saisissez un prix.";
     } else if (!isValidCurrencyCode(currencyCode)) {
-      errors.currency_code = "Select a valid currency.";
+      errors.currency_code = "Sélectionnez une devise valide.";
     }
   } else if (currencyCode && !isValidCurrencyCode(currencyCode)) {
-    errors.currency_code = "Select a valid currency.";
+    errors.currency_code = "Sélectionnez une devise valide.";
   }
 
   if (Object.keys(errors).length > 0) {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
+import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import type { WardrobeFilters, WardrobeLookups } from "@/lib/types/item";
 
 type FilterSheetProps = {
@@ -42,7 +43,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
   }
 
   const refineLabel =
-    activeCount > 0 ? `Refine (${activeCount})` : "Refine";
+    activeCount > 0 ? `Affiner (${activeCount})` : "Affiner";
 
   return (
     <>
@@ -58,13 +59,13 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
         <BottomSheet
           open={open}
           onClose={() => setOpen(false)}
-          title="Refine"
+          title="Affiner"
           className="rounded-t-xl max-h-[85vh]"
         >
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="filter-category" className="input-label">
-                Category
+                Catégorie
               </label>
               <select
                 id="filter-category"
@@ -72,10 +73,10 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
                 defaultValue={filters.category ?? ""}
                 className={selectClassName}
               >
-                <option value="">All categories</option>
+                <option value="">Toutes les catégories</option>
                 {lookups.categories.map((category) => (
                   <option key={category.id} value={category.id}>
-                    {category.name} ({category.item_type})
+                    {category.name} ({getItemTypeLabel(category.item_type)})
                   </option>
                 ))}
               </select>
@@ -83,7 +84,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
 
             <div>
               <label htmlFor="filter-color" className="input-label">
-                Color
+                Couleur
               </label>
               <select
                 id="filter-color"
@@ -91,7 +92,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
                 defaultValue={filters.color ?? ""}
                 className={selectClassName}
               >
-                <option value="">All colors</option>
+                <option value="">Toutes les couleurs</option>
                 {lookups.colors.map((color) => (
                   <option key={color.id} value={color.id}>
                     {color.name}
@@ -102,7 +103,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
 
             <div>
               <label htmlFor="filter-season" className="input-label">
-                Season
+                Saison
               </label>
               <select
                 id="filter-season"
@@ -110,7 +111,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
                 defaultValue={filters.season ?? ""}
                 className={selectClassName}
               >
-                <option value="">All seasons</option>
+                <option value="">Toutes les saisons</option>
                 {lookups.seasons.map((season) => (
                   <option key={season.id} value={season.id}>
                     {season.name}
@@ -121,7 +122,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
 
             <div>
               <label htmlFor="filter-brand" className="input-label">
-                Brand
+                Marque
               </label>
               <select
                 id="filter-brand"
@@ -129,7 +130,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
                 defaultValue={filters.brand ?? ""}
                 className={selectClassName}
               >
-                <option value="">All brands</option>
+                <option value="">Toutes les marques</option>
                 {lookups.brands.map((brand) => (
                   <option key={brand.id} value={brand.id}>
                     {brand.name}
@@ -140,14 +141,14 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
 
             <div className="flex gap-4 pt-2">
               <button type="submit" className="btn-ghost">
-                Apply
+                Appliquer
               </button>
               <Link
                 href="/wardrobe"
                 className="btn-ghost text-[var(--muted)]"
                 onClick={() => setOpen(false)}
               >
-                Clear
+                Effacer
               </Link>
             </div>
           </form>

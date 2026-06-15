@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { actionIcons } from "@/lib/icons";
 import type { ItemFormErrors, ItemFormInput, ItemType, WardrobeLookups } from "@/lib/types/item";
 import { ITEM_TYPES } from "@/lib/types/item";
+import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import { DEFAULT_CURRENCY, SUPPORTED_CURRENCIES } from "@/lib/currency";
 import { uploadItemImage } from "@/lib/storage/upload";
 import {
@@ -56,11 +57,11 @@ function FieldError({ message }: { message?: string }) {
 function getSubmitLabel(phase: SubmitPhase, submitLabel: string): string {
   switch (phase) {
     case "saving":
-      return "Saving…";
+      return "Enregistrement…";
     case "uploading":
-      return "Uploading image…";
+      return "Téléversement de l'image…";
     case "finishing":
-      return "Finishing…";
+      return "Finalisation…";
     default:
       return submitLabel;
   }
@@ -162,7 +163,7 @@ export function ItemForm({
       router.push("/wardrobe");
       router.refresh();
     } catch {
-      setFormError("Something went wrong. Please try again.");
+      setFormError("Une erreur s'est produite. Veuillez réessayer.");
       setPhase("idle");
     }
   }
@@ -178,7 +179,7 @@ export function ItemForm({
         onSubmit={handleSubmit}
         className="space-y-4 pb-mobile-action-focus md:pb-0"
       >
-        <FormSection title="Essentials" defaultOpen>
+        <FormSection title="Essentiel" defaultOpen>
           <ImageUploadField
             currentImageUrl={currentImageUrl}
             disabled={isPending}
@@ -188,7 +189,7 @@ export function ItemForm({
 
           <div>
             <label htmlFor="name" className="input-label">
-              Name
+              Nom
             </label>
             <input
               id="name"
@@ -219,7 +220,7 @@ export function ItemForm({
             >
               {ITEM_TYPES.map((type) => (
                 <option key={type} value={type}>
-                  {type}
+                  {getItemTypeLabel(type)}
                 </option>
               ))}
             </select>
@@ -227,10 +228,10 @@ export function ItemForm({
           </div>
         </FormSection>
 
-        <FormSection title="Details">
+        <FormSection title="Détails">
           <div>
             <label htmlFor="category_id" className="input-label">
-              Category
+              Catégorie
             </label>
             <select
               id="category_id"
@@ -240,7 +241,7 @@ export function ItemForm({
               onChange={(event) => updateValue("category_id", event.target.value)}
               className={inputClassName}
             >
-              <option value="">Select existing category</option>
+              <option value="">Sélectionner une catégorie existante</option>
               {filteredCategories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -252,7 +253,7 @@ export function ItemForm({
 
           <div>
             <label htmlFor="new_category_name" className="input-label">
-              Or new category
+              Ou nouvelle catégorie
             </label>
             <input
               id="new_category_name"
@@ -261,14 +262,14 @@ export function ItemForm({
               disabled={isPending || Boolean(values.category_id)}
               onChange={(event) => updateValue("new_category_name", event.target.value)}
               className={inputClassName}
-              placeholder="e.g. tops, necklace"
+              placeholder="ex. hauts, collier"
             />
             <FieldError message={fieldErrors.new_category_name} />
           </div>
 
           <div>
             <label htmlFor="color_id" className="input-label">
-              Color
+              Couleur
             </label>
             <select
               id="color_id"
@@ -278,7 +279,7 @@ export function ItemForm({
               onChange={(event) => updateValue("color_id", event.target.value)}
               className={inputClassName}
             >
-              <option value="">No color</option>
+              <option value="">Aucune couleur</option>
               {lookups.colors.map((color) => (
                 <option key={color.id} value={color.id}>
                   {color.name}
@@ -290,7 +291,7 @@ export function ItemForm({
 
           <div>
             <label htmlFor="brand_id" className="input-label">
-              Brand
+              Marque
             </label>
             <select
               id="brand_id"
@@ -300,7 +301,7 @@ export function ItemForm({
               onChange={(event) => updateValue("brand_id", event.target.value)}
               className={inputClassName}
             >
-              <option value="">No brand</option>
+              <option value="">Aucune marque</option>
               {lookups.brands.map((brand) => (
                 <option key={brand.id} value={brand.id}>
                   {brand.name}
@@ -312,7 +313,7 @@ export function ItemForm({
 
           <div>
             <label htmlFor="new_brand_name" className="input-label">
-              Or new brand
+              Ou nouvelle marque
             </label>
             <input
               id="new_brand_name"
@@ -321,15 +322,15 @@ export function ItemForm({
               disabled={isPending || Boolean(values.brand_id)}
               onChange={(event) => updateValue("new_brand_name", event.target.value)}
               className={inputClassName}
-              placeholder="Optional"
+              placeholder="Optionnel"
             />
             <FieldError message={fieldErrors.new_brand_name} />
           </div>
         </FormSection>
 
-        <FormSection title="Optional">
+        <FormSection title="Optionnel">
           <fieldset>
-            <legend className="input-label">Seasons</legend>
+            <legend className="input-label">Saisons</legend>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {lookups.seasons.map((season) => {
                 const checked = values.season_ids.includes(season.id);
@@ -367,7 +368,7 @@ export function ItemForm({
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="price" className="input-label">
-                Price
+                Prix
               </label>
               <input
                 id="price"
@@ -379,14 +380,14 @@ export function ItemForm({
                 disabled={isPending}
                 onChange={(event) => updateValue("price", event.target.value)}
                 className={inputClassName}
-                placeholder="Optional"
+                placeholder="Optionnel"
               />
               <FieldError message={fieldErrors.price} />
             </div>
 
             <div>
               <label htmlFor="currency_code" className="input-label">
-                Currency
+                Devise
               </label>
               <select
                 id="currency_code"
@@ -408,7 +409,7 @@ export function ItemForm({
 
           <div>
             <label htmlFor="occasion_tags" className="input-label">
-              Occasion tags
+              Occasions
             </label>
             <input
               id="occasion_tags"
@@ -417,7 +418,7 @@ export function ItemForm({
               disabled={isPending}
               onChange={(event) => updateValue("occasion_tags", event.target.value)}
               className={inputClassName}
-              placeholder="work, casual, formal"
+              placeholder="travail, décontracté, formel"
             />
             <FieldError message={fieldErrors.occasion_tags} />
           </div>

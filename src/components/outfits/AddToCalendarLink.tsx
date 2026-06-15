@@ -7,7 +7,7 @@ type AddToCalendarLinkProps = {
 export function AddToCalendarLink({ outfitId }: AddToCalendarLinkProps) {
   return (
     <Link href={`/calendar?outfitId=${outfitId}`} className="btn-ghost">
-      Add to calendar
+      Ajouter au calendrier
     </Link>
   );
 }

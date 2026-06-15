@@ -12,9 +12,9 @@ type CalendarRow = {
 function getOutfitName(row: CalendarRow): string {
   const outfits = row.outfits;
   if (Array.isArray(outfits)) {
-    return outfits[0]?.name ?? "Untitled outfit";
+    return outfits[0]?.name ?? "Tenue sans titre";
   }
-  return outfits?.name ?? "Untitled outfit";
+  return outfits?.name ?? "Tenue sans titre";
 }
 
 export async function getCalendarEntries(

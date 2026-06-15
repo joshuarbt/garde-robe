@@ -12,7 +12,7 @@ export function DeleteItemButton({ itemId }: DeleteItemButtonProps) {
 
   function handleDelete() {
     const confirmed = window.confirm(
-      "Delete this item? This action cannot be undone.",
+      "Supprimer ce vêtement ? Cette action est irréversible.",
     );
 
     if (!confirmed) {
@@ -31,7 +31,7 @@ export function DeleteItemButton({ itemId }: DeleteItemButtonProps) {
       disabled={isPending}
       className="btn-destructive disabled:opacity-60"
     >
-      {isPending ? "Deleting…" : "Delete item"}
+      {isPending ? "Suppression…" : "Supprimer"}
     </button>
   );
 }

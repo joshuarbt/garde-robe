@@ -68,9 +68,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-plus-jakarta);
 }
 
 body {
@@ -84,38 +82,40 @@ body {
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   .text-display-lg {
-    font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     font-size: var(--text-display-lg);
     line-height: var(--text-display-lg-leading);
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     color: var(--foreground);
   }
 
   .text-display {
-    font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     font-size: var(--text-display);
     line-height: var(--text-display-leading);
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     color: var(--foreground);
   }
 
   .text-title {
     font-size: var(--text-title);
     line-height: var(--text-title-leading);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--foreground);
   }
 
   .text-heading {
     font-size: var(--text-heading);
     line-height: var(--text-heading-leading);
-    font-weight: 400;
+    font-weight: 500;
     color: var(--foreground);
   }
 

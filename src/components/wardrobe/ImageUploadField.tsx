@@ -67,7 +67,7 @@ export function ImageUploadField({
       <div className="mt-2 space-y-3">
         <ItemImage
           src={displayUrl}
-          alt="Item preview"
+          alt="Aperçu du vêtement"
           className="aspect-square w-full max-w-xs border border-[var(--border-subtle)]"
           sizes="320px"
         />
@@ -80,7 +80,7 @@ export function ImageUploadField({
           onChange={handleFileChange}
           className="block w-full text-sm text-[var(--foreground)] file:mr-3 file:border-0 file:bg-[var(--surface-muted)] file:px-3 file:py-2 file:text-sm file:font-medium file:text-[var(--foreground)] disabled:opacity-60"
         />
-        <p className="text-meta">JPEG, PNG, or WebP. Max 5 MB.</p>
+        <p className="text-meta">JPEG, PNG ou WebP. 5 Mo max.</p>
       </div>
       {displayError ? (
         <p className="text-status-error mt-1 text-sm">{displayError}</p>

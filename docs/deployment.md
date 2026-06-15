@@ -11,7 +11,7 @@ Related docs: [auth.md](./auth.md), [storage.md](./storage.md), [database-schema
 | **Vercel** | Hosts the Next.js app (App Router, middleware, static assets) |
 | **Supabase** | Auth, Postgres, Storage — stays outside Vercel |
 
-No server-side secrets are required for the current MVP. The app only needs two **public** Supabase variables.
+No server-side secrets are required for core MVP features. Account deletion (RGPD) requires an additional **server-only** key — see [privacy-ops.md](./privacy-ops.md).
 
 ## Prerequisites
 
@@ -23,18 +23,21 @@ Before deploying:
 
 ## Required environment variables
 
-The app reads env vars through [`src/lib/env/public.ts`](../src/lib/env/public.ts). Only these two are required on Vercel:
+The app reads public env vars through [`src/lib/env/public.ts`](../src/lib/env/public.ts). These two are required on Vercel:
 
 | Variable | Required | Vercel environments | In browser bundle? | Where to find it |
 |----------|----------|---------------------|--------------------|------------------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Production, Preview, Development | Yes (inlined at build) | Supabase → **Project Settings → API → Project URL** |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | Production, Preview, Development | Yes (inlined at build) | Supabase → **Project Settings → API → Publishable key** (anon key) |
 
-**Not used today — do not add unless you implement server-only admin features:**
+**Server-only (Production recommended for RGPD account deletion):**
 
-| Variable | Notes |
-|----------|-------|
-| `SUPABASE_SERVICE_ROLE_KEY` | Bypasses RLS. Server-only, **never** use a `NEXT_PUBLIC_` prefix. Not needed for current features. |
+| Variable | Required | Notes |
+|----------|----------|-------|
+| `SUPABASE_SERVICE_ROLE_KEY` | For account deletion | Supabase → API → service_role key. **Never** `NEXT_PUBLIC_*`. See [privacy-ops.md](./privacy-ops.md) |
+| `LEGAL_CONTROLLER_NAME` | Recommended | Displayed in `/confidentialite` |
+| `LEGAL_CONTACT_EMAIL` | Recommended | Privacy contact e-mail |
+| `LEGAL_SUPABASE_REGION` | Recommended | e.g. `eu-west-1` for transfers section |
 
 If either required variable is missing at runtime, `getPublicEnv()` throws and auth, wardrobe, and outfits will fail.
 

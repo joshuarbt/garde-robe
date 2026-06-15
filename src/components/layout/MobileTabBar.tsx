@@ -7,9 +7,9 @@ import { navIcons } from "@/lib/icons";
 import { isFocusRoute } from "@/lib/navigation/focus-routes";
 
 const tabs = [
-  { href: "/wardrobe", label: "Wardrobe", icon: navIcons.wardrobe },
-  { href: "/outfits", label: "Outfits", icon: navIcons.outfits },
-  { href: "/calendar", label: "Calendar", icon: navIcons.calendar },
+  { href: "/wardrobe", label: "Garde-robe", icon: navIcons.wardrobe },
+  { href: "/outfits", label: "Tenues", icon: navIcons.outfits },
+  { href: "/calendar", label: "Calendrier", icon: navIcons.calendar },
   { href: "/dashboard", label: "Collection", icon: navIcons.collection },
 ] as const;
 
@@ -38,7 +38,7 @@ export function MobileTabBar() {
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-hairline)] bg-[var(--background)] md:hidden"
-      aria-label="Main navigation"
+      aria-label="Navigation principale"
     >
       <div
         className="mx-auto flex max-w-lg items-stretch justify-around px-1"

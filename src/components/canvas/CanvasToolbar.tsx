@@ -27,40 +27,40 @@ export function CanvasToolbar({
         className="btn-secondary gap-2 px-2.5 md:px-3"
         disabled={!hasSelection}
         onClick={onBringForward}
-        aria-label="Bring forward"
+        aria-label="Avancer"
       >
         <Icon icon={actionIcons.layerUp} size="sm" />
-        <span className="hidden md:inline">Bring forward</span>
+        <span className="hidden md:inline">Avancer</span>
       </button>
       <button
         type="button"
         className="btn-secondary gap-2 px-2.5 md:px-3"
         disabled={!hasSelection}
         onClick={onSendBackward}
-        aria-label="Send backward"
+        aria-label="Reculer"
       >
         <Icon icon={actionIcons.layerDown} size="sm" />
-        <span className="hidden md:inline">Send backward</span>
+        <span className="hidden md:inline">Reculer</span>
       </button>
       <button
         type="button"
         className="btn-secondary gap-2 px-2.5 md:px-3"
         disabled={!hasSelection}
         onClick={onDelete}
-        aria-label="Delete selected"
+        aria-label="Supprimer la sélection"
       >
         <Icon icon={actionIcons.delete} size="sm" />
-        <span className="hidden md:inline">Delete</span>
+        <span className="hidden md:inline">Supprimer</span>
       </button>
       <button
         type="button"
         className="btn-primary gap-2 px-2.5 md:px-3 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={!hasPlacements}
         onClick={onExport}
-        aria-label="Export PNG"
+        aria-label="Exporter en PNG"
       >
         <Icon icon={actionIcons.export} size="sm" />
-        <span className="hidden md:inline">Export PNG</span>
+        <span className="hidden md:inline">Exporter en PNG</span>
       </button>
     </div>
   );

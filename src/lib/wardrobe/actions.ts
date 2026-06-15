@@ -37,7 +37,7 @@ async function requireUserId(): Promise<
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, error: "You must be signed in." };
+    return { success: false, error: "Vous devez être connecté." };
   }
 
   return user.id;
@@ -74,7 +74,7 @@ async function resolveCategoryId(
         .single();
 
       if (existingError || !existing) {
-        return { success: false, error: "Could not create category." };
+        return { success: false, error: "Impossible de créer la catégorie." };
       }
 
       return existing.id;
@@ -119,7 +119,7 @@ async function resolveBrandId(
         .single();
 
       if (existingError || !existing) {
-        return { success: false, error: "Could not create brand." };
+        return { success: false, error: "Impossible de créer la marque." };
       }
 
       return existing.id;
@@ -204,7 +204,7 @@ async function saveItemMetadataInternal(
   if (!("data" in validation)) {
     return {
       success: false,
-      error: "Please fix the highlighted fields.",
+      error: "Veuillez corriger les champs signalés.",
       fieldErrors: validation.errors,
     };
   }
@@ -266,7 +266,7 @@ async function saveItemMetadataInternal(
       .single();
 
     if (error || !created) {
-      return { success: false, error: error?.message ?? "Could not create item." };
+      return { success: false, error: error?.message ?? "Impossible de créer le vêtement." };
     }
 
     savedItemId = created.id;
@@ -282,7 +282,7 @@ async function saveItemMetadataInternal(
   }
 
   if (!savedItemId) {
-    return { success: false, error: "Could not save item." };
+    return { success: false, error: "Impossible d'enregistrer le vêtement." };
   }
 
   revalidatePath("/wardrobe");
@@ -313,7 +313,7 @@ export async function updateItemImagePath(
     .single();
 
   if (fetchError || !item) {
-    return { success: false, error: fetchError?.message ?? "Item not found." };
+    return { success: false, error: fetchError?.message ?? "Vêtement introuvable." };
   }
 
   const processingReset = resetImageProcessingState(item.remove_background);
@@ -355,7 +355,7 @@ export async function removeItemImage(itemId: string): Promise<ActionResult> {
     .single();
 
   if (fetchError || !item) {
-    return { success: false, error: fetchError?.message ?? "Item not found." };
+    return { success: false, error: fetchError?.message ?? "Vêtement introuvable." };
   }
 
   if (item.image_path) {

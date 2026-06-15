@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthFormField } from "@/components/auth/AuthFormField";
+import { translateAuthError } from "@/lib/auth/errors";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -25,7 +26,7 @@ export function LoginForm() {
     });
 
     if (signInError) {
-      setError(signInError.message);
+      setError(translateAuthError(signInError.message));
       setIsLoading(false);
       return;
     }
@@ -39,7 +40,7 @@ export function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <AuthFormField
           id="login-email"
-          label="Email"
+          label="E-mail"
           type="email"
           name="email"
           autoComplete="email"
@@ -49,7 +50,7 @@ export function LoginForm() {
         />
         <AuthFormField
           id="login-password"
-          label="Password"
+          label="Mot de passe"
           type="password"
           name="password"
           autoComplete="current-password"
@@ -65,14 +66,14 @@ export function LoginForm() {
         ) : null}
 
         <button type="submit" disabled={isLoading} className="btn-primary w-full">
-          {isLoading ? "Signing in…" : "Sign in"}
+          {isLoading ? "Connexion en cours…" : "Se connecter"}
         </button>
       </form>
 
       <p className="text-meta text-center">
-        Don&apos;t have an account?{" "}
+        Pas encore de compte ?{" "}
         <Link href="/signup" className="text-[var(--foreground)] underline-offset-2 hover:underline">
-          Create one
+          Créer un compte
         </Link>
       </p>
     </div>

@@ -50,11 +50,11 @@ export default async function WardrobePage({ searchParams }: WardrobePageProps) 
     Boolean(params.season) ||
     Boolean(params.brand);
 
-  const pieceLabel = `${items.length} piece${items.length === 1 ? "" : "s"}`;
+  const pieceLabel = `${items.length} pièce${items.length === 1 ? "" : "s"}`;
 
   return (
     <PageShell
-      title="Wardrobe"
+      title="Garde-robe"
       subtitle={pieceLabel}
       wide
       actionsAlign="baseline"
@@ -67,12 +67,12 @@ export default async function WardrobePage({ searchParams }: WardrobePageProps) 
             href="/wardrobe/new"
             className="btn-ghost hidden min-h-[var(--touch-min)] sm:inline-flex"
           >
-            Add
+            Ajouter
           </Link>
           <IconLink
             href="/wardrobe/new"
             icon={actionIcons.add}
-            label="Add item"
+            label="Ajouter un vêtement"
             className="sm:hidden"
           />
         </div>
@@ -97,8 +97,8 @@ export default async function WardrobePage({ searchParams }: WardrobePageProps) 
 
       {items.length === 0 && !hasActiveFilters ? (
         <EmptyState
-          message="Your wardrobe is empty."
-          actionLabel="Add your first piece"
+          message="Votre garde-robe est vide."
+          actionLabel="Ajouter votre première pièce"
           actionHref="/wardrobe/new"
         />
       ) : (

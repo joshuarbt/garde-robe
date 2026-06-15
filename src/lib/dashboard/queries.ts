@@ -36,9 +36,9 @@ const EMPTY_STATS: DashboardStats = {
 function getCategoryLabel(row: ItemStatsRow): string {
   const categories = row.categories;
   if (Array.isArray(categories)) {
-    return categories[0]?.name ?? "Uncategorized";
+    return categories[0]?.name ?? "Sans catégorie";
   }
-  return categories?.name ?? "Uncategorized";
+  return categories?.name ?? "Sans catégorie";
 }
 
 function buildCategoryBreakdown(items: ItemStatsRow[]): CategoryBreakdownEntry[] {

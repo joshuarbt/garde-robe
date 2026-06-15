@@ -11,15 +11,15 @@ type NewOutfitErrorProps = {
 export default function NewOutfitError({ error, reset }: NewOutfitErrorProps) {
   return (
     <PageShell
-      title="Build outfit"
-      description="Click wardrobe items to add them. Drag, resize, and rotate on the canvas."
+      title="Composer une tenue"
+      description="Cliquez sur les articles de la garde-robe pour les ajouter. Déplacez, redimensionnez et faites pivoter sur le canevas."
       wide
     >
       <RouteError
-        title="Could not load outfit builder"
-        message={error.message || "Something went wrong while loading the outfit builder."}
+        title="Impossible de charger le créateur de tenues"
+        message={error.message || "Une erreur s'est produite lors du chargement du créateur de tenues."}
         backHref="/outfits"
-        backLabel="Back to outfits"
+        backLabel="Retour aux tenues"
         reset={reset}
       />
     </PageShell>

@@ -11,15 +11,15 @@ type DashboardErrorProps = {
 export default function DashboardError({ error, reset }: DashboardErrorProps) {
   return (
     <PageShell
-      title="Dashboard"
-      description="Your wardrobe at a glance."
+      title="Collection"
+      description="Votre garde-robe en un coup d'œil."
       wide
     >
       <RouteError
-        title="Could not load your dashboard"
-        message={error.message || "Something went wrong while loading your wardrobe stats."}
+        title="Impossible de charger votre collection"
+        message={error.message || "Une erreur s'est produite lors du chargement des statistiques de votre garde-robe."}
         backHref="/dashboard"
-        backLabel="Back to dashboard"
+        backLabel="Retour à la collection"
         reset={reset}
       />
     </PageShell>

@@ -26,7 +26,7 @@ export function CalendarDayCell({
   }
 
   const hasPreview = Boolean(entry && outfit);
-  const label = entry ? `${day}, ${entry.outfitName}` : String(day);
+  const label = entry ? `Jour ${day}, ${entry.outfitName}` : `Jour ${day}`;
 
   return (
     <button

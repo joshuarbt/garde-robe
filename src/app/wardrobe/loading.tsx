@@ -3,8 +3,8 @@ import { PageShell } from "@/components/layout/PageShell";
 export default function WardrobeLoading() {
   return (
     <PageShell
-      title="Wardrobe"
-      description="Browse and manage your clothing, accessories, and jewelry."
+      title="Garde-robe"
+      description="Parcourez et gérez vos vêtements, accessoires et bijoux."
       wide
     >
       <div className="animate-pulse">

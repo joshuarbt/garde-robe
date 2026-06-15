@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ItemImage } from "@/components/wardrobe/ItemImage";
 import { formatPrice } from "@/lib/currency";
+import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import type { ItemWithRelations } from "@/lib/types/item";
 
 type ItemCardProps = {
@@ -23,7 +24,7 @@ export function ItemCard({ item }: ItemCardProps) {
         <div className="mt-4 space-y-1">
           <h2 className="text-heading leading-snug">{item.name}</h2>
           <p className="text-caption truncate">
-            {[item.brand?.name, item.category?.name ?? item.item_type]
+            {[item.brand?.name, item.category?.name ?? getItemTypeLabel(item.item_type)]
               .filter(Boolean)
               .join(" · ")}
           </p>

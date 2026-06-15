@@ -23,7 +23,7 @@ Copy [`.env.example`](../.env.example) to `.env.local` and fill in both values.
 
 - Enable the Email provider
 - **Disable "Confirm email"** for local development — users can sign in immediately after sign-up
-- For production, re-enable confirmation and configure SMTP under **Authentication → Email Templates**
+- For production, re-enable confirmation and configure SMTP under **Authentication → Email Templates** (recommended for RGPD accuracy and security)
 
 ### 3. URL configuration
 

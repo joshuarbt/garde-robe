@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { CategoryBreakdown } from "@/components/dashboard/CategoryBreakdown";
@@ -25,11 +26,11 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats();
 
   return (
-    <PageShell title="Your collection">
+    <PageShell title="Votre collection">
       {stats.itemCount === 0 ? (
         <EmptyState
-          message="Add pieces to your wardrobe to see your collection summary."
-          actionLabel="Add your first piece"
+          message="Ajoutez des pièces à votre garde-robe pour voir le résumé de votre collection."
+          actionLabel="Ajouter votre première pièce"
           actionHref="/wardrobe/new"
         />
       ) : (
@@ -41,9 +42,12 @@ export default async function DashboardPage() {
           />
           <div className="mt-[var(--space-section)] flex flex-wrap items-baseline gap-x-4 gap-y-2">
             <p className="text-meta">
-              Signed in as{" "}
+              Connecté en tant que{" "}
               <span className="text-[var(--foreground)]">{user.email}</span>
             </p>
+            <Link href="/compte" className="text-caption underline-offset-2 hover:underline">
+              Compte et confidentialité
+            </Link>
             <SignOutButton />
           </div>
         </>

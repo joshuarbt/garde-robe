@@ -11,15 +11,15 @@ type CalendarErrorProps = {
 export default function CalendarError({ error, reset }: CalendarErrorProps) {
   return (
     <PageShell
-      title="Calendar"
-      description="Plan what to wear. Assign one saved outfit per day."
+      title="Calendrier"
+      description="Planifiez vos tenues. Assignez une tenue enregistrée par jour."
       wide
     >
       <RouteError
-        title="Could not load your calendar"
-        message={error.message || "Something went wrong while loading calendar entries."}
+        title="Impossible de charger votre calendrier"
+        message={error.message || "Une erreur s'est produite lors du chargement du calendrier."}
         backHref="/calendar"
-        backLabel="Back to calendar"
+        backLabel="Retour au calendrier"
         reset={reset}
       />
     </PageShell>

@@ -18,8 +18,8 @@ export function WardrobeSidebar({
   if (items.length === 0) {
     return (
       <EmptyState
-        message="No wardrobe items with photos yet. Add items in your wardrobe first."
-        actionLabel="Add your first item"
+        message="Aucun article avec photo dans la garde-robe. Ajoutez d'abord des articles à votre garde-robe."
+        actionLabel="Ajouter votre premier article"
         actionHref="/wardrobe/new"
       />
     );
@@ -27,8 +27,8 @@ export function WardrobeSidebar({
 
   return (
     <div className="space-y-3">
-      <SectionLabel>Wardrobe</SectionLabel>
-      <p className="text-xs text-[var(--muted)]">Click an item to add it to the canvas.</p>
+      <SectionLabel>Garde-robe</SectionLabel>
+      <p className="text-xs text-[var(--muted)]">Cliquez sur un article pour l&apos;ajouter au canevas.</p>
       <ul className="grid grid-cols-2 gap-3">
         {items.map((item) => {
           const isPlaced = placedItemIds.has(item.id);

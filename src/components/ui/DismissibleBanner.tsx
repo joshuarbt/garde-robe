@@ -24,9 +24,9 @@ export function DismissibleBanner({ message, className = "" }: DismissibleBanner
         type="button"
         onClick={() => setVisible(false)}
         className="btn-ghost shrink-0 text-sm text-[var(--status-warning)]"
-        aria-label="Dismiss"
+        aria-label="Ignorer"
       >
-        Dismiss
+        Ignorer
       </button>
     </div>
   );

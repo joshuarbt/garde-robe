@@ -3,8 +3,8 @@ import { PageShell } from "@/components/layout/PageShell";
 export default function NewOutfitLoading() {
   return (
     <PageShell
-      title="Build outfit"
-      description="Click wardrobe items to add them. Drag, resize, and rotate on the canvas."
+      title="Composer une tenue"
+      description="Cliquez sur les articles de la garde-robe pour les ajouter. Déplacez, redimensionnez et faites pivoter sur le canevas."
       wide
     >
       <div className="animate-pulse">

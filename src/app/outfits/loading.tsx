@@ -3,8 +3,8 @@ import { PageShell } from "@/components/layout/PageShell";
 export default function OutfitsLoading() {
   return (
     <PageShell
-      title="Outfits"
-      description="Compose looks on a blank canvas using items from your wardrobe."
+      title="Tenues"
+      description="Composez des tenues sur un canevas vierge avec les articles de votre garde-robe."
       wide
     >
       <div className="animate-pulse divide-y divide-[var(--border-subtle)]">

@@ -4,7 +4,7 @@ export function SignOutButton() {
   return (
     <form action={signOut}>
       <button type="submit" className="btn-ghost text-[var(--muted)]">
-        Sign out
+        Se déconnecter
       </button>
     </form>
   );

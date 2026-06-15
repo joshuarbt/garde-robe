@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import type { WardrobeFilters, WardrobeLookups } from "@/lib/types/item";
 
 type WardrobeFiltersProps = {
@@ -14,7 +15,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
     >
       <div className="min-w-[8rem] flex-1">
         <label htmlFor="category" className="input-label">
-          Category
+          Catégorie
         </label>
         <select
           id="category"
@@ -22,10 +23,10 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
           defaultValue={filters.category ?? ""}
           className="input-field mt-1"
         >
-          <option value="">All categories</option>
+          <option value="">Toutes les catégories</option>
           {lookups.categories.map((category) => (
             <option key={category.id} value={category.id}>
-              {category.name} ({category.item_type})
+              {category.name} ({getItemTypeLabel(category.item_type)})
             </option>
           ))}
         </select>
@@ -33,7 +34,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
 
       <div className="min-w-[8rem] flex-1">
         <label htmlFor="color" className="input-label">
-          Color
+          Couleur
         </label>
         <select
           id="color"
@@ -41,7 +42,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
           defaultValue={filters.color ?? ""}
           className="input-field mt-1"
         >
-          <option value="">All colors</option>
+          <option value="">Toutes les couleurs</option>
           {lookups.colors.map((color) => (
             <option key={color.id} value={color.id}>
               {color.name}
@@ -52,7 +53,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
 
       <div className="min-w-[8rem] flex-1">
         <label htmlFor="season" className="input-label">
-          Season
+          Saison
         </label>
         <select
           id="season"
@@ -60,7 +61,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
           defaultValue={filters.season ?? ""}
           className="input-field mt-1"
         >
-          <option value="">All seasons</option>
+          <option value="">Toutes les saisons</option>
           {lookups.seasons.map((season) => (
             <option key={season.id} value={season.id}>
               {season.name}
@@ -71,7 +72,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
 
       <div className="min-w-[8rem] flex-1">
         <label htmlFor="brand" className="input-label">
-          Brand
+          Marque
         </label>
         <select
           id="brand"
@@ -79,7 +80,7 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
           defaultValue={filters.brand ?? ""}
           className="input-field mt-1"
         >
-          <option value="">All brands</option>
+          <option value="">Toutes les marques</option>
           {lookups.brands.map((brand) => (
             <option key={brand.id} value={brand.id}>
               {brand.name}
@@ -90,10 +91,10 @@ export function WardrobeFiltersBar({ lookups, filters }: WardrobeFiltersProps) {
 
       <div className="flex items-center gap-4 pb-1">
         <button type="submit" className="btn-ghost text-sm">
-          Apply
+          Appliquer
         </button>
         <Link href="/wardrobe" className="btn-ghost text-sm">
-          Clear
+          Effacer
         </Link>
       </div>
     </form>
