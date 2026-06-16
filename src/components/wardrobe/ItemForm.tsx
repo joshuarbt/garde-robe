@@ -24,6 +24,8 @@ type ItemFormProps = {
   userId: string;
   itemId?: string;
   currentImageUrl?: string | null;
+  originalImageUrl?: string | null;
+  backgroundAlreadyProcessed?: boolean;
   initialValues?: Partial<ItemFormInput>;
   defaultCurrency?: string;
   submitLabel: string;
@@ -100,6 +102,8 @@ export function ItemForm({
   userId,
   itemId,
   currentImageUrl,
+  originalImageUrl,
+  backgroundAlreadyProcessed = false,
   initialValues,
   defaultCurrency = DEFAULT_CURRENCY,
   submitLabel,
@@ -215,6 +219,16 @@ export function ItemForm({
             onFileChange={setSelectedFile}
             onBackgroundChoiceChange={setBackgroundChoice}
             error={imageError}
+            retroactive={
+              itemId && originalImageUrl
+                ? {
+                    itemId,
+                    userId,
+                    originalImageUrl,
+                    alreadyProcessed: backgroundAlreadyProcessed,
+                  }
+                : undefined
+            }
           />
 
           <div>

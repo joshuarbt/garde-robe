@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { DeleteItemButton } from "@/components/wardrobe/DeleteItemButton";
 import { ItemForm } from "@/components/wardrobe/ItemForm";
-import { ItemImage } from "@/components/wardrobe/ItemImage";
 import { PageShell } from "@/components/layout/PageShell";
+import { getItemImageUrl } from "@/lib/storage/images";
 import { getItemById, getWardrobeLookups, getProfileCurrency } from "@/lib/wardrobe/queries";
 import { createClient } from "@/lib/supabase/server";
 
@@ -34,21 +34,15 @@ export default async function EditWardrobeItemPage({
     notFound();
   }
 
+  const originalImageUrl = await getItemImageUrl(item.image_path);
+  const backgroundAlreadyProcessed =
+    item.remove_background && item.image_processing_status === "completed";
+
   return (
     <PageShell title={item.name}>
       <Link href="/wardrobe" className="btn-ghost mb-6 inline-flex items-center">
         Retour
       </Link>
-
-      <div className="mb-8 max-w-sm">
-        <ItemImage
-          src={item.image_url}
-          alt={item.name}
-          className="aspect-[3/4] w-full border border-[var(--border-subtle)]"
-          sizes="512px"
-          priority
-        />
-      </div>
 
       <div>
         <ItemForm
@@ -56,6 +50,8 @@ export default async function EditWardrobeItemPage({
           userId={user.id}
           itemId={item.id}
           currentImageUrl={item.image_url}
+          originalImageUrl={originalImageUrl}
+          backgroundAlreadyProcessed={backgroundAlreadyProcessed}
           defaultCurrency={defaultCurrency}
           submitLabel="Enregistrer les modifications"
           initialValues={{

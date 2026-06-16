@@ -2,7 +2,7 @@ import { hasKnockoutToken } from "@/lib/env/knockout";
 import { removeBackgroundFromBuffer } from "@/lib/image-processing/knockout";
 import {
   ALLOWED_IMAGE_TYPES,
-  MAX_IMAGE_FILE_SIZE,
+  MAX_COMPRESSED_IMAGE_FILE_SIZE,
   type AllowedImageType,
 } from "@/lib/storage/image-validation";
 import { createClient } from "@/lib/supabase/server";
@@ -12,8 +12,8 @@ function validateUploadedFile(file: File): string | null {
     return "L'image doit être au format JPEG, PNG ou WebP.";
   }
 
-  if (file.size > MAX_IMAGE_FILE_SIZE) {
-    return "L'image doit faire 5 Mo ou moins.";
+  if (file.size > MAX_COMPRESSED_IMAGE_FILE_SIZE) {
+    return "L'image optimisée est trop volumineuse. Choisissez une photo plus petite.";
   }
 
   return null;
