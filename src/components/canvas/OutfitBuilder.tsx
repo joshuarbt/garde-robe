@@ -16,6 +16,8 @@ import { SaveOutfitForm } from "@/components/canvas/SaveOutfitForm";
 import { useSaveOutfitForm } from "@/components/canvas/useSaveOutfitForm";
 import { WardrobeSidebar } from "@/components/canvas/WardrobeSidebar";
 import { WardrobeStrip } from "@/components/canvas/WardrobeStrip";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { useMinWidth } from "@/hooks/useMediaQuery";
 import type { CanvasPlacementState, WardrobeCanvasItem } from "@/lib/types/outfit";
 
 type OutfitBuilderProps = {
@@ -67,6 +69,8 @@ export function OutfitBuilder({
   initialNotes,
 }: OutfitBuilderProps) {
   const stageRef = useRef<Konva.Stage | null>(null);
+  const isDesktop = useIsDesktop();
+  const isLgUp = useMinWidth(1024);
   const [placements, setPlacements] = useState<CanvasPlacementState[]>(initialPlacements);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Record<string, HTMLImageElement>>(
@@ -221,32 +225,42 @@ export function OutfitBuilder({
   };
 
   return (
-    <div className="pb-mobile-action-focus md:pb-0">
-      <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-        <aside className="hidden lg:block">
-          <WardrobeSidebar {...wardrobeProps} />
-        </aside>
+    <div className="min-w-0">
+      <div
+        className={`grid min-w-0 gap-6 ${isLgUp ? "lg:grid-cols-[240px_minmax(0,1fr)]" : ""}`}
+      >
+        {isLgUp ? (
+          <aside className="min-w-0">
+            <WardrobeSidebar {...wardrobeProps} />
+          </aside>
+        ) : null}
 
-        <div className="flex flex-col gap-4">
-          <div className="order-1 md:order-3">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className={`min-w-0 ${isDesktop ? "order-3" : "order-1"}`}>
             <OutfitCanvas {...canvasProps} />
           </div>
 
-          <div className="order-2 md:hidden">
-            <WardrobeStrip {...wardrobeProps} />
-          </div>
+          {!isDesktop ? (
+            <div className="order-2 min-w-0">
+              <WardrobeStrip {...wardrobeProps} />
+            </div>
+          ) : null}
 
-          <div className="order-3 md:order-2">
+          <div className={isDesktop ? "order-2" : "order-3"}>
             <CanvasToolbar {...toolbarProps} />
           </div>
 
-          <div className="order-4 hidden md:block md:order-1">
-            <SaveOutfitForm {...saveForm} />
-          </div>
+          {isDesktop ? (
+            <div className="order-1">
+              <SaveOutfitForm {...saveForm} />
+            </div>
+          ) : null}
 
-          <div className="order-5 md:hidden">
-            <BuilderActionBar {...saveForm} />
-          </div>
+          {!isDesktop ? (
+            <div className="order-5">
+              <BuilderActionBar {...saveForm} />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

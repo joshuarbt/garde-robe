@@ -3,6 +3,9 @@
 import { Icon } from "@/components/ui/Icon";
 import { actionIcons } from "@/lib/icons";
 
+const toolbarButtonClassName =
+  "btn-secondary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 px-2.5 md:min-w-0 md:px-3";
+
 type CanvasToolbarProps = {
   hasSelection: boolean;
   hasPlacements: boolean;
@@ -24,7 +27,7 @@ export function CanvasToolbar({
     <div className="flex flex-wrap gap-2">
       <button
         type="button"
-        className="btn-secondary gap-2 px-2.5 md:px-3"
+        className={toolbarButtonClassName}
         disabled={!hasSelection}
         onClick={onBringForward}
         aria-label="Avancer"
@@ -34,7 +37,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className="btn-secondary gap-2 px-2.5 md:px-3"
+        className={toolbarButtonClassName}
         disabled={!hasSelection}
         onClick={onSendBackward}
         aria-label="Reculer"
@@ -44,7 +47,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className="btn-secondary gap-2 px-2.5 md:px-3"
+        className={toolbarButtonClassName}
         disabled={!hasSelection}
         onClick={onDelete}
         aria-label="Supprimer la sélection"
@@ -54,7 +57,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className="btn-primary gap-2 px-2.5 md:px-3 disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn-primary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 px-2.5 disabled:cursor-not-allowed disabled:opacity-50 md:min-w-0 md:px-3"
         disabled={!hasPlacements}
         onClick={onExport}
         aria-label="Exporter en PNG"

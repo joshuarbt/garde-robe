@@ -115,20 +115,25 @@ export function CalendarGrid({
         </p>
       ) : null}
 
-      <div className="flex items-center justify-between gap-4">
-        <Link
-          href={buildCalendarHref(prevYear, prevMonth, preselectedOutfitId)}
-          className="btn-ghost min-h-[var(--touch-min)] text-sm"
-        >
-          Précédent
-        </Link>
-        <h2 className="text-title">{monthLabel}</h2>
-        <Link
-          href={buildCalendarHref(nextYear, nextMonth, preselectedOutfitId)}
-          className="btn-ghost min-h-[var(--touch-min)] text-sm"
-        >
-          Suivant
-        </Link>
+      <div className="space-y-3 sm:space-y-0">
+        <h2 className="text-title text-center sm:hidden">{monthLabel}</h2>
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
+          <Link
+            href={buildCalendarHref(prevYear, prevMonth, preselectedOutfitId)}
+            className="btn-ghost min-h-[var(--touch-min)] shrink-0 text-sm"
+          >
+            <span className="sm:hidden">Préc.</span>
+            <span className="hidden sm:inline">Précédent</span>
+          </Link>
+          <h2 className="text-title hidden text-center sm:block">{monthLabel}</h2>
+          <Link
+            href={buildCalendarHref(nextYear, nextMonth, preselectedOutfitId)}
+            className="btn-ghost min-h-[var(--touch-min)] shrink-0 text-sm"
+          >
+            <span className="sm:hidden">Suiv.</span>
+            <span className="hidden sm:inline">Suivant</span>
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8">

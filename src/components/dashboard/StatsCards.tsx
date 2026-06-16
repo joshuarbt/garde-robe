@@ -25,15 +25,23 @@ export function StatsCards({ stats }: StatsCardsProps) {
   return (
     <div className="space-y-3">
       <p className="font-display text-display text-[var(--foreground)]">
-        {formatCount(stats.itemCount, "vêtement", "vêtements")}
-        <span className="text-[var(--muted-light)]"> · </span>
-        {formatCount(stats.outfitCount, "tenue", "tenues")}
-        <span className="text-[var(--muted-light)]"> · </span>
-        {formatPrice(stats.wardrobeValue, stats.profileCurrency)}
+        <span className="block sm:inline">
+          {formatCount(stats.itemCount, "vêtement", "vêtements")}
+        </span>
+        <span className="hidden text-[var(--muted-light)] sm:inline"> · </span>
+        <span className="block sm:inline">
+          {formatCount(stats.outfitCount, "tenue", "tenues")}
+        </span>
+        <span className="hidden text-[var(--muted-light)] sm:inline"> · </span>
+        <span className="block sm:inline">
+          {formatPrice(stats.wardrobeValue, stats.profileCurrency)}
+        </span>
       </p>
 
       {footnotes.length > 0 ? (
-        <p className="text-caption text-[var(--muted-light)]">{footnotes.join(" · ")}</p>
+        <p className="text-caption break-words text-[var(--muted-light)]">
+          {footnotes.join(" · ")}
+        </p>
       ) : null}
     </div>
   );

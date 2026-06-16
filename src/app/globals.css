@@ -30,6 +30,7 @@
   --header-height: 3.5rem;
   --touch-min: 2.75rem;
   --mobile-action-bar-height: 4.25rem;
+  --mobile-action-bar-height-expanded: 10rem;
   --icon-size-sm: 1rem;
   --icon-size-md: 1.25rem;
   --icon-stroke: 1.5;
@@ -236,6 +237,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    min-height: var(--touch-min);
     border-radius: var(--radius-sm);
     background: var(--foreground);
     padding: 0.625rem 1.25rem;
@@ -275,6 +277,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    min-height: var(--touch-min);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-hairline);
     background: transparent;
@@ -300,6 +303,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    min-height: var(--touch-min);
     font-size: var(--text-body);
     font-weight: 500;
     color: var(--foreground);
@@ -319,6 +323,7 @@ body {
   .btn-destructive {
     display: inline-flex;
     align-items: center;
+    min-height: var(--touch-min);
     font-size: var(--text-body);
     font-weight: 500;
     color: var(--status-error);
@@ -366,33 +371,16 @@ body {
 
   .pb-mobile-action-focus {
     padding-bottom: calc(
-      var(--mobile-action-bar-height) + env(safe-area-inset-bottom, 0px)
+      var(--mobile-action-bar-current, var(--mobile-action-bar-height)) +
+        env(safe-area-inset-bottom, 0px)
     );
   }
 
-  .outfit-canvas-mobile-scale {
-    overflow: hidden;
-    width: min(100%, calc(400px * min(1, (100vw - 40px) / 400) + 26px));
-    height: calc((500px + 26px) * min(1, (100vw - 40px) / 400));
-    margin-inline: auto;
-  }
-
-  .outfit-canvas-mobile-scale-inner {
-    transform: scale(min(1, (100vw - 40px) / 400));
-    transform-origin: top center;
-  }
-
-  @media (min-width: 768px) {
-    .outfit-canvas-mobile-scale {
-      overflow-x: auto;
-      width: auto;
-      height: auto;
-      margin-inline: 0;
-    }
-
-    .outfit-canvas-mobile-scale-inner {
-      transform: none;
-    }
+  .pb-mobile-action-focus-expanded {
+    padding-bottom: calc(
+      var(--mobile-action-bar-current, var(--mobile-action-bar-height-expanded)) +
+        env(safe-area-inset-bottom, 0px)
+    );
   }
 
   @media (min-width: 768px) {
@@ -401,7 +389,8 @@ body {
     }
 
     .pb-mobile-action,
-    .pb-mobile-action-focus {
+    .pb-mobile-action-focus,
+    .pb-mobile-action-focus-expanded {
       padding-bottom: 0;
     }
   }

@@ -21,9 +21,9 @@ export function WardrobeStrip({ items, placedItemIds, onAddItem }: WardrobeStrip
   }
 
   return (
-    <div className="space-y-2">
+    <div className="min-w-0 w-full space-y-2">
       <p className="label-caps">Ajouter depuis la garde-robe</p>
-      <ul className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory">
+      <ul className="flex w-full gap-3 overflow-x-auto pb-1 snap-x snap-mandatory">
         {items.map((item) => {
           const isPlaced = placedItemIds.has(item.id);
 

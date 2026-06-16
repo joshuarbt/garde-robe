@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ImageUploadField } from "@/components/wardrobe/ImageUploadField";
 import { MobileActionBar } from "@/components/ui/MobileActionBar";
 import { Icon } from "@/components/ui/Icon";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { actionIcons } from "@/lib/icons";
 import type { ItemFormErrors, ItemFormInput, ItemType, WardrobeLookups } from "@/lib/types/item";
 import { ITEM_TYPES } from "@/lib/types/item";
@@ -104,6 +105,7 @@ export function ItemForm({
   submitLabel,
 }: ItemFormProps) {
   const router = useRouter();
+  const isDesktop = useIsDesktop();
   const [values, setValues] = useState<ItemFormInput>({
     ...defaultValues,
     currency_code: defaultCurrency,
@@ -204,7 +206,7 @@ export function ItemForm({
       <form
         id={FORM_ID}
         onSubmit={handleSubmit}
-        className="space-y-4 pb-mobile-action-focus md:pb-0"
+        className="space-y-4"
       >
         <FormSection title="Essentiel" defaultOpen>
           <ImageUploadField
@@ -477,25 +479,29 @@ export function ItemForm({
           </p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="btn-primary hidden w-full disabled:opacity-60 md:block"
-        >
-          {buttonLabel}
-        </button>
+        {isDesktop ? (
+          <button
+            type="submit"
+            disabled={isPending}
+            className="btn-primary w-full disabled:opacity-60"
+          >
+            {buttonLabel}
+          </button>
+        ) : null}
       </form>
 
-      <MobileActionBar withTabBar={false}>
-        <button
-          type="submit"
-          form={FORM_ID}
-          disabled={isPending}
-          className="btn-primary w-full disabled:opacity-60"
-        >
-          {buttonLabel}
-        </button>
-      </MobileActionBar>
+      {!isDesktop ? (
+        <MobileActionBar withTabBar={false}>
+          <button
+            type="submit"
+            form={FORM_ID}
+            disabled={isPending}
+            className="btn-primary w-full disabled:opacity-60"
+          >
+            {buttonLabel}
+          </button>
+        </MobileActionBar>
+      ) : null}
     </>
   );
 }

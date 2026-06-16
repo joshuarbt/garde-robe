@@ -22,7 +22,7 @@ export default async function NewWardrobeItemPage() {
 
   return (
     <PageShell title="Ajouter une pièce">
-      <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
+      <Link href="/wardrobe" className="btn-ghost mb-6 inline-flex items-center">
         Retour
       </Link>
       <ItemForm

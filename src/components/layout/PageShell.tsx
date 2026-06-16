@@ -25,27 +25,33 @@ export function PageShell({
 }: PageShellProps) {
   return (
     <FadeIn
-      className={`mx-auto w-full px-[var(--space-page-x)] py-[var(--space-page-y)] ${
+      className={`mx-auto min-w-0 w-full px-[var(--space-page-x)] py-[var(--space-page-y)] ${
         wide ? "max-w-5xl" : "max-w-2xl"
       }`}
     >
       {eyebrow ? <p className="text-overline mb-2">{eyebrow}</p> : null}
       <div
-        className={`flex justify-between gap-4 ${
-          actionsAlign === "baseline" ? "items-baseline" : "items-start"
+        className={`flex flex-col gap-4 md:flex-row md:justify-between md:gap-4 ${
+          actionsAlign === "baseline" ? "md:items-baseline" : "md:items-start"
         }`}
       >
         <div className="min-w-0 flex-1">
-          <h1 className={compact ? "text-display" : "text-display-lg"}>{title}</h1>
-          {subtitle ? <p className="text-caption mt-3">{subtitle}</p> : null}
+          <h1 className={`break-words ${compact ? "text-display" : "text-display-lg"}`}>
+            {title}
+          </h1>
+          {subtitle ? <p className="text-caption mt-3 break-words">{subtitle}</p> : null}
           {description && !compact ? (
-            <p className="text-caption mt-4 max-w-xl">{description}</p>
+            <p className="text-caption mt-4 max-w-xl break-words">{description}</p>
           ) : null}
         </div>
-        {actions ? <div className="shrink-0">{actions}</div> : null}
+        {actions ? (
+          <div className="flex min-w-0 w-full flex-wrap items-center gap-2 md:w-auto md:shrink-0 md:justify-end">
+            {actions}
+          </div>
+        ) : null}
       </div>
       {children ? (
-        <div className="mt-10 md:mt-12">{children}</div>
+        <div className="mt-10 min-w-0 md:mt-12">{children}</div>
       ) : null}
     </FadeIn>
   );

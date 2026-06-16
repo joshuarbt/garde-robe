@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { formatCount } from "@/lib/i18n/plural";
 import { OutfitBuilderLoader } from "@/components/canvas/OutfitBuilderLoader";
-import { DeleteOutfitButton } from "@/components/outfits/DeleteOutfitButton";
+import { OutfitDeletePlacement } from "@/components/outfits/OutfitDeletePlacement";
 import { PageShell } from "@/components/layout/PageShell";
 import {
   filterPlacementsForWardrobe,
@@ -53,10 +53,20 @@ export default async function EditOutfitPage({
       title={outfit.name}
       wide
       actions={
-        <DeleteOutfitButton outfitId={outfit.id} outfitName={outfit.name} />
+        <OutfitDeletePlacement
+          outfitId={outfit.id}
+          outfitName={outfit.name}
+          placement="header"
+        />
       }
     >
-      <Link href="/outfits" className="btn-ghost mb-6 inline-block">
+      <OutfitDeletePlacement
+        outfitId={outfit.id}
+        outfitName={outfit.name}
+        placement="body"
+      />
+
+      <Link href="/outfits" className="btn-ghost mb-6 inline-flex items-center">
         Retour
       </Link>
 

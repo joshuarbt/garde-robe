@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { navIcons } from "@/lib/icons";
 import { isFocusRoute } from "@/lib/navigation/focus-routes";
+import { isTabBarRoute } from "@/lib/navigation/tab-bar-routes";
 
 const tabs = [
   { href: "/wardrobe", label: "Garde-robe", icon: navIcons.wardrobe },
@@ -30,14 +32,15 @@ function isTabActive(pathname: string, href: string): boolean {
 
 export function MobileTabBar() {
   const pathname = usePathname();
+  const isDesktop = useIsDesktop();
 
-  if (pathname === "/login" || pathname === "/signup" || isFocusRoute(pathname)) {
+  if (isDesktop || !isTabBarRoute(pathname)) {
     return null;
   }
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-hairline)] bg-[var(--background)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-hairline)] bg-[var(--background)]"
       aria-label="Navigation principale"
     >
       <div

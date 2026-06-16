@@ -36,7 +36,7 @@ export default async function EditWardrobeItemPage({
 
   return (
     <PageShell title={item.name}>
-      <Link href="/wardrobe" className="btn-ghost mb-6 inline-block">
+      <Link href="/wardrobe" className="btn-ghost mb-6 inline-flex items-center">
         Retour
       </Link>
 
@@ -50,7 +50,7 @@ export default async function EditWardrobeItemPage({
         />
       </div>
 
-      <div className="pb-mobile-action-focus md:pb-0">
+      <div>
         <ItemForm
           lookups={lookups}
           userId={user.id}
@@ -75,7 +75,7 @@ export default async function EditWardrobeItemPage({
         />
       </div>
 
-      <div className="divider-hairline mt-10 pb-mobile-action-focus pt-8 md:pb-0">
+      <div className="divider-hairline mt-10 pt-8">
         <DeleteItemButton itemId={item.id} />
       </div>
     </PageShell>

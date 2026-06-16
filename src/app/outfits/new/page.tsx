@@ -21,7 +21,7 @@ export default async function NewOutfitPage() {
 
   return (
     <PageShell title="Composer une tenue" wide>
-      <Link href="/outfits" className="btn-ghost mb-6 inline-block">
+      <Link href="/outfits" className="btn-ghost mb-6 inline-flex items-center">
         Retour
       </Link>
       <OutfitBuilderLoader wardrobeItems={wardrobeItems} />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { getItemTypeLabel } from "@/lib/i18n/item-types";
 import type { WardrobeFilters, WardrobeLookups } from "@/lib/types/item";
 
@@ -16,6 +17,7 @@ const selectClassName = "input-field mt-1";
 
 export function FilterSheet({ lookups, filters }: FilterSheetProps) {
   const router = useRouter();
+  const isDesktop = useIsDesktop();
   const [open, setOpen] = useState(false);
 
   const activeCount = [
@@ -45,23 +47,26 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
   const refineLabel =
     activeCount > 0 ? `Affiner (${activeCount})` : "Affiner";
 
+  if (isDesktop) {
+    return null;
+  }
+
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="btn-ghost min-h-[var(--touch-min)] px-2 text-sm md:hidden"
+        className="btn-ghost min-h-[var(--touch-min)] px-2 text-sm"
       >
         {refineLabel}
       </button>
 
-      <div className="md:hidden">
-        <BottomSheet
-          open={open}
-          onClose={() => setOpen(false)}
-          title="Affiner"
-          className="rounded-t-xl max-h-[85vh]"
-        >
+      <BottomSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Affiner"
+        className="rounded-t-xl max-h-[85vh]"
+      >
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="filter-category" className="input-label">
@@ -152,8 +157,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
               </Link>
             </div>
           </form>
-        </BottomSheet>
-      </div>
+      </BottomSheet>
     </>
   );
 }

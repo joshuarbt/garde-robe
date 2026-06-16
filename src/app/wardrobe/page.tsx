@@ -1,13 +1,11 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ItemList } from "@/components/wardrobe/ItemList";
 import { FilterSheet } from "@/components/wardrobe/FilterSheet";
+import { WardrobeAddAction } from "@/components/wardrobe/WardrobeAddAction";
 import { WardrobeFilterChips } from "@/components/wardrobe/WardrobeFilterChips";
 import { WardrobeFiltersBar } from "@/components/wardrobe/WardrobeFilters";
 import { PageShell } from "@/components/layout/PageShell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { IconLink } from "@/components/ui/IconButton";
-import { actionIcons } from "@/lib/icons";
 import type { WardrobeFilters } from "@/lib/types/item";
 import { getItems, getWardrobeLookups } from "@/lib/wardrobe/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -63,18 +61,7 @@ export default async function WardrobePage({ searchParams }: WardrobePageProps) 
           {(items.length > 0 || hasActiveFilters) && (
             <FilterSheet lookups={lookups} filters={filters} />
           )}
-          <Link
-            href="/wardrobe/new"
-            className="btn-ghost hidden min-h-[var(--touch-min)] sm:inline-flex"
-          >
-            Ajouter
-          </Link>
-          <IconLink
-            href="/wardrobe/new"
-            icon={actionIcons.add}
-            label="Ajouter un vêtement"
-            className="sm:hidden"
-          />
+          <WardrobeAddAction />
         </div>
       }
     >

@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { OutfitsList } from "@/components/outfits/OutfitsList";
+import { OutfitsAddAction } from "@/components/outfits/OutfitsAddAction";
 import { PageShell } from "@/components/layout/PageShell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { IconLink } from "@/components/ui/IconButton";
-import { actionIcons } from "@/lib/icons";
 import { getOutfits } from "@/lib/outfit/queries";
 import { createClient } from "@/lib/supabase/server";
 
@@ -25,22 +23,7 @@ export default async function OutfitsPage() {
       title="Tenues"
       wide
       actionsAlign="baseline"
-      actions={
-        <>
-          <Link
-            href="/outfits/new"
-            className="btn-ghost hidden min-h-[var(--touch-min)] sm:inline-flex"
-          >
-            Nouvelle tenue
-          </Link>
-          <IconLink
-            href="/outfits/new"
-            icon={actionIcons.add}
-            label="Composer une tenue"
-            className="sm:hidden"
-          />
-        </>
-      }
+      actions={<OutfitsAddAction />}
     >
       {outfits.length === 0 ? (
         <EmptyState

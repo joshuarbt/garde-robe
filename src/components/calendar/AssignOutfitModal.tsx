@@ -110,14 +110,6 @@ export function AssignOutfitModal({
           >
             Supprimer
           </button>
-          <button
-            type="button"
-            disabled={isPending}
-            onClick={onClose}
-            className="btn-ghost text-sm disabled:opacity-60"
-          >
-            Fermer
-          </button>
         </div>
       ) : (
         <>
@@ -136,22 +128,6 @@ export function AssignOutfitModal({
                 Annuler
               </button>
             ) : null}
-            <button
-              type="button"
-              disabled={isPending}
-              onClick={onClose}
-              className="btn-ghost text-sm disabled:opacity-60 md:hidden"
-            >
-              Fermer
-            </button>
-            <button
-              type="button"
-              disabled={isPending}
-              onClick={onClose}
-              className="btn-secondary hidden disabled:opacity-60 md:inline-flex"
-            >
-              Fermer
-            </button>
           </div>
           <button
             type="button"

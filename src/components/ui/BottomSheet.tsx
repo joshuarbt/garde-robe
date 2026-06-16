@@ -62,13 +62,12 @@ export function BottomSheet({
     <AnimatePresence>
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-4"
+          className="fixed inset-0 z-[60] flex items-end justify-center md:items-center md:p-4"
           role="presentation"
         >
-          <motion.button
-            type="button"
+          <motion.div
             className="absolute inset-0 bg-[var(--foreground)]/25 backdrop-blur-sm"
-            aria-label="Fermer"
+            aria-hidden="true"
             onClick={onClose}
             {...sheetMotion.backdrop}
           />

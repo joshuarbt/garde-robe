@@ -21,7 +21,7 @@ export function CategoryBreakdown({ breakdown, className }: CategoryBreakdownPro
     .join(", ");
 
   return (
-    <p className={`text-caption ${className ?? ""}`.trim()}>
+    <p className={`text-caption break-words ${className ?? ""}`.trim()}>
       {inlineText}
       {hiddenCount > 0
         ? `, et ${formatCount(hiddenCount, "autre catégorie", "autres catégories")}`
