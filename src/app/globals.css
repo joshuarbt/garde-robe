@@ -53,6 +53,19 @@
   --space-grid-y: 2.5rem;
   --space-stack: 1rem;
   --space-stack-sm: 0.5rem;
+  --btn-border-width: 1px;
+  --btn-border-primary: color-mix(in srgb, white 20%, var(--foreground));
+  --btn-border-secondary: var(--border-subtle);
+  --btn-border-ghost: var(--border-subtle);
+  --btn-border-destructive: color-mix(in srgb, var(--status-error) 28%, var(--border-hairline));
+  --btn-border-icon: var(--border-subtle);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --btn-border-ghost: color-mix(in srgb, var(--foreground) 12%, var(--border-subtle));
+    --btn-border-icon: color-mix(in srgb, var(--foreground) 12%, var(--border-subtle));
+  }
 }
 
 @media (min-width: 768px) {
@@ -245,13 +258,16 @@ body {
     font-weight: 500;
     letter-spacing: 0.01em;
     color: white;
+    box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-primary);
     transition:
       opacity 0.2s var(--ease-out),
-      transform 0.15s var(--ease-out);
+      transform 0.15s var(--ease-out),
+      box-shadow 0.2s var(--ease-out);
   }
 
   .btn-primary:hover {
     opacity: 0.88;
+    box-shadow: inset 0 0 0 var(--btn-border-width) color-mix(in srgb, white 30%, var(--foreground));
   }
 
   .btn-primary:active:not(:disabled) {
@@ -267,6 +283,7 @@ body {
   .btn-primary:focus-visible,
   .btn-secondary:focus-visible,
   .btn-ghost:focus-visible,
+  .btn-destructive:focus-visible,
   .btn-icon:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: 2px;
@@ -279,7 +296,7 @@ body {
     gap: 0.5rem;
     min-height: var(--touch-min);
     border-radius: var(--radius-sm);
-    border: 1px solid var(--border-hairline);
+    border: var(--btn-border-width) solid var(--btn-border-secondary);
     background: transparent;
     padding: 0.5rem 1rem;
     font-size: var(--text-body);
@@ -291,7 +308,7 @@ body {
   }
 
   .btn-secondary:hover {
-    border-color: color-mix(in srgb, var(--foreground) 35%, var(--border-hairline));
+    border-color: color-mix(in srgb, var(--foreground) 35%, var(--btn-border-secondary));
   }
 
   .btn-secondary:active:not(:disabled) {
@@ -304,14 +321,19 @@ body {
     align-items: center;
     gap: 0.5rem;
     min-height: var(--touch-min);
+    border-radius: var(--radius-sm);
     font-size: var(--text-body);
     font-weight: 500;
     color: var(--foreground);
-    transition: opacity 0.2s var(--ease-out);
+    box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-ghost);
+    transition:
+      opacity 0.2s var(--ease-out),
+      box-shadow 0.2s var(--ease-out);
   }
 
   .btn-ghost:hover {
     opacity: 0.65;
+    box-shadow: inset 0 0 0 var(--btn-border-width) color-mix(in srgb, var(--foreground) 18%, var(--btn-border-ghost));
   }
 
   .btn-ghost-underline {
@@ -324,14 +346,19 @@ body {
     display: inline-flex;
     align-items: center;
     min-height: var(--touch-min);
+    border-radius: var(--radius-sm);
     font-size: var(--text-body);
     font-weight: 500;
     color: var(--status-error);
-    transition: opacity 0.2s var(--ease-out);
+    box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-destructive);
+    transition:
+      opacity 0.2s var(--ease-out),
+      box-shadow 0.2s var(--ease-out);
   }
 
   .btn-destructive:hover {
     opacity: 0.65;
+    box-shadow: inset 0 0 0 var(--btn-border-width) color-mix(in srgb, var(--status-error) 40%, var(--border-hairline));
   }
 
   .btn-destructive:disabled {
@@ -348,11 +375,15 @@ body {
     height: var(--touch-min);
     border-radius: var(--radius-sm);
     color: var(--foreground);
-    transition: opacity 0.2s var(--ease-out);
+    box-shadow: inset 0 0 0 var(--btn-border-width) var(--btn-border-icon);
+    transition:
+      opacity 0.2s var(--ease-out),
+      box-shadow 0.2s var(--ease-out);
   }
 
   .btn-icon:hover {
     opacity: 0.7;
+    box-shadow: inset 0 0 0 var(--btn-border-width) color-mix(in srgb, var(--foreground) 18%, var(--btn-border-icon));
   }
 
   .btn-icon:active {
