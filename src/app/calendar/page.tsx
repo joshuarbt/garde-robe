@@ -5,6 +5,7 @@ import { DismissibleBanner } from "@/components/ui/DismissibleBanner";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getCalendarEntries } from "@/lib/calendar/queries";
 import { getOutfits } from "@/lib/outfit/queries";
+import { getWeatherLocation } from "@/lib/weather/queries";
 import { createClient } from "@/lib/supabase/server";
 import { isUuid } from "@/lib/wardrobe/validation";
 
@@ -67,9 +68,10 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
   const preselectedOutfitId =
     rawOutfitId && isUuid(rawOutfitId) ? rawOutfitId : undefined;
 
-  const [calendarData, outfits] = await Promise.all([
+  const [calendarData, outfits, initialLocation] = await Promise.all([
     getCalendarEntries(year, month),
     getOutfits(),
+    getWeatherLocation(),
   ]);
 
   const preselectedOutfit = preselectedOutfitId
@@ -102,6 +104,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
           month={calendarData.month}
           entries={calendarData.entries}
           outfits={outfits}
+          initialLocation={initialLocation}
           preselectedOutfitId={preselectedOutfit?.id}
           preselectedOutfitName={preselectedOutfit?.name}
         />

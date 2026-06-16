@@ -11,6 +11,7 @@ import {
   Layers,
   LayoutGrid,
   ListFilter,
+  Luggage,
   Plus,
   Trash2,
   X,
@@ -24,6 +25,7 @@ export const navIcons = {
   outfits: Layers,
   calendar: Calendar,
   collection: Gem,
+  voyages: Luggage,
 } as const satisfies Record<string, LucideIcon>;
 
 /** Action icons — one icon per semantic meaning app-wide. */

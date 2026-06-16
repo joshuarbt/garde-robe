@@ -9,6 +9,9 @@ import type { ImageProcessingStatus, ItemType } from "@/lib/types/item";
 export type ProfilesRow = {
   id: string;
   currency_code: string;
+  weather_latitude: number | null;
+  weather_longitude: number | null;
+  weather_location_label: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -66,4 +69,28 @@ export type OutfitCalendarEntriesRow = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type TripsRow = {
+  id: string;
+  user_id: string;
+  name: string;
+  destination: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TripOutfitsRow = {
+  id: string;
+  trip_id: string;
+  outfit_id: string;
+};
+
+export type TripItemsRow = {
+  id: string;
+  trip_id: string;
+  item_id: string;
+  is_packed: boolean;
 };

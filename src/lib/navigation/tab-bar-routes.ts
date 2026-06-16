@@ -4,6 +4,7 @@ const TAB_BAR_PREFIXES = [
   "/wardrobe",
   "/outfits",
   "/calendar",
+  "/voyages",
   "/dashboard",
   "/compte",
 ] as const;

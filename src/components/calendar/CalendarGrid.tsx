@@ -4,14 +4,18 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AssignOutfitModal } from "@/components/calendar/AssignOutfitModal";
 import { CalendarDayCell } from "@/components/calendar/CalendarDayCell";
+import { WeatherLocationPrompt } from "@/components/calendar/WeatherLocationPrompt";
+import { useWeatherForecast } from "@/hooks/useWeatherForecast";
 import type { CalendarEntry } from "@/lib/types/calendar";
 import type { OutfitSummary } from "@/lib/types/outfit";
+import type { WeatherLocation } from "@/lib/types/weather";
 
 type CalendarGridProps = {
   year: number;
   month: number;
   entries: CalendarEntry[];
   outfits: OutfitSummary[];
+  initialLocation: WeatherLocation | null;
   preselectedOutfitId?: string;
   preselectedOutfitName?: string;
 };
@@ -53,10 +57,31 @@ export function CalendarGrid({
   month,
   entries,
   outfits,
+  initialLocation,
   preselectedOutfitId,
   preselectedOutfitName,
 }: CalendarGridProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [location, setLocation] = useState<WeatherLocation | null>(initialLocation);
+  const [showLocationPrompt, setShowLocationPrompt] = useState(!initialLocation);
+
+  function handleLocationSaved(nextLocation: WeatherLocation) {
+    setLocation(nextLocation);
+    setShowLocationPrompt(false);
+  }
+
+  const locationControl = location ? (
+    <button
+      type="button"
+      onClick={() => setShowLocationPrompt(true)}
+      className="text-caption text-[var(--muted)] transition-opacity hover:opacity-70"
+    >
+      {location.label} · Changer de lieu
+    </button>
+  ) : null;
+
+  const { forecastsByDate, isLoading: isWeatherLoading, error: weatherError } =
+    useWeatherForecast(location);
 
   const entryByDate = useMemo(() => {
     const map = new Map<string, CalendarEntry>();
@@ -116,7 +141,10 @@ export function CalendarGrid({
       ) : null}
 
       <div className="space-y-3 sm:space-y-0">
-        <h2 className="text-title text-center sm:hidden">{monthLabel}</h2>
+        <div className="text-center sm:hidden">
+          <h2 className="text-title">{monthLabel}</h2>
+          {locationControl ? <div className="mt-1">{locationControl}</div> : null}
+        </div>
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           <Link
             href={buildCalendarHref(prevYear, prevMonth, preselectedOutfitId)}
@@ -125,7 +153,10 @@ export function CalendarGrid({
             <span className="sm:hidden">Préc.</span>
             <span className="hidden sm:inline">Précédent</span>
           </Link>
-          <h2 className="text-title hidden text-center sm:block">{monthLabel}</h2>
+          <div className="hidden min-w-0 text-center sm:block">
+            <h2 className="text-title">{monthLabel}</h2>
+            {locationControl ? <div className="mt-1">{locationControl}</div> : null}
+          </div>
           <Link
             href={buildCalendarHref(nextYear, nextMonth, preselectedOutfitId)}
             className="btn-ghost min-h-[var(--touch-min)] shrink-0 text-sm"
@@ -166,6 +197,11 @@ export function CalendarGrid({
                 entry={entry}
                 outfit={entry ? outfitsById.get(entry.outfitId) ?? null : null}
                 isToday={cell.scheduledDate === today}
+                forecast={
+                  cell.scheduledDate
+                    ? forecastsByDate.get(cell.scheduledDate) ?? null
+                    : null
+                }
                 onSelectDate={setSelectedDate}
               />
             </div>
@@ -180,9 +216,18 @@ export function CalendarGrid({
           currentEntry={selectedEntry}
           outfits={outfits}
           preselectedOutfitId={preselectedOutfitId}
+          forecast={forecastsByDate.get(selectedDate) ?? null}
+          isWeatherLoading={isWeatherLoading}
+          weatherError={weatherError}
           onClose={() => setSelectedDate(null)}
         />
       ) : null}
+
+      <WeatherLocationPrompt
+        open={showLocationPrompt}
+        onClose={() => setShowLocationPrompt(false)}
+        onLocationSaved={handleLocationSaved}
+      />
     </>
   );
 }

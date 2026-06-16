@@ -56,7 +56,7 @@ export function FilterSheet({ lookups, filters }: FilterSheetProps) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="btn-ghost min-h-[var(--touch-min)] px-2 text-sm"
+        className="btn-ghost btn-sm min-h-[var(--touch-min)] text-sm"
       >
         {refineLabel}
       </button>

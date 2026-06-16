@@ -12,6 +12,7 @@ const tabs = [
   { href: "/wardrobe", label: "Garde-robe", icon: navIcons.wardrobe },
   { href: "/outfits", label: "Tenues", icon: navIcons.outfits },
   { href: "/calendar", label: "Calendrier", icon: navIcons.calendar },
+  { href: "/voyages", label: "Valise", icon: navIcons.voyages },
   { href: "/dashboard", label: "Collection", icon: navIcons.collection },
 ] as const;
 
@@ -25,6 +26,10 @@ function isTabActive(pathname: string, href: string): boolean {
       pathname === "/outfits" ||
       (pathname.startsWith("/outfits/") && !isFocusRoute(pathname))
     );
+  }
+
+  if (href === "/voyages") {
+    return pathname === "/voyages" || pathname.startsWith("/voyages/");
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);

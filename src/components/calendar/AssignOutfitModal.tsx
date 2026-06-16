@@ -4,18 +4,23 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { OutfitPreview } from "@/components/outfits/OutfitPreview";
+import { WeatherDetail } from "@/components/calendar/WeatherDetail";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Crossfade } from "@/components/layout/motion";
 import { assignOutfitToDate, removeCalendarEntry } from "@/lib/calendar/actions";
 import type { CalendarEntry } from "@/lib/types/calendar";
 import type { OutfitSummary } from "@/lib/types/outfit";
+import type { DayForecast } from "@/lib/types/weather";
 
 type AssignOutfitModalProps = {
   scheduledDate: string;
   currentEntry: CalendarEntry | null;
   outfits: OutfitSummary[];
   preselectedOutfitId?: string;
+  forecast?: DayForecast | null;
+  isWeatherLoading?: boolean;
+  weatherError?: string | null;
   onClose: () => void;
 };
 
@@ -24,6 +29,9 @@ export function AssignOutfitModal({
   currentEntry,
   outfits,
   preselectedOutfitId,
+  forecast,
+  isWeatherLoading,
+  weatherError,
   onClose,
 }: AssignOutfitModalProps) {
   const router = useRouter();
@@ -152,6 +160,11 @@ export function AssignOutfitModal({
       className="rounded-t-xl md:rounded-sm"
     >
       <p className="text-sm text-[var(--muted)]">{formattedDate}</p>
+      <WeatherDetail
+        forecast={forecast}
+        isLoading={isWeatherLoading}
+        error={weatherError}
+      />
 
       <Crossfade contentKey={contentKey}>
         {currentEntry && !isChanging ? (

@@ -22,10 +22,10 @@ export function RouteError({
       <p className="text-heading text-[var(--status-error)]">{title}</p>
       <p className="mt-2">{message}</p>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button type="button" onClick={reset} className="btn-primary px-3 py-1.5 text-sm">
+        <button type="button" onClick={reset} className="btn-primary btn-sm text-sm">
           Réessayer
         </button>
-        <Link href={backHref} className="btn-secondary px-3 py-1.5 text-sm">
+        <Link href={backHref} className="btn-secondary btn-sm text-sm">
           {backLabel}
         </Link>
       </div>

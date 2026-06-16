@@ -1,8 +1,10 @@
 "use client";
 
 import { OutfitPreview } from "@/components/outfits/OutfitPreview";
+import { WeatherBadge } from "@/components/calendar/WeatherBadge";
 import type { CalendarEntry } from "@/lib/types/calendar";
 import type { OutfitSummary } from "@/lib/types/outfit";
+import type { DayForecast } from "@/lib/types/weather";
 
 type CalendarDayCellProps = {
   day: number | null;
@@ -10,6 +12,7 @@ type CalendarDayCellProps = {
   entry: CalendarEntry | null;
   outfit: OutfitSummary | null;
   isToday: boolean;
+  forecast?: DayForecast | null;
   onSelectDate: (scheduledDate: string) => void;
 };
 
@@ -19,6 +22,7 @@ export function CalendarDayCell({
   entry,
   outfit,
   isToday,
+  forecast,
   onSelectDate,
 }: CalendarDayCellProps) {
   if (day === null || !scheduledDate) {
@@ -37,6 +41,12 @@ export function CalendarDayCell({
         hasPreview ? "min-h-[4.5rem]" : "flex min-h-16 items-start justify-center py-2"
       }`}
     >
+      {forecast ? (
+        <WeatherBadge
+          forecast={forecast}
+          className="absolute right-0.5 top-0.5 z-20"
+        />
+      ) : null}
       {hasPreview ? (
         <>
           <OutfitPreview

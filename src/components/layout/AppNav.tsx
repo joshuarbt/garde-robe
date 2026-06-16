@@ -7,6 +7,7 @@ const desktopNavLinks = [
   { href: "/wardrobe", label: "Garde-robe" },
   { href: "/outfits", label: "Tenues" },
   { href: "/calendar", label: "Calendrier" },
+  { href: "/voyages", label: "Voyages" },
   { href: "/dashboard", label: "Collection" },
 ] as const;
 
@@ -45,7 +46,7 @@ export async function AppNav() {
             <Link href="/login" className="text-caption transition-opacity hover:opacity-70">
               Se connecter
             </Link>
-            <Link href="/signup" className="btn-primary px-4 py-2 text-xs">
+            <Link href="/signup" className="btn-primary btn-sm text-xs">
               Créer un compte
             </Link>
           </div>

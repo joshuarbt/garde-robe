@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/Icon";
 import { actionIcons } from "@/lib/icons";
 
 const toolbarButtonClassName =
-  "btn-secondary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 px-2.5 md:min-w-0 md:px-3";
+  "btn-secondary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 md:min-w-0";
 
 type CanvasToolbarProps = {
   hasSelection: boolean;
@@ -57,7 +57,7 @@ export function CanvasToolbar({
       </button>
       <button
         type="button"
-        className="btn-primary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 px-2.5 disabled:cursor-not-allowed disabled:opacity-50 md:min-w-0 md:px-3"
+        className="btn-primary min-h-[var(--touch-min)] min-w-[var(--touch-min)] gap-2 disabled:cursor-not-allowed disabled:opacity-50 md:min-w-0"
         disabled={!hasPlacements}
         onClick={onExport}
         aria-label="Exporter en PNG"

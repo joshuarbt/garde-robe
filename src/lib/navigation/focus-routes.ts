@@ -12,6 +12,10 @@ export function isFocusRoute(pathname: string): boolean {
     return true;
   }
 
+  if (pathname === "/voyages/new") {
+    return true;
+  }
+
   if (/^\/wardrobe\/[^/]+\/edit$/.test(pathname)) {
     return true;
   }
