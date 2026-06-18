@@ -1,33 +1,42 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
-import { saveWeatherLocation } from "@/lib/weather/actions";
+import { cityResultToLocation } from "@/lib/weather/location";
 import { searchCity } from "@/lib/weather/open-meteo";
-import type { CitySearchResult, WeatherLocation } from "@/lib/types/weather";
+import type {
+  CitySearchResult,
+  WeatherActionResult,
+  WeatherLocation,
+} from "@/lib/types/weather";
 
 type WeatherLocationPromptProps = {
   open: boolean;
   onClose: () => void;
-  onLocationSaved: (location: WeatherLocation) => void;
+  onLocationSaved: () => void;
+  saveLocation: (location: WeatherLocation) => Promise<WeatherActionResult>;
+  saveCityByName: (cityName: string) => Promise<WeatherActionResult>;
+  isSaving: boolean;
 };
 
 export function WeatherLocationPrompt({
   open,
   onClose,
   onLocationSaved,
+  saveLocation,
+  saveCityByName,
+  isSaving,
 }: WeatherLocationPromptProps) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<CitySearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchTimeoutRef = useRef<number | null>(null);
 
   function handleQueryChange(value: string) {
     setQuery(value);
+    setHasSearched(false);
 
     if (searchTimeoutRef.current) {
       window.clearTimeout(searchTimeoutRef.current);
@@ -37,6 +46,7 @@ export function WeatherLocationPrompt({
     if (trimmed.length < 2) {
       setResults([]);
       setIsSearching(false);
+      setError(null);
       return;
     }
 
@@ -45,10 +55,12 @@ export function WeatherLocationPrompt({
       void searchCity(trimmed)
         .then((cityResults) => {
           setResults(cityResults);
+          setHasSearched(true);
           setError(null);
         })
         .catch(() => {
           setResults([]);
+          setHasSearched(true);
           setError("Recherche de ville indisponible.");
         })
         .finally(() => {
@@ -57,54 +69,38 @@ export function WeatherLocationPrompt({
     }, 300);
   }
 
-  function persistLocation(location: WeatherLocation) {
+  async function handleSaveCity() {
     setError(null);
-    startTransition(async () => {
-      const result = await saveWeatherLocation(location);
-      if (!result.success) {
-        setError(result.error);
-        return;
-      }
-
-      onLocationSaved(location);
-      router.refresh();
-      onClose();
-    });
-  }
-
-  function handleUseCurrentPosition() {
-    if (!navigator.geolocation) {
-      setError("Impossible d'accéder à votre position. Recherchez une ville.");
+    const result = await saveCityByName(query);
+    if (!result.success) {
+      setError(result.error);
       return;
     }
 
+    onLocationSaved();
+    onClose();
+  }
+
+  async function handleSelectCity(result: CitySearchResult) {
     setError(null);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        persistLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          label: "Ma position",
-        });
-      },
-      () => {
-        setError("Impossible d'accéder à votre position. Recherchez une ville.");
-      },
-      { enableHighAccuracy: false, timeout: 10000 },
-    );
+    const location = cityResultToLocation(result);
+    const saveResult = await saveLocation(location);
+    if (!saveResult.success) {
+      setError(saveResult.error);
+      return;
+    }
+
+    onLocationSaved();
+    onClose();
   }
 
-  function handleSelectCity(result: CitySearchResult) {
-    const label = result.admin1
-      ? `${result.name}, ${result.admin1}`
-      : `${result.name}, ${result.country}`;
-
-    persistLocation({
-      latitude: result.latitude,
-      longitude: result.longitude,
-      label,
-    });
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void handleSaveCity();
   }
+
+  const showNoResults =
+    hasSearched && !isSearching && query.trim().length >= 2 && results.length === 0;
 
   if (!open) {
     return null;
@@ -113,27 +109,18 @@ export function WeatherLocationPrompt({
   return (
     <BottomSheet
       open
-      title="Météo locale"
+      title="Ville météo par défaut"
       titleId="weather-location-title"
       onClose={onClose}
     >
       <p className="text-sm text-[var(--muted)]">
-        Indiquez votre lieu pour afficher la météo sur le calendrier.
+        Choisissez votre ville pour afficher la météo sur le calendrier.
       </p>
 
-      <div className="mt-6 space-y-4">
-        <button
-          type="button"
-          onClick={handleUseCurrentPosition}
-          disabled={isPending}
-          className="btn-primary w-full min-h-[var(--touch-min)]"
-        >
-          Utiliser ma position
-        </button>
-
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div className="space-y-2">
           <label htmlFor="weather-city-search" className="text-overline">
-            Ou rechercher une ville
+            Rechercher une ville
           </label>
           <input
             id="weather-city-search"
@@ -141,14 +128,28 @@ export function WeatherLocationPrompt({
             value={query}
             onChange={(event) => handleQueryChange(event.target.value)}
             placeholder="Paris, Lyon…"
-            disabled={isPending}
+            disabled={isSaving}
             className="input-field w-full"
             autoComplete="off"
           />
         </div>
 
+        <button
+          type="submit"
+          disabled={isSaving || query.trim().length < 2}
+          className="btn-primary w-full min-h-[var(--touch-min)] disabled:opacity-60"
+        >
+          {isSaving ? "Enregistrement…" : "Enregistrer cette ville"}
+        </button>
+
         {isSearching ? (
           <p className="text-caption text-[var(--muted)]">Recherche…</p>
+        ) : null}
+
+        {showNoResults ? (
+          <p className="text-caption text-[var(--muted)]">
+            Ville introuvable. Vérifiez l&apos;orthographe.
+          </p>
         ) : null}
 
         {results.length > 0 ? (
@@ -162,8 +163,8 @@ export function WeatherLocationPrompt({
                 <li key={`${result.name}-${result.latitude}-${result.longitude}`}>
                   <button
                     type="button"
-                    onClick={() => handleSelectCity(result)}
-                    disabled={isPending}
+                    onClick={() => void handleSelectCity(result)}
+                    disabled={isSaving}
                     className="flex w-full min-h-[var(--touch-min)] flex-col items-start px-3 py-2 text-left transition-opacity active:opacity-70"
                   >
                     <span className="text-sm text-[var(--foreground)]">{result.name}</span>
@@ -174,7 +175,7 @@ export function WeatherLocationPrompt({
             })}
           </ul>
         ) : null}
-      </div>
+      </form>
 
       {error ? (
         <p role="alert" className="text-status-error mt-4 text-sm">

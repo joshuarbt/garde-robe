@@ -22,5 +22,5 @@ export type CitySearchResult = {
 };
 
 export type WeatherActionResult =
-  | { success: true }
+  | { success: true; location?: WeatherLocation }
   | { success: false; error: string };

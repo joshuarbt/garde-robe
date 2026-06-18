@@ -6,6 +6,7 @@ import { AssignOutfitModal } from "@/components/calendar/AssignOutfitModal";
 import { CalendarDayCell } from "@/components/calendar/CalendarDayCell";
 import { WeatherLocationPrompt } from "@/components/calendar/WeatherLocationPrompt";
 import { useWeatherForecast } from "@/hooks/useWeatherForecast";
+import { useWeatherLocation } from "@/hooks/useWeatherLocation";
 import type { CalendarEntry } from "@/lib/types/calendar";
 import type { OutfitSummary } from "@/lib/types/outfit";
 import type { WeatherLocation } from "@/lib/types/weather";
@@ -62,11 +63,11 @@ export function CalendarGrid({
   preselectedOutfitName,
 }: CalendarGridProps) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [location, setLocation] = useState<WeatherLocation | null>(initialLocation);
-  const [showLocationPrompt, setShowLocationPrompt] = useState(!initialLocation);
+  const { location, saveLocation, saveCityByName, isSaving } =
+    useWeatherLocation(initialLocation);
+  const [showLocationPrompt, setShowLocationPrompt] = useState(!location);
 
-  function handleLocationSaved(nextLocation: WeatherLocation) {
-    setLocation(nextLocation);
+  function handleLocationSaved() {
     setShowLocationPrompt(false);
   }
 
@@ -227,6 +228,9 @@ export function CalendarGrid({
         open={showLocationPrompt}
         onClose={() => setShowLocationPrompt(false)}
         onLocationSaved={handleLocationSaved}
+        saveLocation={saveLocation}
+        saveCityByName={saveCityByName}
+        isSaving={isSaving}
       />
     </>
   );

@@ -14,7 +14,7 @@ export function createAdminClient() {
 
   if (!serviceRoleKey) {
     throw new Error(
-      "Missing SUPABASE_SERVICE_ROLE_KEY. Required for account deletion only — set server-side in Vercel.",
+      "Missing SUPABASE_SERVICE_ROLE_KEY. Required for account deletion and admin user management — set server-side in Vercel.",
     );
   }
 

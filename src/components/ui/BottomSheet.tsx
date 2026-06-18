@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useId } from "react";
+import { useEffect, useId, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { IconButton } from "@/components/ui/IconButton";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
 import { actionIcons } from "@/lib/icons";
@@ -35,6 +36,11 @@ export function BottomSheet({
   const reduced = useReducedMotion() ?? false;
   const isDesktop = useIsDesktop();
   const sheetMotion = sheetMotionProps(reduced, isDesktop);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     if (!open) {
@@ -58,7 +64,7 @@ export function BottomSheet({
     };
   }, [open, onClose]);
 
-  return (
+  const overlay = (
     <AnimatePresence>
       {open ? (
         <div
@@ -75,7 +81,7 @@ export function BottomSheet({
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className={`relative z-10 flex max-h-[90vh] w-full flex-col border border-[var(--border-hairline)] bg-[var(--surface)] md:max-w-md md:rounded-sm ${className}`.trim()}
+            className={`relative z-10 flex w-full flex-col border border-[var(--border-hairline)] bg-[var(--surface)] max-h-[min(90dvh,calc(100dvh-env(safe-area-inset-top,0px)-env(safe-area-inset-bottom,0px)))] md:max-h-[90vh] md:max-w-md md:rounded-sm ${className}`.trim()}
             style={{
               paddingBottom: "max(env(safe-area-inset-bottom, 0px), 0px)",
             }}
@@ -85,7 +91,9 @@ export function BottomSheet({
             {!hideHandle ? (
               <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-[var(--border-strong)] md:hidden" />
             ) : null}
-            <div className="flex shrink-0 items-start justify-between gap-4 px-5 pb-2 pt-4 md:pt-6">
+            <div
+              className="flex shrink-0 items-start justify-between gap-4 px-5 pb-2 pt-[max(1rem,env(safe-area-inset-top,0px))] md:pt-6"
+            >
               <h2 id={titleId} className="font-display text-xl text-[var(--foreground)] md:text-2xl">
                 {title}
               </h2>
@@ -102,4 +110,10 @@ export function BottomSheet({
       ) : null}
     </AnimatePresence>
   );
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(overlay, document.body);
 }

@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { WeatherActionResult } from "@/lib/types/weather";
+import { resolveCityQuery } from "@/lib/weather/location";
+import type { WeatherActionResult, WeatherLocation } from "@/lib/types/weather";
 import { createClient } from "@/lib/supabase/server";
 
 async function requireUserId(): Promise<string | WeatherActionResult> {
@@ -15,6 +16,31 @@ async function requireUserId(): Promise<string | WeatherActionResult> {
   }
 
   return user.id;
+}
+
+function revalidateWeatherPaths(): void {
+  revalidatePath("/calendar");
+  revalidatePath("/dashboard");
+}
+
+function rowToWeatherLocation(data: {
+  weather_latitude: number | null;
+  weather_longitude: number | null;
+  weather_location_label: string | null;
+}): WeatherLocation | null {
+  if (
+    data.weather_latitude == null ||
+    data.weather_longitude == null ||
+    !data.weather_location_label
+  ) {
+    return null;
+  }
+
+  return {
+    latitude: data.weather_latitude,
+    longitude: data.weather_longitude,
+    label: data.weather_location_label,
+  };
 }
 
 export async function saveWeatherLocation(input: {
@@ -46,19 +72,48 @@ export async function saveWeatherLocation(input: {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
-    .update({
-      weather_latitude: latitude,
-      weather_longitude: longitude,
-      weather_location_label: trimmedLabel,
-    })
-    .eq("id", userResult);
+    .upsert(
+      {
+        id: userResult,
+        weather_latitude: latitude,
+        weather_longitude: longitude,
+        weather_location_label: trimmedLabel,
+      },
+      { onConflict: "id" },
+    )
+    .select("weather_latitude, weather_longitude, weather_location_label")
+    .single();
 
   if (error) {
     return { success: false, error: error.message };
   }
 
-  revalidatePath("/calendar");
-  return { success: true };
+  const location = rowToWeatherLocation(data);
+  if (!location) {
+    return {
+      success: false,
+      error: "Impossible d'enregistrer la ville. Réessayez.",
+    };
+  }
+
+  revalidateWeatherPaths();
+  return { success: true, location };
+}
+
+export async function saveWeatherCityByName(
+  cityName: string,
+): Promise<WeatherActionResult> {
+  const userResult = await requireUserId();
+  if (typeof userResult !== "string") {
+    return userResult;
+  }
+
+  const resolved = await resolveCityQuery(cityName);
+  if (!resolved.success) {
+    return resolved;
+  }
+
+  return saveWeatherLocation(resolved.location);
 }

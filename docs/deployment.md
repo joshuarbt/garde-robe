@@ -35,6 +35,7 @@ The app reads public env vars through [`src/lib/env/public.ts`](../src/lib/env/p
 | Variable | Required | Notes |
 |----------|----------|-------|
 | `SUPABASE_SERVICE_ROLE_KEY` | For account deletion | Supabase → API → service_role key. **Never** `NEXT_PUBLIC_*`. See [privacy-ops.md](./privacy-ops.md) |
+| `ADMIN_USER_IDS` | Optional | Comma-separated admin user UUIDs (backup gate for `/admin`). See [Admin panel](#admin-panel) |
 | `LEGAL_CONTROLLER_NAME` | Recommended | Displayed in `/confidentialite` |
 | `LEGAL_CONTACT_EMAIL` | Recommended | Privacy contact e-mail |
 | `LEGAL_SUPABASE_REGION` | Recommended | e.g. `eu-west-1` for transfers section |
@@ -156,6 +157,26 @@ For production you may want to **enable email confirmation** and configure SMTP 
 ### Storage
 
 Ensure the `item-images` bucket migration is applied ([storage.md](./storage.md)). If outfit PNG export fails on Vercel, check Supabase Storage CORS allows your Vercel domain.
+
+## Admin panel
+
+The admin area at `/admin` is **hidden** (no nav link) and returns **404** for non-admin users.
+
+### Bootstrap (one-time)
+
+1. Sign up in the app with your account
+2. In Supabase Dashboard → **Authentication → Users**, copy your user UUID
+3. Edit the user → set **App metadata** to `{ "role": "admin" }`
+4. Set `ADMIN_USER_IDS=<your-uuid>` in `.env.local` / Vercel (optional backup)
+5. Ensure `SUPABASE_SERVICE_ROLE_KEY` is set (required for user deletion)
+
+### Features
+
+- User list with item/outfit counts and last sign-in
+- User detail: wardrobe and outfits (read-only)
+- Change email, reset password, delete user and all data
+
+Admin routes require authentication (middleware) and `requireAdmin()` (layout + every server action). Service role is used only on the server.
 
 ## First deploy walkthrough
 

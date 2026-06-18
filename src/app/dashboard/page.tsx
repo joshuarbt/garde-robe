@@ -4,9 +4,11 @@ import { SignOutButton } from "@/components/auth/SignOutButton";
 import { CategoryBreakdown } from "@/components/dashboard/CategoryBreakdown";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { PageShell } from "@/components/layout/PageShell";
+import { WeatherCitySettings } from "@/components/settings/WeatherCitySettings";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getDashboardStats } from "@/lib/dashboard/queries";
 import { hasPublicEnv } from "@/lib/env/public";
+import { getWeatherLocation } from "@/lib/weather/queries";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
@@ -23,7 +25,10 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const stats = await getDashboardStats();
+  const [stats, weatherLocation] = await Promise.all([
+    getDashboardStats(),
+    getWeatherLocation(),
+  ]);
 
   return (
     <PageShell title="Votre collection">
@@ -40,18 +45,21 @@ export default async function DashboardPage() {
             breakdown={stats.categoryBreakdown}
             className="mt-[var(--space-section)]"
           />
-          <div className="mt-[var(--space-section)] flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <p className="text-meta">
-              Connecté en tant que{" "}
-              <span className="text-[var(--foreground)]">{user.email}</span>
-            </p>
-            <Link href="/compte" className="text-caption underline-offset-2 hover:underline">
-              Compte et confidentialité
-            </Link>
-            <SignOutButton />
-          </div>
         </>
       )}
+
+      <WeatherCitySettings initialLocation={weatherLocation} />
+
+      <div className="mt-[var(--space-section)] flex flex-wrap items-baseline gap-x-4 gap-y-2 border-t border-[var(--border-hairline)] pt-8">
+        <p className="text-meta">
+          Connecté en tant que{" "}
+          <span className="text-[var(--foreground)]">{user.email}</span>
+        </p>
+        <Link href="/compte" className="text-caption underline-offset-2 hover:underline">
+          Compte et confidentialité
+        </Link>
+        <SignOutButton />
+      </div>
     </PageShell>
   );
 }
