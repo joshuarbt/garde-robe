@@ -206,7 +206,7 @@ export function OutfitBuilder({
     onSelect: setSelectedItemId,
     onPlacementChange: handlePlacementChange,
     stageRef,
-    mobileScale: true,
+    mobileScale: !isLgUp,
   };
 
   const toolbarProps = {

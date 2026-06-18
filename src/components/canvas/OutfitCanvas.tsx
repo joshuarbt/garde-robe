@@ -17,6 +17,14 @@ const TRANSFORMER_BLEED = 12;
 const LAYOUT_WIDTH = OUTER_WIDTH + TRANSFORMER_BLEED * 2;
 const LAYOUT_HEIGHT = OUTER_HEIGHT + TRANSFORMER_BLEED * 2;
 
+function getInitialScale(): number {
+  if (typeof window === "undefined") {
+    return 1;
+  }
+
+  return Math.min(1, window.innerWidth / LAYOUT_WIDTH);
+}
+
 type OutfitCanvasProps = {
   placements: CanvasPlacementState[];
   loadedImages: Record<string, HTMLImageElement>;
@@ -38,7 +46,7 @@ export function OutfitCanvas({
 }: OutfitCanvasProps) {
   const transformerRef = useRef<Konva.Transformer>(null);
   const measureRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(getInitialScale);
   const sortedPlacements = sortByZIndex(placements);
 
   useEffect(() => {
@@ -84,7 +92,7 @@ export function OutfitCanvas({
   }, [mobileScale]);
 
   const stageContent = (
-    <div className="inline-block border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-3">
+    <div className="block border border-[var(--border-subtle)] bg-[var(--surface-muted)] p-3">
       <Stage
         ref={stageRef}
         width={CANVAS_WIDTH}
@@ -145,7 +153,7 @@ export function OutfitCanvas({
     const scaledHeight = LAYOUT_HEIGHT * scale;
 
     return (
-      <div ref={measureRef} className="min-w-0 w-full">
+      <div ref={measureRef} className="min-w-0 w-full max-w-full overflow-hidden">
         <div
           className="mx-auto overflow-hidden"
           style={{ width: scaledWidth, height: scaledHeight }}
@@ -154,7 +162,7 @@ export function OutfitCanvas({
             style={{
               width: LAYOUT_WIDTH,
               transform: `scale(${scale})`,
-              transformOrigin: "top center",
+              transformOrigin: "top left",
             }}
           >
             <div style={{ padding: TRANSFORMER_BLEED }}>{stageContent}</div>
