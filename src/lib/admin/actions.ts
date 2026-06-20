@@ -40,6 +40,117 @@ async function verifyAdminPassword(password: string): Promise<AdminActionResult 
   return null;
 }
 
+function revalidateAdminUserPaths(userId: string): void {
+  revalidatePath("/admin");
+  revalidatePath(`/admin/${userId}`);
+}
+
+async function getUnconfirmedAdminUser(
+  userId: string,
+): Promise<
+  | { success: true; email: string }
+  | { success: false; error: string }
+> {
+  const admin = createAdminClient();
+  const { data, error } = await admin.auth.admin.getUserById(userId);
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  if (!data.user) {
+    return { success: false, error: "Utilisateur introuvable." };
+  }
+
+  if (data.user.email_confirmed_at) {
+    return { success: false, error: "L'e-mail est déjà vérifié." };
+  }
+
+  const email = data.user.email?.trim();
+  if (!email) {
+    return { success: false, error: "Cet utilisateur n'a pas d'adresse e-mail." };
+  }
+
+  return { success: true, email };
+}
+
+export async function adminResendConfirmationEmail(input: {
+  userId: string;
+}): Promise<AdminActionResult> {
+  await requireAdmin();
+
+  const userIdError = validateAdminUserId(input.userId);
+  if (userIdError) {
+    return { success: false, error: userIdError };
+  }
+
+  if (!hasServiceRoleKey()) {
+    return {
+      success: false,
+      error: "Cette action n'est pas disponible dans cet environnement.",
+    };
+  }
+
+  const userResult = await getUnconfirmedAdminUser(input.userId);
+  if (!userResult.success) {
+    return userResult;
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin.auth.resend({
+    type: "signup",
+    email: userResult.email,
+  });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  revalidateAdminUserPaths(input.userId);
+  return { success: true };
+}
+
+export async function adminConfirmUserEmail(input: {
+  userId: string;
+  password: string;
+}): Promise<AdminActionResult> {
+  await requireAdmin();
+
+  const userIdError = validateAdminUserId(input.userId);
+  if (userIdError) {
+    return { success: false, error: userIdError };
+  }
+
+  const passwordError = await verifyAdminPassword(input.password);
+  if (passwordError) {
+    return passwordError;
+  }
+
+  if (!hasServiceRoleKey()) {
+    return {
+      success: false,
+      error: "Cette action n'est pas disponible dans cet environnement.",
+    };
+  }
+
+  const userResult = await getUnconfirmedAdminUser(input.userId);
+  if (!userResult.success) {
+    return userResult;
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.updateUserById(input.userId, {
+    email_confirm: true,
+  });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  revalidateAdminUserPaths(input.userId);
+  return { success: true };
+}
+
 export async function adminDeleteUser(input: {
   userId: string;
   confirmation: string;

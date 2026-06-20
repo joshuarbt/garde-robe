@@ -2,6 +2,10 @@ import type { AdminUserDetail as AdminUserDetailType } from "@/lib/admin/types";
 import type { ItemWithRelations } from "@/lib/types/item";
 import type { OutfitSummary } from "@/lib/types/outfit";
 import { AdminDeleteUserForm } from "@/components/admin/AdminDeleteUserForm";
+import {
+  AdminEmailVerificationBadge,
+  AdminEmailVerificationSection,
+} from "@/components/admin/AdminEmailVerificationSection";
 import { AdminEmailForm } from "@/components/admin/AdminEmailForm";
 import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminWardrobePreview } from "@/components/admin/AdminWardrobePreview";
@@ -28,9 +32,19 @@ export function AdminUserDetail({ user, items, outfits }: AdminUserDetailProps) 
     <div className="space-y-10">
       <section className="space-y-4">
         <div>
-          <h2 className="text-title">{user.email}</h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-title">{user.email}</h2>
+            <AdminEmailVerificationBadge isEmailConfirmed={user.isEmailConfirmed} />
+          </div>
           <p className="text-caption mt-1 break-all text-[var(--muted)]">{user.id}</p>
         </div>
+
+        <AdminEmailVerificationSection
+          userId={user.id}
+          email={user.email}
+          isEmailConfirmed={user.isEmailConfirmed}
+          emailConfirmedAt={user.emailConfirmedAt}
+        />
 
         <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="surface-panel p-4">

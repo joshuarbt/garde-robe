@@ -3,6 +3,8 @@ export type AdminUserSummary = {
   email: string;
   createdAt: string;
   lastSignInAt: string | null;
+  emailConfirmedAt: string | null;
+  isEmailConfirmed: boolean;
   itemCount: number;
   outfitCount: number;
   tripCount: number;

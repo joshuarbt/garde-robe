@@ -112,14 +112,19 @@ function mapAuthUserToSummary(
     email?: string;
     created_at?: string;
     last_sign_in_at?: string;
+    email_confirmed_at?: string | null;
   },
   stats: { itemCount: number; outfitCount: number; tripCount: number },
 ): AdminUserSummary {
+  const emailConfirmedAt = user.email_confirmed_at ?? null;
+
   return {
     id: user.id,
     email: user.email ?? "—",
     createdAt: user.created_at ?? "",
     lastSignInAt: user.last_sign_in_at ?? null,
+    emailConfirmedAt,
+    isEmailConfirmed: Boolean(emailConfirmedAt),
     itemCount: stats.itemCount,
     outfitCount: stats.outfitCount,
     tripCount: stats.tripCount,
