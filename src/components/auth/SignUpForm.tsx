@@ -81,8 +81,6 @@ export function SignUpForm() {
             J&apos;accepte la{" "}
             <Link
               href="/confidentialite"
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-[var(--foreground)] underline-offset-2 hover:underline"
             >
               politique de confidentialité
@@ -90,8 +88,6 @@ export function SignUpForm() {
             et les{" "}
             <Link
               href="/cgu"
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-[var(--foreground)] underline-offset-2 hover:underline"
             >
               conditions d&apos;utilisation
