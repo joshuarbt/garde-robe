@@ -1,0 +1,135 @@
+/* Vaporwave — retro sunset grid */
+
+[data-theme="vaporwave"] {
+  --background: #0d0015;
+  --foreground: #e0d0ff;
+  --muted: #b090e0;
+  --muted-light: #7050a0;
+  --surface: rgba(30, 0, 60, 0.75);
+  --surface-muted: rgba(30, 0, 60, 0.75);
+  --border-hairline: rgba(180, 0, 255, 0.4);
+  --border-subtle: rgba(180, 0, 255, 0.4);
+  --accent: #b44fff;
+  --accent-muted: #00ffff;
+  --btn-border-primary: rgba(255, 255, 255, 0.2);
+  --btn-border-secondary: rgba(180, 0, 255, 0.4);
+  --btn-border-ghost: rgba(180, 0, 255, 0.4);
+  --btn-border-icon: rgba(180, 0, 255, 0.4);
+}
+
+[data-theme="vaporwave"] body {
+  background: linear-gradient(
+    180deg,
+    #0d0015 0%,
+    #1a0030 30%,
+    #2d0050 50%,
+    #1a0835 70%,
+    #000510 100%
+  );
+  background-attachment: fixed;
+  font-family: var(--font-vt323), monospace;
+}
+
+[data-theme="vaporwave"] .theme-vaporwave-sun {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  opacity: 0.6;
+  background:
+    repeating-linear-gradient(
+      transparent,
+      transparent 12px,
+      #0d0015 12px,
+      #0d0015 16px
+    ),
+    linear-gradient(180deg, #ff6ec7 0%, #ff8c00 40%, #ff4400 60%, #cc0066 100%);
+}
+
+[data-theme="vaporwave"] .theme-vaporwave-grid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
+  background:
+    linear-gradient(transparent 0%, rgba(180, 0, 255, 0.15) 100%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(180, 0, 255, 0.2) 0px,
+      transparent 1px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(180, 0, 255, 0.2) 0px,
+      transparent 1px,
+      transparent 40px
+    );
+  transform: perspective(300px) rotateX(60deg);
+  transform-origin: bottom;
+}
+
+[data-theme="vaporwave"] .text-display,
+[data-theme="vaporwave"] .text-display-lg,
+[data-theme="vaporwave"] .text-title,
+[data-theme="vaporwave"] .font-display {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow:
+    0 0 10px rgba(180, 0, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+[data-theme="vaporwave"] .surface-panel,
+[data-theme="vaporwave"] .surface-card,
+[data-theme="vaporwave"] .surface-editorial {
+  background: rgba(30, 0, 60, 0.75);
+  border: 1px solid rgba(180, 0, 255, 0.4);
+  box-shadow:
+    0 0 20px rgba(180, 0, 255, 0.15),
+    0 0 60px rgba(0, 255, 255, 0.05),
+    inset 0 1px 0 rgba(180, 0, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="vaporwave"] .btn-primary {
+  background: linear-gradient(135deg, #b44fff, #ff2d95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 0 20px rgba(180, 0, 255, 0.5),
+    0 0 40px rgba(255, 45, 149, 0.3);
+  color: white;
+}
+
+[data-theme="vaporwave"] .input-field {
+  background: rgba(10, 0, 30, 0.8);
+  border: 1px solid rgba(180, 0, 255, 0.4);
+  color: #e0d0ff;
+}
+
+[data-theme="vaporwave"] .input-field:focus {
+  border-color: #00ffff;
+  box-shadow:
+    0 0 0 3px rgba(0, 255, 255, 0.15),
+    0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+[data-theme="vaporwave"] header,
+[data-theme="vaporwave"] footer {
+  background: rgba(10, 0, 25, 0.9);
+  border-color: rgba(180, 0, 255, 0.3);
+  box-shadow: 0 0 30px rgba(180, 0, 255, 0.2);
+}
+
+[data-theme="vaporwave"] nav[aria-label="Navigation principale"] a[aria-current="page"] svg {
+  color: #00ffff;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.8));
+}
+
+[data-theme="vaporwave"] nav[aria-label="Navigation principale"] a[aria-current="page"] {
+  color: #00ffff;
+}

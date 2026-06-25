@@ -1,0 +1,116 @@
+/* Game Boy — 4-color DMG palette */
+
+[data-theme="gameboy"] {
+  --gb-darkest: #0f380f;
+  --gb-dark: #306230;
+  --gb-light: #8bac0f;
+  --gb-lightest: #9bbc0f;
+  --background: var(--gb-lightest);
+  --foreground: var(--gb-darkest);
+  --muted: var(--gb-dark);
+  --muted-light: var(--gb-light);
+  --surface: var(--gb-lightest);
+  --surface-muted: var(--gb-lightest);
+  --border-hairline: var(--gb-darkest);
+  --border-subtle: var(--gb-darkest);
+  --accent: var(--gb-darkest);
+  --accent-muted: var(--gb-dark);
+  --btn-border-primary: var(--gb-darkest);
+  --btn-border-secondary: var(--gb-darkest);
+  --btn-border-ghost: var(--gb-darkest);
+  --btn-border-icon: var(--gb-darkest);
+}
+
+[data-theme="gameboy"] * {
+  border-radius: 0 !important;
+}
+
+[data-theme="gameboy"] body {
+  background: var(--gb-lightest);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(15, 56, 15, 0.03) 3px,
+    rgba(15, 56, 15, 0.03) 4px
+  );
+  font-family: var(--font-press-start), monospace;
+  font-size: 80%;
+  line-height: 1.8;
+  text-transform: uppercase;
+}
+
+[data-theme="gameboy"] .surface-panel,
+[data-theme="gameboy"] .surface-card,
+[data-theme="gameboy"] .surface-editorial {
+  background: var(--gb-lightest);
+  border: 2px solid var(--gb-darkest);
+  box-shadow: 4px 4px 0 var(--gb-darkest);
+}
+
+[data-theme="gameboy"] .btn-primary {
+  background: var(--gb-darkest);
+  color: var(--gb-lightest);
+  border: 2px solid var(--gb-darkest);
+  box-shadow: 3px 3px 0 var(--gb-dark);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+[data-theme="gameboy"] .btn-primary:hover {
+  background: var(--gb-dark);
+  opacity: 1;
+  box-shadow: 1px 1px 0 var(--gb-darkest);
+  transform: translate(2px, 2px);
+}
+
+[data-theme="gameboy"] .input-field {
+  background: var(--gb-light);
+  border: 2px solid var(--gb-darkest);
+  color: var(--gb-darkest);
+  box-shadow: inset 2px 2px 0 rgba(15, 56, 15, 0.2);
+}
+
+[data-theme="gameboy"] .input-field:focus {
+  background: var(--gb-lightest);
+  outline: 2px solid var(--gb-darkest);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+[data-theme="gameboy"] header {
+  background: var(--gb-dark);
+  border-bottom: 3px solid var(--gb-darkest);
+  color: var(--gb-lightest);
+}
+
+[data-theme="gameboy"] header a,
+[data-theme="gameboy"] header .font-display {
+  color: var(--gb-lightest);
+}
+
+[data-theme="gameboy"] footer {
+  background: var(--gb-dark);
+  border-top: 3px solid var(--gb-darkest);
+}
+
+[data-theme="gameboy"] nav[aria-label="Navigation principale"] a {
+  color: var(--gb-lightest);
+  opacity: 0.6;
+}
+
+[data-theme="gameboy"] nav[aria-label="Navigation principale"] a[aria-current="page"] {
+  color: var(--gb-lightest);
+  opacity: 1;
+  background: var(--gb-darkest);
+}
+
+[data-theme="gameboy"] ::-webkit-scrollbar-thumb {
+  background: var(--gb-dark);
+  border: 2px solid var(--gb-darkest);
+}
+
+[data-theme="gameboy"] ::selection {
+  background: var(--gb-darkest);
+  color: var(--gb-lightest);
+}

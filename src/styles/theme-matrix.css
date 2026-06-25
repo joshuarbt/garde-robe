@@ -1,0 +1,94 @@
+/* Matrix — terminal green on black */
+
+[data-theme="matrix"] {
+  --background: #000000;
+  --foreground: #00ff41;
+  --muted: #00aa2b;
+  --muted-light: #006618;
+  --surface: rgba(0, 20, 0, 0.85);
+  --surface-muted: rgba(0, 20, 0, 0.85);
+  --border-hairline: rgba(0, 255, 65, 0.25);
+  --border-subtle: rgba(0, 255, 65, 0.25);
+  --accent: #00ff41;
+  --accent-muted: #00aa2b;
+  --status-error: #ff4444;
+  --status-error-bg: rgba(255, 68, 68, 0.1);
+  --btn-border-primary: #00ff41;
+  --btn-border-secondary: rgba(0, 255, 65, 0.3);
+  --btn-border-ghost: rgba(0, 255, 65, 0.3);
+  --btn-border-icon: rgba(0, 255, 65, 0.3);
+}
+
+[data-theme="matrix"] body {
+  background: #000000;
+  background-attachment: fixed;
+  font-family: "Courier New", Courier, monospace;
+}
+
+[data-theme="matrix"] .text-display,
+[data-theme="matrix"] .text-display-lg,
+[data-theme="matrix"] .text-title,
+[data-theme="matrix"] .font-display {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+}
+
+[data-theme="matrix"] .surface-panel,
+[data-theme="matrix"] .surface-card,
+[data-theme="matrix"] .surface-editorial {
+  background: rgba(0, 20, 0, 0.85);
+  border: 1px solid rgba(0, 255, 65, 0.25);
+  box-shadow:
+    0 0 20px rgba(0, 255, 65, 0.08),
+    inset 0 0 40px rgba(0, 255, 65, 0.03);
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="matrix"] .btn-primary {
+  background: transparent;
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  box-shadow:
+    0 0 10px rgba(0, 255, 65, 0.3),
+    inset 0 0 10px rgba(0, 255, 65, 0.05);
+}
+
+[data-theme="matrix"] .btn-primary:hover {
+  background: rgba(0, 255, 65, 0.1);
+  opacity: 1;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+}
+
+[data-theme="matrix"] .input-field {
+  background: rgba(0, 15, 0, 0.9);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  caret-color: #00ff41;
+}
+
+[data-theme="matrix"] .input-field:focus {
+  border-color: rgba(0, 255, 65, 0.7);
+  box-shadow:
+    0 0 0 3px rgba(0, 255, 65, 0.15),
+    0 0 12px rgba(0, 255, 65, 0.2);
+}
+
+[data-theme="matrix"] header,
+[data-theme="matrix"] footer {
+  background: rgba(0, 8, 0, 0.92);
+  border-color: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+}
+
+[data-theme="matrix"] nav[aria-label="Navigation principale"] a[aria-current="page"] svg {
+  color: #00ff41;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 65, 0.8));
+}
+
+[data-theme="matrix"] nav[aria-label="Navigation principale"] a[aria-current="page"] {
+  color: #00ff41;
+}
+
+[data-theme="matrix"] ::selection {
+  background: rgba(0, 255, 65, 0.3);
+  color: #000;
+}

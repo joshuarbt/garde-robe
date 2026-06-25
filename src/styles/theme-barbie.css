@@ -1,0 +1,135 @@
+/* Barbie — pink gradient with sparkles */
+
+[data-theme="barbie"] {
+  --background: #ff69b4;
+  --foreground: #8b0057;
+  --muted: #c2185b;
+  --muted-light: #e91e8c;
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-muted: rgba(255, 255, 255, 0.7);
+  --border-hairline: rgba(255, 20, 147, 0.3);
+  --border-subtle: rgba(255, 20, 147, 0.3);
+  --accent: #ff1493;
+  --accent-muted: #ff69b4;
+  --btn-border-primary: transparent;
+  --btn-border-secondary: rgba(255, 105, 180, 0.4);
+  --btn-border-ghost: rgba(255, 105, 180, 0.4);
+  --btn-border-icon: rgba(255, 105, 180, 0.4);
+}
+
+[data-theme="barbie"] body {
+  background: linear-gradient(
+    135deg,
+    #ff85c2 0%,
+    #ff1493 25%,
+    #ff69b4 50%,
+    #ffb3de 75%,
+    #ffe4f0 100%
+  );
+  background-size: 300% 300%;
+  animation: barbieGradient 6s ease infinite;
+  font-family: var(--font-nunito), sans-serif;
+}
+
+@keyframes barbieGradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+[data-theme="barbie"] .theme-barbie-sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: barbieTwinkle 2s ease-in-out infinite;
+}
+
+@keyframes barbieTwinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+[data-theme="barbie"] .surface-panel,
+[data-theme="barbie"] .surface-card,
+[data-theme="barbie"] .surface-editorial {
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px solid rgba(255, 20, 147, 0.3);
+  border-radius: var(--radius-xl) !important;
+  box-shadow:
+    0 8px 24px rgba(255, 20, 147, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="barbie"] .text-display,
+[data-theme="barbie"] .text-display-lg,
+[data-theme="barbie"] .text-title,
+[data-theme="barbie"] .font-display {
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(255, 20, 147, 0.2);
+}
+
+[data-theme="barbie"] .btn-primary {
+  background: linear-gradient(135deg, #ff1493, #ff69b4);
+  border: none;
+  border-radius: var(--radius-full) !important;
+  box-shadow:
+    0 4px 15px rgba(255, 20, 147, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="barbie"] .input-field {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 105, 180, 0.4);
+  border-radius: var(--radius-full) !important;
+}
+
+[data-theme="barbie"] .input-field:focus {
+  border-color: #ff1493;
+  box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.15);
+}
+
+[data-theme="barbie"] header,
+[data-theme="barbie"] footer {
+  background: rgba(255, 20, 147, 0.85);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+[data-theme="barbie"] header a,
+[data-theme="barbie"] header .font-display,
+[data-theme="barbie"] footer a,
+[data-theme="barbie"] .text-caption {
+  color: white;
+}
+
+[data-theme="barbie"] nav[aria-label="Navigation principale"] a {
+  color: white;
+  opacity: 0.75;
+}
+
+[data-theme="barbie"] nav[aria-label="Navigation principale"] a[aria-current="page"] svg {
+  color: white;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+}
+
+[data-theme="barbie"] nav[aria-label="Navigation principale"] a[aria-current="page"] {
+  color: white;
+  opacity: 1;
+}

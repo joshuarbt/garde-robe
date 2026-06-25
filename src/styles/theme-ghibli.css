@@ -1,0 +1,114 @@
+/* Ghibli — pastoral sky and meadows */
+
+[data-theme="ghibli"] {
+  --background: #87ceeb;
+  --foreground: #2c4a1e;
+  --muted: #5a7a3a;
+  --muted-light: #8aaa6a;
+  --surface: rgba(255, 252, 240, 0.88);
+  --surface-muted: rgba(255, 252, 240, 0.88);
+  --border-hairline: rgba(140, 180, 100, 0.3);
+  --border-subtle: rgba(140, 180, 100, 0.3);
+  --accent: #4a7c3f;
+  --accent-muted: #7bc44f;
+  --btn-border-primary: rgba(255, 255, 255, 0.3);
+  --btn-border-secondary: rgba(140, 180, 100, 0.4);
+  --btn-border-ghost: rgba(140, 180, 100, 0.4);
+  --btn-border-icon: rgba(140, 180, 100, 0.4);
+}
+
+[data-theme="ghibli"] body {
+  background: linear-gradient(
+    180deg,
+    #87ceeb 0%,
+    #b0dff0 25%,
+    #d4ecc8 55%,
+    #c8e6a0 75%,
+    #a8d878 100%
+  );
+  background-attachment: fixed;
+  font-family: var(--font-nunito), sans-serif;
+}
+
+[data-theme="ghibli"] .theme-ghibli-cloud {
+  position: absolute;
+  left: -200px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  filter: blur(2px);
+  animation: cloudDrift linear infinite;
+  box-shadow:
+    30px 10px 0 0 white,
+    60px 5px 0 -5px white,
+    90px 15px 0 -2px white;
+}
+
+@keyframes cloudDrift {
+  from {
+    transform: translateX(-200px);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
+[data-theme="ghibli"] .text-display,
+[data-theme="ghibli"] .text-display-lg,
+[data-theme="ghibli"] .text-title,
+[data-theme="ghibli"] .font-display {
+  font-weight: 700;
+  color: #1e3d10;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="ghibli"] .surface-panel,
+[data-theme="ghibli"] .surface-card,
+[data-theme="ghibli"] .surface-editorial {
+  background: rgba(255, 252, 240, 0.88);
+  border: 1px solid rgba(140, 180, 100, 0.3);
+  box-shadow:
+    0 4px 16px rgba(80, 120, 40, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="ghibli"] .btn-primary {
+  background: linear-gradient(135deg, #5a9e3f, #7bc44f);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 4px 12px rgba(80, 140, 40, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  color: white;
+  border-radius: var(--radius-full);
+}
+
+[data-theme="ghibli"] .input-field {
+  background: rgba(255, 252, 240, 0.95);
+  border: 1px solid rgba(140, 180, 100, 0.4);
+}
+
+[data-theme="ghibli"] .input-field:focus {
+  border-color: #4a7c3f;
+  box-shadow: 0 0 0 3px rgba(74, 124, 63, 0.15);
+}
+
+[data-theme="ghibli"] header {
+  background: rgba(240, 252, 225, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(140, 180, 100, 0.3);
+}
+
+[data-theme="ghibli"] footer {
+  background: rgba(200, 230, 160, 0.85);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(140, 180, 100, 0.4);
+}
+
+[data-theme="ghibli"] nav[aria-label="Navigation principale"] a[aria-current="page"] svg {
+  color: #2c6e1f;
+  filter: drop-shadow(0 1px 3px rgba(80, 140, 40, 0.4));
+}
+
+[data-theme="ghibli"] nav[aria-label="Navigation principale"] a[aria-current="page"] {
+  color: #2c6e1f;
+}
